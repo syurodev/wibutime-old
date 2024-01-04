@@ -1,0 +1,16 @@
+.nav{
+  overflow: hidden;
+
+  .wrapper{
+    margin-bottom: 80px;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .nav{
+    .wrapper{
+      margin-bottom: 0px;
+      justify-content: space-between;
+    }
+  }
+}
