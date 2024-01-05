@@ -12,7 +12,7 @@ const Nav = () => {
   const [selectedLink, setSelectedLink] = useState({ isActive: false, index: 0 });
 
   return (
-    <motion.div variants={height} initial="initial" animate="enter" exit="exit" className={styles.nav}>
+    <motion.div variants={height} initial="initial" animate="enter" exit="exit" className={`${styles.nav} max-w-[1300px] mx-auto`}>
       {/* <div className={styles.wrapper}> */}
       <div className={styles.container}>
         <Body links={navItem} selectedLink={selectedLink} setSelectedLink={setSelectedLink} />

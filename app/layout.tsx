@@ -26,7 +26,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          <main className='container'>
+          <main className='min-h-dvh pt-16 max-w-[1300px] mx-auto'>
             {children}
           </main>
         </ThemeProvider>

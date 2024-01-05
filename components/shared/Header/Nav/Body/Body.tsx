@@ -8,6 +8,7 @@ type IProps = {
   links: {
     title: string
     href: string
+    status: string
   }[]
   selectedLink: {
     isActive: boolean;
@@ -42,9 +43,10 @@ const Body: FC<IProps> = ({ links, selectedLink, setSelectedLink }) => {
     <div className={styles.body}>
       {
         links.map((link, index) => {
-          const { title, href } = link;
+          const { title, href, status } = link;
           return <Link key={`l_${index}`} href={href}>
             <motion.p
+              className={status === "comingsoon" ? "select-none pointer-events-none !opacity-35" : ""}
               onMouseOver={() => { setSelectedLink({ isActive: true, index }) }}
               onMouseLeave={() => { setSelectedLink({ isActive: false, index }) }}
               variants={blur}
