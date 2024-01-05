@@ -4,6 +4,7 @@ import styles from './styles.module.scss';
 import { translate } from '../../anim';
 import { navFooter } from '../data';
 import Link from 'next/link';
+import { ThemeToggle } from '@/components/shared/ThemeToggle';
 
 const Footer = () => {
   return (
@@ -17,6 +18,8 @@ const Footer = () => {
           <span>Made by:</span> Syuro
         </motion.li>
       </ul>
+
+      <ThemeToggle />
 
       {
         navFooter.map((item, index) => {
