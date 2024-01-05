@@ -63,7 +63,7 @@ const Header: FC = () => {
         variants={background}
         initial="initial"
         animate={isActive ? "open" : "closed"}
-        className={`${styles.background} bg - black dark: bg - white`}
+        className={`${styles.background} bg-black backdrop-blur-lg z-40`}
         onClick={() => setIsActive(false)}
       ></motion.div>
 
