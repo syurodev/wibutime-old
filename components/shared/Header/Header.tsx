@@ -31,7 +31,7 @@ const Header: FC = () => {
   }, []);
 
   return (
-    <nav ref={navRef} className={`${styles.header} p-3 z-50 backdrop-blur-2xl bg-black/20`}>
+    <nav ref={navRef} className={`${styles.header} p-3 z-50 backdrop-blur-xl bg-background/60`}>
       <div className={`${styles.bar} ${isActive ? "max-w-[1450px]" : "max-w-[1350px]"} mx-auto transition-all delay-75 duration-500`}>
         <Link href={"/"} >Wibutime</Link>
 
@@ -63,7 +63,7 @@ const Header: FC = () => {
         variants={background}
         initial="initial"
         animate={isActive ? "open" : "closed"}
-        className={`${styles.background} bg-black backdrop-blur-lg z-40`}
+        className={`${styles.background} bg-black z-40`}
         onClick={() => setIsActive(false)}
       ></motion.div>
 
