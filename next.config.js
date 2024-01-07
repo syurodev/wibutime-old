@@ -37,6 +37,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images2.imgbox.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 }

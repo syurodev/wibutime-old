@@ -15,22 +15,21 @@ type IProps = {
 const Continue: FC<IProps> = ({ data }) => {
   return (
     <section>
-      <h1 className='uppercase font-medium text-lg'>Continue</h1>
+      <h1 className='uppercase font-semibold text-lg'>Continue</h1>
 
-      <div
-      // className='w-full h-fit overflow-hidden relative rounded-2xl shadow-lg dark:border'
-      >
+      <div>
         <Carousel
           opts={{
             align: "start",
+            loop: false,
           }}
-          className="w-full px-9"
+          className="w-full md:px-9"
         >
           <CarouselContent>
             {
               data.map((item, index) => {
                 return (
-                  <CarouselItem key={`continiue-${index}`} className="basis-1/2 md:basis-1/4 lg:basis-1/6">
+                  <CarouselItem key={`continiue-${index}`} className="basis-2/5 md:basis-1/4 lg:basis-1/6">
                     <motion.div
                       className="p-1"
                       variants={slide}
@@ -71,8 +70,8 @@ const Continue: FC<IProps> = ({ data }) => {
               })
             }
           </CarouselContent>
-          <CarouselPrevious className='left-0' />
-          <CarouselNext className='right-0' />
+          <CarouselPrevious className='left-0 hidden md:flex' />
+          <CarouselNext className='right-0 hidden md:flex' />
         </Carousel>
       </div>
     </section>

@@ -10,9 +10,29 @@ const data = {
       categories: ["isekai", "action", "adventure"],
       image: "/images/image1.jpeg",
       type: "anime",
-      ep: "ep01",
+      ep: "01",
       duration: 24,
       description: "Growth cheats? Infinite magic power? The ability to utilize all archetypes? What’s the point if instant death ends everything with a single attack?High school senior Yogiri Takatou was on a school field trip when he woke up to a dragon assaulting his sightseeing bus, with the only ones still on the bus being him and his female classmate, the panicking Tomochika Dannoura. Apparently the rest of his classmates had been given special powers by Sion, a woman who introduced herself as Sage, and escaped from the dragon, leaving those that hadn’t received any special powers behind as dragon bait.And so Yogiri was thrown into a parallel universe full of danger, with no idea of what just happened. Likewise, Sion had no way of knowing just what kind of being she had summoned to her world."
+    },
+    {
+      _id: "eqwe",
+      title: "Ore dake Level Up na Ken",
+      categories: ["isekai", "action", "adventure"],
+      image: "/images/image2.jpeg",
+      type: "anime",
+      ep: "01",
+      duration: 24,
+      description: 'Ten years ago, "the Gate" appeared and connected the real world with the realm of magic and monsters. To combat these vile beasts, ordinary people received superhuman powers and became known as "Hunters." Twenty-year-old Sung Jin-Woo is one such Hunter, but he is known as the "World\'s Weakest," owing to his pathetic power compared to even a measly E-Rank. Still, he hunts monsters tirelessly in low-rank Gates to pay for his mother\'s medical bills.However, this miserable lifestyle changes when Jin-Woo—believing himself to be the only one left to die in a mission gone terribly wrong—awakens in a hospital three days later to find a mysterious screen floating in front of him. This "Quest Log" demands that Jin-Woo completes an unrealistic and intense training program, or face an appropriate penalty. Initially reluctant to comply because of the quest\'s rigor, Jin-Woo soon finds that it may just transform him into one of the world\'s most fearsome Hunters.'
+    },
+    {
+      _id: "eqwe",
+      title: "Làm bạn với cô gái đáng yêu thứ hai lớp",
+      categories: ["Comedy", "Romance", "School Life"],
+      image: "https://images2.imgbox.com/b0/bc/cQVQEDSK_o.jpg",
+      type: "lightnovel",
+      ep: "200",
+      duration: 1492,
+      description: 'Một câu chuyện hài lãng mạn ngọt ngào bắt nguồn từ mối quan hệ bạn bè bí mật! Tôi là Maehara Maki, đã không có bạn bè, hay thậm chí là người quen khi bước vào cao trung, cuối cùng bây giờ cũng đã có bạn đi chơi ở ngoài trường. Đó là một cô gái. Cô ấy tên là Asanagi. Đám con trai hay gọi cô ấy là “Cô gái đáng yêu thứ hai trong lớp”. Cứ vào thứ sáu, cô ấy lại từ chối lời mời của bạn thân Amami, và đến nhà tôi chơi. Vừa chơi game, xem phim, đọc manga, vừa uống Coca, ăn Junk Food được ship đến như Hamburger hay Pizza. Đó là khoảng thời gian ăn chơi của tôi và Asanagi-san, nhưng nó cũng là một bí mật rất quan trọng.'
     }
   ] as NewsData[],
   trending: {
