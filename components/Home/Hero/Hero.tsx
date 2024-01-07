@@ -1,6 +1,6 @@
 import React from 'react'
 import News from './News/News'
-import Trending from '../Trending/Trending'
+import Trending from './Trending/Trending'
 
 const data = {
   news: [
@@ -196,10 +196,10 @@ const data = {
 
 const Hero = async () => {
   return (
-    <div className='grid grid-cols-[1fr] lg:grid-cols-[3fr_1fr] gap-5'>
+    <section className='grid grid-cols-[1fr] lg:grid-cols-[3fr_1fr] gap-5'>
       <News data={data.news} />
       <Trending data={data.trending} />
-    </div>
+    </section>
   )
 }
 

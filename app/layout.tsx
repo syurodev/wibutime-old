@@ -21,9 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+          defaultTheme="light"
         >
           <Header />
           <main className='min-h-dvh pt-20 px-4 max-w-[1300px] mx-auto'>

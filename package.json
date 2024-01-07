@@ -16,6 +16,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "embla-carousel-react": "^8.0.0-rc18",
     "framer-motion": "^10.17.4",
     "next": "14.0.4",
     "next-themes": "^0.2.1",

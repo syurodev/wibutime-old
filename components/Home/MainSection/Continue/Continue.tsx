@@ -1,0 +1,82 @@
+'use client'
+
+import React, { FC } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import Image from 'next/image'
+import { Badge } from '@/components/ui/badge'
+import { motion } from 'framer-motion'
+import { slide } from '@/lib/motion'
+
+type IProps = {
+  data: ContinueData[]
+}
+
+const Continue: FC<IProps> = ({ data }) => {
+  return (
+    <section>
+      <h1 className='uppercase font-medium text-lg'>Continue</h1>
+
+      <div
+      // className='w-full h-fit overflow-hidden relative rounded-2xl shadow-lg dark:border'
+      >
+        <Carousel
+          opts={{
+            align: "start",
+          }}
+          className="w-full px-9"
+        >
+          <CarouselContent>
+            {
+              data.map((item, index) => {
+                return (
+                  <CarouselItem key={`continiue-${index}`} className="basis-1/2 md:basis-1/4 lg:basis-1/6">
+                    <motion.div
+                      className="p-1"
+                      variants={slide}
+                      custom={0.4 + (index * 0.1)}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                    >
+                      <Card>
+                        <CardContent className="flex aspect-[2/3] items-center justify-center p-6 relative overflow-hidden rounded-lg shadow">
+                          <div className='absolute z-10 w-full bottom-0 p-2 bg-background/60 backdrop-blur-lg'>
+                            <Badge className='uppercase text-xs' variant={item.type as "lightnovel" | "anime" | "manga" | "default" | "secondary" | "destructive" | "outline" | null | undefined}>{item.type}</Badge>
+                            <p className='flex gap-1 items-center text-xs font-semibold uppercase mt-1'>
+                              <span>
+                                {item.type === "anime" ? "EP" : "CHAP"}
+                              </span>
+                              <span>
+                                {item.history}
+                              </span>
+                              {/* <LuDot /> */}
+                              <span>|</span>
+                              <span>
+                                {item.current}
+                              </span>
+                            </p>
+                          </div>
+                          <Image
+                            src={item.image}
+                            fill
+                            alt={item._id}
+                            className='object-cover'
+                          />
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </CarouselItem>
+                )
+              })
+            }
+          </CarouselContent>
+          <CarouselPrevious className='left-0' />
+          <CarouselNext className='right-0' />
+        </Carousel>
+      </div>
+    </section>
+  )
+}
+
+export default Continue
