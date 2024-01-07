@@ -39,7 +39,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'images2.imgbox.com',
+        hostname: 'i.imgur.com',
         port: '',
         pathname: '/**',
       },

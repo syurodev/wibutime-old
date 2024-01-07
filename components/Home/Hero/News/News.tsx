@@ -53,11 +53,11 @@ const News: FC<IProps> = ({ data }) => {
                     key={`heroNew-${index}`}
                     className='w-full h-[60dvh] min-h-[500px] overflow-hidden rounded-2xl relative'
                   >
-                    <div className='absolute w-full h-full z-30 flex flex-col justify-between'>
+                    <div className='absolute w-full h-full z-30 flex flex-col justify-between overflow-hidden'>
                       <div></div>
 
                       <motion.div
-                        className='flex flex-col gap-3 p-3 bg-background/60 backdrop-blur-md max-h-[85%] overflow-y-hidden'
+                        className='flex flex-col gap-3 p-3 bg-background/60 backdrop-blur-md max-h-[85%] overflow-hidden rounded-b-2xl'
                         variants={slide}
                         custom={0.15}
                         initial="initial"
@@ -169,7 +169,7 @@ const News: FC<IProps> = ({ data }) => {
                     </div>
 
                     <motion.div
-                      className='w-full h-full relative'
+                      className='w-full h-full relative flex items-start overflow-hidden rounded-2xl'
                       variants={slide}
                       initial="initial"
                       animate="animate"

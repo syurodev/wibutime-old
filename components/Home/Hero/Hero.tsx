@@ -28,7 +28,7 @@ const data = {
       _id: "eqwe",
       title: "Làm bạn với cô gái đáng yêu thứ hai lớp",
       categories: ["Comedy", "Romance", "School Life"],
-      image: "https://images2.imgbox.com/b0/bc/cQVQEDSK_o.jpg",
+      image: "https://i.imgur.com/AF4ivQu.jpeg",
       type: "lightnovel",
       ep: "200",
       duration: 1492,

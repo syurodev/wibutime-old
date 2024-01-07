@@ -51,16 +51,16 @@ const Trending: FC<IProps> = ({ data }) => {
                       >
                         <Link
                           href={"#"}
-                          className='flex gap-2'
+                          className='flex gap-2 w-full'
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />
                           </div>
 
-                          <div className='flex flex-col'>
+                          <div className='flex flex-col w-full'>
                             <p className='line-clamp-1'>{item.title}</p>
 
-                            <div className='flex gap-3 text-secondary-foreground font-medium'>
+                            <div className='grid grid-cols-2 gap-3 text-secondary-foreground font-medium'>
                               <div className='flex items-center gap-1'>
                                 <IoEyeOutline />
                                 <span className='text-xs'>{item.view}</span>
@@ -82,7 +82,7 @@ const Trending: FC<IProps> = ({ data }) => {
             {/* Manga */}
             <TabsContent value="manga" className='h-[calc(100%-40px)]'>
               <div
-                className='flex flex-wrap justify-between h-full w-full px-2'
+                className='flex flex-wrap justify-between h-full w-full'
               >
                 {
                   data.manga.map((item, index) => {
@@ -94,27 +94,27 @@ const Trending: FC<IProps> = ({ data }) => {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className='flex gap-2 w-1/2 lg:w-full px-1'
+                        className='flex gap-2 w-1/2 lg:w-full px-3'
                       >
                         <Link
                           href={"#"}
-                          className='flex gap-2'
+                          className='flex gap-1 w-full'
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />
                           </div>
 
-                          <div className='flex flex-col'>
+                          <div className='flex flex-col w-full'>
                             <p className='line-clamp-1'>{item.title}</p>
 
-                            <div className='flex gap-3 text-secondary-foreground font-medium'>
+                            <div className='grid grid-cols-2 gap-3 text-secondary-foreground font-medium'>
                               <div className='flex items-center gap-1'>
                                 <IoEyeOutline />
-                                <span className='text-xs'>{item.view}</span>
+                                <span className='text-xs line-clamp-1'>{item.view}</span>
                               </div>
                               <div className='flex items-center gap-1'>
                                 <GoHeart />
-                                <span className='text-xs'>{item.like}</span>
+                                <span className='text-xs line-clamp-1'>{item.like}</span>
                               </div>
                             </div>
                           </div>
@@ -145,16 +145,16 @@ const Trending: FC<IProps> = ({ data }) => {
                       >
                         <Link
                           href={"#"}
-                          className='flex gap-2'
+                          className='flex gap-2 w-full'
                         >
-                          <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
+                          <div className='min-w-8 w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />
                           </div>
 
-                          <div className='flex flex-col'>
+                          <div className='flex flex-col w-full'>
                             <p className='line-clamp-1'>{item.title}</p>
 
-                            <div className='flex gap-3 text-secondary-foreground font-medium'>
+                            <div className='grid grid-cols-2 gap-3 text-secondary-foreground font-medium'>
                               <div className='flex items-center gap-1'>
                                 <IoEyeOutline />
                                 <span className='text-xs'>{item.view}</span>
