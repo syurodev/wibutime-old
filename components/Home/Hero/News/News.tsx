@@ -8,7 +8,7 @@ import { IoArrowForward } from "react-icons/io5";
 import { Badge } from '@/components/ui/badge';
 import { LuDot } from "react-icons/lu";
 import { AnimatePresence, motion } from 'framer-motion'
-import { slide } from '@/lib/motion'
+import { slide, slideWithoutScale } from '@/lib/motion'
 
 type IProps = {
   data: NewsData[]
@@ -51,14 +51,14 @@ const News: FC<IProps> = ({ data }) => {
                 index === currentIndex && (
                   <div
                     key={`heroNew-${index}`}
-                    className='w-full h-[60dvh] min-h-[500px] overflow-hidden rounded-2xl relative'
+                    className='w-full h-[60vh] min-h-[500px] overflow-hidden rounded-2xl relative'
                   >
                     <div className='absolute w-full h-full z-30 flex flex-col justify-between overflow-hidden'>
                       <div></div>
 
                       <motion.div
                         className='flex flex-col gap-3 p-3 bg-background/60 backdrop-blur-md max-h-[85%] overflow-hidden rounded-b-2xl'
-                        variants={slide}
+                        variants={slideWithoutScale}
                         custom={0.15}
                         initial="initial"
                         animate="animate"

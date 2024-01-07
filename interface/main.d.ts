@@ -5,3 +5,12 @@ type ContinueData = {
   history: number;
   type: string;
 }
+
+type NewlyData = {
+  _id: string;
+  image: string;
+  current: number;
+  end: number;
+  type: string;
+  title: string;
+}

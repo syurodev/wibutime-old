@@ -17,3 +17,20 @@ export const slide = {
     transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] }
   }),
 }
+
+export const slideWithoutScale = {
+  initial: {
+    y: "50",
+    opacity: 0,
+  },
+  animate: (delay: number) => ({
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1], delay: delay }
+  }),
+  exit: (delay: number) => ({
+    y: "-100",
+    opacity: 0,
+    transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] }
+  }),
+}
