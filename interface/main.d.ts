@@ -11,6 +11,6 @@ type NewlyData = {
   image: string;
   current: number;
   end: number;
-  type: string;
+  type: "anime" | "manga" | "lightnovel";
   title: string;
 }

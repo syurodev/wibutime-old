@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { IoEyeOutline } from "react-icons/io5";
 import { GoHeart } from "react-icons/go";
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { slide } from '@/lib/motion'
 
 type IProps = {
@@ -50,7 +50,7 @@ const Trending: FC<IProps> = ({ data }) => {
                         className='flex gap-2 w-1/2 lg:w-full px-1'
                       >
                         <Link
-                          href={"#"}
+                          href={`/animes/anime/${item._id}`}
                           className='flex gap-2 w-full'
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
@@ -97,7 +97,7 @@ const Trending: FC<IProps> = ({ data }) => {
                         className='flex gap-2 w-1/2 lg:w-full px-3'
                       >
                         <Link
-                          href={"#"}
+                          href={`/mangas/manga/${item._id}`}
                           className='flex gap-1 w-full'
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
@@ -144,7 +144,7 @@ const Trending: FC<IProps> = ({ data }) => {
                         className='flex gap-2 w-1/2 lg:w-full px-1'
                       >
                         <Link
-                          href={"#"}
+                          href={`/lightnovels/lightnovel/${item._id}`}
                           className='flex gap-2 w-full'
                         >
                           <div className='min-w-8 w-8 h-12 relative rounded-md overflow-hidden'>

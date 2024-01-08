@@ -13,12 +13,11 @@ const data = {
   _id: "eqwe",
   categories: ["Romance", "School Life", "Comedy"],
   title: "Làm bạn với cô gái đáng yêu thứ hai lớp",
-  type: "anime",
+  type: "lightnovel",
   description: 'Một câu chuyện hài lãng mạn ngọt ngào bắt nguồn từ mối quan hệ bạn bè bí mật! Tôi là Maehara Maki, đã không có bạn bè, hay thậm chí là người quen khi bước vào cao trung, cuối cùng bây giờ cũng đã có bạn đi chơi ở ngoài trường. Đó là một cô gái. Cô ấy tên là Asanagi. Đám con trai hay gọi cô ấy là “Cô gái đáng yêu thứ hai trong lớp”. Cứ vào thứ sáu, cô ấy lại từ chối lời mời của bạn thân Amami, và đến nhà tôi chơi. Vừa chơi game, xem phim, đọc manga, vừa uống Coca, ăn Junk Food được ship đến như Hamburger hay Pizza. Đó là khoảng thời gian ăn chơi của tôi và Asanagi-san, nhưng nó cũng là một bí mật rất quan trọng.',
   current: 200,
   end: 0,
   duration: 1492,
-  eps: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"],
   chaps: [
     {
       title: "WN Vol.1: Cô gái đáng yêu thứ hai lớp (ĐÃ HOÀN THÀNH)",
@@ -108,7 +107,7 @@ const data = {
   view: 312392,
 } as DetailData
 
-const AnimePage: FC<IProps> = ({ params }) => {
+const LightnovelPage: FC<IProps> = ({ params }) => {
 
   return (
     <PageFadeInOut>
@@ -125,4 +124,4 @@ const AnimePage: FC<IProps> = ({ params }) => {
   )
 }
 
-export default AnimePage
+export default LightnovelPage

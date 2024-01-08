@@ -37,7 +37,7 @@ const NewlyUpdated: FC<IProps> = ({ title, data }) => {
                 exit="exit"
               >
                 <Link
-                  href={"#"}
+                  href={`/${item.type}s/${item.type}/${item._id}`}
                 >
                   <Card>
                     <CardContent className="flex aspect-[2/3] items-center justify-center p-6 relative overflow-hidden rounded-lg shadow">
