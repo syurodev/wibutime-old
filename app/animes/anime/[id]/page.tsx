@@ -1,0 +1,50 @@
+
+import { FC } from 'react'
+import PageFadeInOut from '@/components/shared/PageAnimatePresence/PageFadeInOut';
+
+import Images from '@/components/Detail/Images'
+import Info from '@/components/Detail/Info';
+
+type IProps = {
+  params: { id: string };
+}
+
+const data = {
+  _id: "eqwe",
+  categories: ["Romance", "School Life", "Comedy", "Romance", "School Life", "Comedy", "Romance", "School Life", "Comedy"],
+  title: "Làm bạn với cô gái đáng yêu thứ hai lớp",
+  description: 'Một câu chuyện hài lãng mạn ngọt ngào bắt nguồn từ mối quan hệ bạn bè bí mật! Tôi là Maehara Maki, đã không có bạn bè, hay thậm chí là người quen khi bước vào cao trung, cuối cùng bây giờ cũng đã có bạn đi chơi ở ngoài trường. Đó là một cô gái. Cô ấy tên là Asanagi. Đám con trai hay gọi cô ấy là “Cô gái đáng yêu thứ hai trong lớp”. Cứ vào thứ sáu, cô ấy lại từ chối lời mời của bạn thân Amami, và đến nhà tôi chơi. Vừa chơi game, xem phim, đọc manga, vừa uống Coca, ăn Junk Food được ship đến như Hamburger hay Pizza. Đó là khoảng thời gian ăn chơi của tôi và Asanagi-san, nhưng nó cũng là một bí mật rất quan trọng.',
+  current: 200,
+  end: 0,
+  duration: 1492,
+  ep: ["1", "2", "3"],
+  history: 120,
+  image: "https://i.docln.net/lightnovel/covers/s9193-28267b79-2581-420f-be87-d3cb0ea0f46d-m.jpg",
+  thumbnail: "https://i.imgur.com/AF4ivQu.jpeg",
+  like: 1920,
+  view: 312392,
+} as AnimeData
+
+const AnimePage: FC<IProps> = ({ params }) => {
+
+  return (
+    <PageFadeInOut>
+      <div>
+        <Images
+          image={data.image}
+          thumbnail={data.thumbnail}
+        />
+        <Info
+          _id={data._id}
+          title={data.title}
+          view={data.view}
+          like={data.like}
+          categories={data.categories}
+          description={data.description}
+        />
+      </div>
+    </PageFadeInOut>
+  )
+}
+
+export default AnimePage

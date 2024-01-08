@@ -17,11 +17,11 @@ const PageAnimatePresence: React.FC<React.PropsWithChildren> = ({ children }) =>
 			 * The `motion.div` Component gets re-evaluated when the `key` prop updates, triggering the animation's lifecycles.
 			 * During this re-evaluation, the `<FrozenRoute />` Component also gets updated with the new route components.
 			 */}
-      <motion.div key={pathname}>
+      <motion.main key={pathname}>
         <FrozenRoute>
           {children}
         </FrozenRoute>
-      </motion.div>
+      </motion.main>
     </AnimatePresence>
   )
 

@@ -43,6 +43,7 @@ const News: FC<IProps> = ({ data }) => {
         initial="initial"
         animate="animate"
         exit="exit"
+        custom={0.1}
       >
         <AnimatePresence mode='wait'>
           {
@@ -59,7 +60,7 @@ const News: FC<IProps> = ({ data }) => {
                       <motion.div
                         className='flex flex-col gap-3 p-3 bg-background/60 backdrop-blur-md max-h-[85%] overflow-hidden rounded-b-2xl'
                         variants={slideWithoutScale}
-                        custom={0.15}
+                        custom={0.2}
                         initial="initial"
                         animate="animate"
                         exit="exit"
@@ -68,7 +69,7 @@ const News: FC<IProps> = ({ data }) => {
                         <div className='flex items-center justify-between'>
                           <motion.div
                             variants={slide}
-                            custom={0.2}
+                            custom={0.3}
                             initial="initial"
                             animate="animate"
                             exit="exit"
@@ -83,13 +84,13 @@ const News: FC<IProps> = ({ data }) => {
 
                           <motion.div
                             variants={slide}
-                            custom={0.3}
+                            custom={0.35}
                             initial="initial"
                             animate="animate"
                             exit="exit"
                           >
                             <Link
-                              href={`/animes/${item._id}`}
+                              href={`/animes/anime/${item._id}`}
                               className={`${buttonVariants({ variant: "default" })} gap-2`}>
                               <span>{item.type === "lightnovel" ? "Read now" : "Watch now"}</span>
                               <IoArrowForward className="text-lg" />
@@ -101,7 +102,7 @@ const News: FC<IProps> = ({ data }) => {
                         <motion.h2
                           className='font-semibold text-xl text-pretty line-clamp-3'
                           variants={slide}
-                          custom={0.35}
+                          custom={0.4}
                           initial="initial"
                           animate="animate"
                           exit="exit"
@@ -113,7 +114,7 @@ const News: FC<IProps> = ({ data }) => {
                         <motion.div
                           className='flex gap-1 items-center font-semibold text-secondary-foreground'
                           variants={slide}
-                          custom={0.4}
+                          custom={0.45}
                           initial="initial"
                           animate="animate"
                           exit="exit"
@@ -131,7 +132,7 @@ const News: FC<IProps> = ({ data }) => {
                                 <motion.div
                                   key={`cate${item.title}-${index}`}
                                   variants={slide}
-                                  custom={0.45 + (index * 0.1)}
+                                  custom={0.5 + (index * 0.1)}
                                   initial="initial"
                                   animate="animate"
                                   exit="exit"
@@ -156,7 +157,7 @@ const News: FC<IProps> = ({ data }) => {
                         <motion.p
                           className='line-clamp-3 text-xs'
                           variants={slide}
-                          custom={0.6}
+                          custom={0.7}
                           initial="initial"
                           animate="animate"
                           exit="exit"
