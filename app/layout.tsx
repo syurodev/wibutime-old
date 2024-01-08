@@ -1,9 +1,11 @@
+
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/shared/Header/Header'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import Footer from '@/components/shared/Footer/Footer'
+import PageAnimatePresence from '@/components/shared/PageAnimatePresence/PageAnimatePresence'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,9 +27,11 @@ export default function RootLayout({
           defaultTheme="light"
         >
           <Header />
-          <main className='min-h-dvh pt-20 px-4 max-w-[1300px] mx-auto'>
-            {children}
-          </main>
+          <PageAnimatePresence>
+            <main className='min-h-dvh pt-20 px-4 max-w-[1300px] mx-auto'>
+              {children}
+            </main>
+          </PageAnimatePresence>
           <Footer />
         </ThemeProvider>
       </body>
