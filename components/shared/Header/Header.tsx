@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { background, opacity } from './anim'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Lottie from "lottie-react";
+import { buttonVariants } from "@/components/ui/button"
 
 import logoAnimation from '@/lib/logoAnimation.json'
 import styles from './styles.module.scss'
@@ -35,7 +36,11 @@ const Header: FC = () => {
   return (
     <nav ref={navRef} className={`${styles.header} p-3 z-50 backdrop-blur-xl bg-background/60`}>
       <div className={`${styles.bar} ${isActive ? "max-w-[1450px]" : "max-w-[1350px]"} mx-auto transition-all delay-75 duration-500`}>
-        <Link href={"/"} className='relative flex items-center justify-start pl-10' >
+        <Link
+          href={"/"}
+          className='relative flex items-center justify-start pl-10'
+          scroll
+        >
           <Lottie animationData={logoAnimation} loop={false} className='absolute size-44 -left-[75px]' />
           <span className='font-semibold'>Wibutime</span>
         </Link>
@@ -55,15 +60,20 @@ const Header: FC = () => {
           className={styles.userContainer}
         >
           <div className={styles.user}>
-            <Avatar>
+            {/* <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            </Avatar> */}
+            <Link
+              href={"/auth/login"}
+              className={`${buttonVariants({ variant: "outline" })} !rounded-full`}>
+              Đăng nhập
+            </Link>
 
           </div>
         </motion.div>
-
       </div>
+
       <motion.div
         variants={background}
         initial="initial"

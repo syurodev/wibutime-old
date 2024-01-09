@@ -1,7 +1,6 @@
 'use client'
 
 import { motion, type HTMLMotionProps, type Variants } from 'framer-motion'
-import { usePathname } from 'next/navigation'
 
 const fadeInOut: Variants = {
   initial: {
@@ -38,6 +37,7 @@ const PageFadeInOut: React.FC<
       initial='initial'
       animate='animate'
       exit='exit'
+      className='w-full'
       variants={fadeInOut}
       transition={transition}
       {...props}

@@ -52,6 +52,7 @@ const Trending: FC<IProps> = ({ data }) => {
                         <Link
                           href={`/animes/anime/${item._id}`}
                           className='flex gap-2 w-full'
+                          scroll
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />
@@ -99,6 +100,7 @@ const Trending: FC<IProps> = ({ data }) => {
                         <Link
                           href={`/mangas/manga/${item._id}`}
                           className='flex gap-1 w-full'
+                          scroll
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />
@@ -146,6 +148,7 @@ const Trending: FC<IProps> = ({ data }) => {
                         <Link
                           href={`/lightnovels/lightnovel/${item._id}`}
                           className='flex gap-2 w-full'
+                          scroll
                         >
                           <div className='min-w-8 w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />

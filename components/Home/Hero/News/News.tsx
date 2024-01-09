@@ -91,7 +91,9 @@ const News: FC<IProps> = ({ data }) => {
                           >
                             <Link
                               href={`/animes/anime/${item._id}`}
-                              className={`${buttonVariants({ variant: "default" })} gap-2`}>
+                              className={`${buttonVariants({ variant: "default" })} gap-2`}
+                              scroll
+                            >
                               <span>{item.type === "lightnovel" ? "Read now" : "Watch now"}</span>
                               <IoArrowForward className="text-lg" />
                             </Link>
