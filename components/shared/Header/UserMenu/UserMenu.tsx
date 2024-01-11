@@ -1,10 +1,14 @@
+'use client'
+
 import { memo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { signOut } from 'next-auth/react'
+import { IoIosLogOut } from "react-icons/io";
 
-import { menuLinks } from '@/lib/links';
 import style from './navbar.module.scss'
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import Link from 'next/link'
 
 const perspective = {
   initial: {
@@ -118,7 +122,7 @@ const UserMenu = () => {
             </div>
 
             <motion.div
-              className='max-w-[500px] h-[600px] bg-background/95 absolute z-20 overflow-hidden shadow  backdrop-blur-xl'
+              className='max-w-[500px] h-[600px] bg-background absolute z-20 overflow-hidden shadow'
               variants={variants}
               animate={isMenuOpen ? "open" : "closed"}
               initial="closed"
@@ -128,70 +132,47 @@ const UserMenu = () => {
                   isMenuOpen && (
                     <div className='h-full w-full p-[100px_40px_50px_40px] box-border flex flex-col justify-between'>
                       <div className='flex flex-col gap-4'>
-                        {
-                          menuLinks.map((item, index) => {
-                            return (
-                              <div
-                                key={item.name}
-                                className={`${style.linkContainer}`}
-                              >
-                                <motion.div
-                                  variants={perspective}
-                                  animate="enter"
-                                  exit="exit"
-                                  initial="initial"
-                                  custom={index}
-                                >
-                                  {
-                                    item.type === "link" ? (
-                                      <a
-                                        href={item.url}
-                                        target='_blank'
-                                        rel="noopener noreferrer"
-                                        className='text-4xl font-semibold hover:text-secondary transition-colors'
-                                      >
-                                        {item.name}
-                                      </a>
-                                    ) : (
-                                      item.url
-                                    )
-                                  }
-                                </motion.div>
-                              </div>
-                            )
-                          })
-                        }
+                        <div
+                          className={`${style.linkContainer}`}
+                        >
+                          <motion.div
+                            variants={perspective}
+                            animate="enter"
+                            exit="exit"
+                            initial="initial"
+                            custom={0}
+                          >
+                            <Link
+                              href={""}
+                              className='text-4xl font-semibold hover:text-secondary transition-colors'
+                            >
+                              Yêu thích
+                            </Link>
+                          </motion.div>
+                        </div>
                       </div>
 
                       {/* footer */}
-                      {/* <div className='flex justify-between w-full'>
-                  {
-                    social.map((item, index) => {
-                      return (
+                      <div className='flex justify-between w-full'>
                         <div
-                          key={item.name}
-                          className={`${style.linkContainer} w-1/2`}
+                          className={`${style.linkContainer} w-1/2 text-destructive cursor-pointer`}
+                          onClick={() => signOut()}
                         >
                           <motion.div
                             variants={slideIn}
                             animate="enter"
                             exit="exit"
                             initial="initial"
-                            custom={index}
+                            custom={1}
+                            className='flex items-center gap-1'
                           >
-                            <a
-                              href={item.url}
-                              target='_blank'
-                              rel="noopener noreferrer"
-                            >
-                              {item.name}
-                            </a>
+                            <IoIosLogOut className="text-lg" />
+                            <span>
+                              Đăng xuất
+                            </span>
                           </motion.div>
                         </div>
-                      )
-                    })
-                  }
-                </div> */}
+                      </div>
                     </div>
                   )
                 }

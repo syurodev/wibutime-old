@@ -58,12 +58,8 @@ const NewPasswordForm: FC = () => {
       if (res.code !== 200) {
         toast.error(res.message)
       } else {
-        toast.success(res.message, {
-          action: {
-            label: "Đăng nhập",
-            onClick: () => router.push("/auth/login")
-          },
-        })
+        toast.success(res.message)
+        router.push("/auth/login")
       }
     })
   }
