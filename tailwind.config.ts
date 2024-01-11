@@ -54,6 +54,7 @@ module.exports = {
         anime: "hsl(var(--anime))",
         manga: "hsl(var(--manga))",
         lightnovel: "hsl(var(--lightnovel))",
+        success: "hsl(var(--success))",
       },
       borderRadius: {
         lg: "var(--radius)",

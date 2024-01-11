@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState, useTransition } from 'react'
+import { FC, useTransition } from 'react'
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { FcGoogle } from "react-icons/fc";
 
@@ -22,15 +23,16 @@ import CardWrapper from '../CardWrapper'
 import { registerSchema } from '@/schemas/auth'
 import { register } from '@/actions/register'
 import { ReloadIcon } from '@radix-ui/react-icons'
+import { useRouter } from 'next/navigation'
 
 const RegisterForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
-  const [error, setError] = useState<string | undefined>("")
-  const [success, setSuccess] = useState<string | undefined>("")
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      email: "",
       username: "",
       password: "",
       confirmPassword: "",
@@ -43,9 +45,16 @@ const RegisterForm: FC = () => {
       const res = await register(values)
 
       if (res.code !== 200) {
-        setError(res.error)
+        toast.error(res.message)
       } else {
-        setSuccess(res.success)
+        // toast.success(res.message, {
+        //   description: res.submess,
+        //   action: {
+        //     label: "Đăng nhập",
+        //     onClick: () => router.push("/auth/login")
+        //   },
+        // })
+        router.push("/auth/login")
       }
     })
   }
@@ -78,8 +87,21 @@ const RegisterForm: FC = () => {
                     <Input placeholder="Jame" disabled={isPending} {...field} />
                   </FormControl>
                   <FormDescription>
-                    Tên sẻ được hiển thị thay thế cho tên người dùng
+                    Tên sẽ được hiển thị thay thế cho tên đăng nhập.
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="jame@gmail.com" disabled={isPending} {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

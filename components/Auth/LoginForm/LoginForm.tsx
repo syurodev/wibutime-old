@@ -1,33 +1,35 @@
 'use client'
 
-import { FC, useState, useTransition } from 'react'
+import { FC, useEffect, useTransition } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { FcGoogle } from "react-icons/fc";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { signIn } from 'next-auth/react'
+import { ReloadIcon } from '@radix-ui/react-icons'
+import { useSearchParams } from 'next/navigation'
 
 import styles from './styles.module.scss'
 import CardWrapper from '../CardWrapper'
 import { loginSchema } from '@/schemas/auth'
 import { login } from '@/actions/login'
-import { ReloadIcon } from '@radix-ui/react-icons'
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 
 const LoginForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
-  const [error, setError] = useState<string | undefined>("")
-  const [success, setSuccess] = useState<string | undefined>("")
+  const searchParams = useSearchParams()
+  const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email đã đăng nhập bằng tài khoản liên kết khác" : ""
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -37,18 +39,27 @@ const LoginForm: FC = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    setError("")
-    setSuccess("")
+  useEffect(() => {
+    if (urlError !== "") {
+      toast.error(urlError)
+    }
+  }, [urlError])
 
+  function onSubmit(values: z.infer<typeof loginSchema>) {
     startTransiton(async () => {
       const res = await login(values)
 
       if (res.code !== 200) {
-        setError(res.error)
+        toast.error(res.message)
       } else {
-        setSuccess(res.success)
+        toast.success(res.message)
       }
+    })
+  }
+
+  const onClick = (provider: "google") => {
+    signIn(provider, {
+      callbackUrl: DEFAULT_LOGIN_REDIRECT
     })
   }
 
@@ -59,7 +70,13 @@ const LoginForm: FC = () => {
       bottomLabel='Chưa có tài khoản?'
     >
       <div className='flex flex-col gap-9 w-full px-4'>
-        <Button variant={"outline"} rounded={"full"} className='flex items-center gap-3' size={"lg"}>
+        <Button
+          variant={"outline"}
+          rounded={"full"}
+          className='flex items-center gap-3'
+          size={"lg"}
+          onClick={() => onClick("google")}
+        >
           <FcGoogle className="text-lg" /> Đăng nhập với Google
         </Button>
 
@@ -105,10 +122,6 @@ const LoginForm: FC = () => {
                 </FormItem>
               )}
             />
-
-            {
-              error && (<p className='text-center text-destructive'>{error}</p>)
-            }
 
             <Button
               type="submit"

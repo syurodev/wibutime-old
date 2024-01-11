@@ -9,6 +9,7 @@
     --lightnovel: 141 43% 62%;
     --manga: 264 46% 65%;
     --anime: 12 83% 62%;
+    --success: 153 60% 61%;
 
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -44,6 +45,7 @@
     --lightnovel: 163 46% 45%;
     --manga: 264 46% 54%;
     --anime: 12 83% 62%;
+    --success: 153 60% 61%;
 
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -78,6 +80,7 @@
   }
 
   body {
-    @apply bg-background text-foreground transition-colors duration-700;
+    scrollbar-gutter: stable;
+    @apply bg-background text-foreground transition-colors duration-700 overflow-visible;
   }
 }

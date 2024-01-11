@@ -1,0 +1,38 @@
+.el {
+  &:hover {
+    .perspectiveText {
+      transform: rotateX(90deg);
+
+      p:nth-of-type(1) {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      p:nth-of-type(2) {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.perspectiveText {
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.76, 0, 0.24, 1);
+
+  p {
+    transition: all 0.75s cubic-bezier(0.76, 0, 0.24, 1);
+    pointer-events: none;
+    text-transform: uppercase;
+
+    &:nth-of-type(2) {
+      transform-origin: bottom center;
+      transform: rotateX(-90deg) translateY(9px);
+      opacity: 0;
+    }
+  }
+}
+
+.linkContainer {
+  perspective: 120px;
+  perspective-origin: bottom;
+}

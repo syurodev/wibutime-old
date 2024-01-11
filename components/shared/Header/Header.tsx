@@ -6,14 +6,16 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { background, opacity } from './anim'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Lottie from "lottie-react";
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 
 import logoAnimation from '@/lib/logoAnimation.json'
 import styles from './styles.module.scss'
 import Nav from './Nav/Nav'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
+import UserMenu from './UserMenu/UserMenu'
 
 const Header: FC = () => {
-
+  const session = useCurrentUser()
   const [isActive, setIsActive] = useState<boolean>(false)
   const navRef = useRef<HTMLElement>(null)
 
@@ -34,7 +36,7 @@ const Header: FC = () => {
   }, []);
 
   return (
-    <nav ref={navRef} className={`${styles.header} p-3 z-50 backdrop-blur-xl bg-background/60`}>
+    <nav ref={navRef} className={`${styles.header} p-3 z-50 backdrop-blur-xl bg-background/60 transition-all`}>
       <div className={`${styles.bar} ${isActive ? "max-w-[1450px]" : "max-w-[1350px]"} mx-auto transition-all delay-75 duration-500`}>
         <Link
           href={"/"}
@@ -60,16 +62,17 @@ const Header: FC = () => {
           className={styles.userContainer}
         >
           <div className={styles.user}>
-            {/* <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar> */}
-            <Link
-              href={"/auth/login"}
-              className={`${buttonVariants({ variant: "outline" })} !rounded-full`}>
-              Đăng nhập
-            </Link>
-
+            {
+              session ? (
+                <UserMenu />
+              ) : (
+                <Link
+                  href={"/auth/login"}
+                  className={`${buttonVariants({ variant: "outline" })} !rounded-full`}>
+                  Đăng nhập
+                </Link>
+              )
+            }
           </div>
         </motion.div>
       </div>
