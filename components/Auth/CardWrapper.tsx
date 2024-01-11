@@ -2,15 +2,14 @@ import React from 'react'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
 import Link from 'next/link'
 import Lottie from 'lottie-react'
 
 import logoAnimation from '@/lib/logoAnimation.json'
+import Image from 'next/image'
 
 type IProps = {
   bottomLabel: string
@@ -25,9 +24,17 @@ const CardWrapper: React.FC<IProps> = ({
   bottomHref,
   children,
 }) => {
+  function randomImages(): number {
+    return Math.floor(Math.random() * 3) + 1;
+  }
+
+  const imageUrl = `/images/image${randomImages()}.jpeg`
+
   return (
-    <div>
-      <Card>
+    <div className='flex items-center justify-center h-fit relative w-full md:max-w-[80%] rounded-lg overflow-hidden border shadow'>
+      <div className='w-full hidden md:block'></div>
+
+      <Card className='md:rounded-none min-w-[400px] max-w-[450px] overflow-hidden z-50 !border-none md:bg-background/70 backdrop-blur-xl shadow-none'>
         <CardHeader className='text-center text-lg relative space-y-4 z-0'>
           <div className='relative w-full flex justify-center'>
             <Link
@@ -56,6 +63,14 @@ const CardWrapper: React.FC<IProps> = ({
           </p>
         </CardFooter>
       </Card>
+      <Image
+        src={imageUrl}
+        alt=''
+        fill
+        sizes='full'
+        priority
+        className='object-cover hidden md:block'
+      />
     </div>
   )
 }

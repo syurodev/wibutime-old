@@ -47,7 +47,3 @@ export const newVerification = async (token: string) => {
     message: "Xác thực tài khoản thành công"
   }
 }
-
-export const reSendToken = async () => {
-
-}

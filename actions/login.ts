@@ -26,18 +26,17 @@ export const login = async (values: z.infer<typeof loginSchema>) => {
 
     const isEmail = isValidEmail(username)
 
-    let existingUser = null
-
-    if (isEmail) {
-      existingUser = await getUserByEmail(username)
-    } else {
-      existingUser = await getUserByUsername(username)
+    if (isEmail) return {
+      code: 400,
+      message: "Vui lòng đăng nhập bằng tên đăng nhập"
     }
+
+    const existingUser = await getUserByUsername(username)
 
     if (!existingUser || !existingUser.email) {
       return {
         code: 400,
-        message: "Email không tồn tại"
+        message: "Người dùng không tồn tại"
       }
     }
 

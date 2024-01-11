@@ -17,7 +17,7 @@ interface IProps {
   verificationLink: string
 }
 
-const VerificationEmail = ({
+const ResetPasswordEmail = ({
   name,
   verificationLink
 }: IProps) => (
@@ -36,22 +36,19 @@ const VerificationEmail = ({
         /> */}
 
         <Text style={title}>
-          Tài khoản của bạn đã được tạo thành công. Vui lòng hoàn thành bước cuối cùng để kích hoạt tài khoản
+          Đặt lại mật khẩu
         </Text>
 
         <Section style={section}>
           <Text style={text}>
-            Hey <strong>{name}</strong>!
-          </Text>
-          <Text style={text}>
-            Vui lòng xác thực email của bạn để có thể đăng nhập vào wibutime
+            Vui lòng nhấn vào liên kết bên dưới để đặt lại mật khẩu
           </Text>
 
           <Link
             style={link}
             href={verificationLink}
           >
-            Xác thực email
+            Đặt lại mật khẩu
           </Link>
         </Section>
 
@@ -63,7 +60,7 @@ const VerificationEmail = ({
   </Html>
 );
 
-export default VerificationEmail;
+export default ResetPasswordEmail;
 
 const main = {
   backgroundColor: '#ffffff',

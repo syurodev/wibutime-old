@@ -11,7 +11,8 @@ export const publicRoute = [
   "/mangas/manga/",
   "/lightnovels",
   "/lightnovels/lightnovel/",
-  "/auth/new-verification"
+  "/auth/new-verification",
+  "/auth/new-password",
 ]
 
 /**
@@ -22,6 +23,7 @@ export const authRoute = [
   "/auth/login",
   "/auth/register",
   "/auth/error",
+  "/auth/reset",
 ]
 
 /**

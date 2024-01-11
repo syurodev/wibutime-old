@@ -12,33 +12,31 @@ import {
 } from "@/components/ui/form"
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
-import { FcGoogle } from "react-icons/fc";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { signIn } from 'next-auth/react'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
-import { loginSchema } from '@/schemas/auth'
-import { login } from '@/actions/login'
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
-import Link from 'next/link'
+import { newPasswordSchema } from '@/schemas/auth'
+import { changePassword } from '@/actions/changePassword'
 
 const ComponentWithNoSSR = dynamic(() => import('@/components/Auth/CardWrapper'), {
   ssr: false
 })
-const LoginForm: FC = () => {
+const NewPasswordForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
   const searchParams = useSearchParams()
+  const token = searchParams.get("token")
   const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email đã đăng nhập bằng tài khoản liên kết khác" : ""
+  const router = useRouter()
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof newPasswordSchema>>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: {
-      username: "",
       password: "",
+      confirmPassword: "",
     },
   })
 
@@ -48,43 +46,35 @@ const LoginForm: FC = () => {
     }
   }, [urlError])
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  function onSubmit(values: z.infer<typeof newPasswordSchema>) {
+    if (!token) {
+      toast.error("Token không tồn tại")
+      return
+    }
+
     startTransiton(async () => {
-      const res = await login(values)
+      const res = await changePassword(token, values)
 
       if (res.code !== 200) {
         toast.error(res.message)
       } else {
-        toast.success(res.message)
+        toast.success(res.message, {
+          action: {
+            label: "Đăng nhập",
+            onClick: () => router.push("/auth/login")
+          },
+        })
       }
-    })
-  }
-
-  const onClick = (provider: "google") => {
-    signIn(provider, {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT
     })
   }
 
   return (
     <ComponentWithNoSSR
-      bottomHref='/auth/register'
-      bottomHrefLabel='Đăng ký'
-      bottomLabel='Chưa có tài khoản?'
+      bottomHref='/auth/login'
+      bottomHrefLabel='đăng nhập'
+      bottomLabel='Quay lại'
     >
       <div className='flex flex-col gap-9 w-full px-4'>
-        <Button
-          variant={"outline"}
-          rounded={"full"}
-          className='flex items-center gap-3'
-          size={"lg"}
-          onClick={() => onClick("google")}
-        >
-          <FcGoogle className="text-lg" /> Đăng nhập với Google
-        </Button>
-
-        <hr />
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -92,33 +82,16 @@ const LoginForm: FC = () => {
           >
             <FormField
               control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tên đăng nhập</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="username"
-                      disabled={isPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mật khẩu</FormLabel>
+                  <FormLabel>Mật khẩu mới</FormLabel>
                   <FormControl>
                     <Input
+                      placeholder="******"
+                      disabled={isPending}
                       {...field}
                       type='password'
-                      placeholder='******'
-                      disabled={isPending}
                     />
                   </FormControl>
                   <FormMessage />
@@ -126,18 +99,24 @@ const LoginForm: FC = () => {
               )}
             />
 
-            <Button
-              variant={"link"}
-              size={"sm"}
-              asChild
-              className='p-0 w-fit font-medium'
-            >
-              <Link
-                href={"/auth/reset"}
-              >
-                Quên mật khẩu?
-              </Link>
-            </Button>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nhập lại mật khẩu</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="******"
+                      disabled={isPending}
+                      {...field}
+                      type='password'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <Button
               type="submit"
@@ -146,7 +125,7 @@ const LoginForm: FC = () => {
               disabled={isPending}
             >
               {isPending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-              Đăng nhập
+              Đổi mật khẩu
             </Button>
           </form>
         </Form>
@@ -155,4 +134,4 @@ const LoginForm: FC = () => {
   )
 }
 
-export default LoginForm
+export default NewPasswordForm

@@ -17,13 +17,16 @@ import {
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { FcGoogle } from "react-icons/fc";
+import dynamic from 'next/dynamic'
 
-import styles from './styles.module.scss'
-import CardWrapper from '../CardWrapper'
 import { registerSchema } from '@/schemas/auth'
 import { register } from '@/actions/register'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
+
+const ComponentWithNoSSR = dynamic(() => import('@/components/Auth/CardWrapper'), {
+  ssr: false
+})
 
 const RegisterForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
@@ -49,10 +52,10 @@ const RegisterForm: FC = () => {
       } else {
         // toast.success(res.message, {
         //   description: res.submess,
-        //   action: {
-        //     label: "Đăng nhập",
-        //     onClick: () => router.push("/auth/login")
-        //   },
+        // action: {
+        //   label: "Đăng nhập",
+        //   onClick: () => router.push("/auth/login")
+        // },
         // })
         router.push("/auth/login")
       }
@@ -60,7 +63,7 @@ const RegisterForm: FC = () => {
   }
 
   return (
-    <CardWrapper
+    <ComponentWithNoSSR
       bottomHref='/auth/login'
       bottomHrefLabel='Đăng nhập'
       bottomLabel='Đã có tài khoản?'
@@ -70,7 +73,7 @@ const RegisterForm: FC = () => {
           <FcGoogle className="text-lg" /> Đăng ký với Google
         </Button>
 
-        <hr className={`${styles.divider} text-xs text-secondary-foreground after:bg-background`} />
+        <hr />
 
         <Form {...form}>
           <form
@@ -100,7 +103,7 @@ const RegisterForm: FC = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="jame@gmail.com" disabled={isPending} {...field} />
+                    <Input placeholder="example@example.com" disabled={isPending} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,6 +148,7 @@ const RegisterForm: FC = () => {
                 </FormItem>
               )}
             />
+
             <Button
               type="submit"
               size={"lg"}
@@ -157,7 +161,7 @@ const RegisterForm: FC = () => {
           </form>
         </Form>
       </div>
-    </CardWrapper>
+    </ComponentWithNoSSR>
   )
 }
 
