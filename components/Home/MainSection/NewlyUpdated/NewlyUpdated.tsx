@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { slide } from '@/lib/motion'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -23,7 +22,7 @@ const NewlyUpdated: FC<IProps> = ({ title, data }) => {
         <Button variant={"ghost"}>See more</Button>
       </div>
 
-      <div className='grid grid-cols-2 md:grid-cols-5 gap-4'>
+      <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {
           data.map((item, index) => {
             return (
@@ -43,21 +42,18 @@ const NewlyUpdated: FC<IProps> = ({ title, data }) => {
                   <Card>
                     <CardContent className="flex aspect-[2/3] items-center justify-center p-6 relative overflow-hidden rounded-lg shadow">
                       <div className='absolute z-10 w-full bottom-0 p-2 bg-background/60 backdrop-blur-lg'>
-                        <Badge className='uppercase text-xs' variant={item.type as "lightnovel" | "anime" | "manga" | "default" | "secondary" | "destructive" | "outline" | null | undefined}>{item.type}</Badge>
+                        <p className='line-clamp-1 font-medium text-sm'>{item.title}</p>
 
-                        <p className='line-clamp-1 font-semibold'>{item.title}</p>
-
-                        <p className='flex gap-1 items-center text-xs font-semibold uppercase mt-1'>
+                        <p className='flex gap-1 items-center text-xs uppercase mt-1'>
                           <span>
                             {item.type === "anime" ? "EP" : "CHAP"}
                           </span>
-                          <span>
+                          <span className='font-semibold'>
                             {item.current}
                           </span>
-                          {/* <LuDot /> */}
                           <span>|</span>
                           <span>
-                            {item.end}
+                            {item.end || "??"}
                           </span>
                         </p>
                       </div>
