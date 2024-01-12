@@ -1,11 +1,10 @@
+'use client'
+
 import React, { FC } from 'react'
 
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog"
 import VideoPlayer from './VideoPlayer/VideoPlayer'
 
@@ -13,16 +12,24 @@ type IProps = {
   isOpen: boolean
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
   content: {
+    animeId: string,
     id: string,
     url: string
   }
+  history?: string
 }
 
 const AnimeWatchBox: FC<IProps> = ({
   isOpen,
   onOpenChange,
-  content
+  content,
+  history
 }) => {
+  let currentTime: string | undefined | null = history
+  if (!history) {
+    currentTime = localStorage.getItem(`anime-${content.animeId}-${content.id}`);
+  }
+
   return (
     <Dialog
       open={isOpen}
@@ -32,7 +39,9 @@ const AnimeWatchBox: FC<IProps> = ({
         className="bg-background max-w-[97%] lg:w-fit rounded-lg overflow-hidden p-0"
       >
         <VideoPlayer
-          url={content.url}
+          {...content}
+          history={currentTime}
+          onOpenChange={onOpenChange}
         />
       </DialogContent>
     </Dialog>

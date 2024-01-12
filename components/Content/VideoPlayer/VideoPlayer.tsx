@@ -8,16 +8,20 @@ import { IoPlayOutline, IoPauseOutline, IoVolumeOffOutline, IoVolumeMuteOutline,
 import { RxEnterFullScreen, RxExitFullScreen } from "react-icons/rx";
 
 type IProps = {
-  url: string
+  url: string,
+  id: string,
+  animeId: string
+  history: string | undefined | null
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const VideoPlayer: FC<IProps> = ({ url }) => {
+const VideoPlayer: FC<IProps> = ({ animeId, url, id, history, onOpenChange }) => {
   const playerRef = useRef<HTMLVideoElement>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
 
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
-  const [currentDuration, setCurrentDuration] = useState<string>("00:00")
+  const [currentDuration, setCurrentDuration] = useState<string>(history || "00:00")
   const [percentComplete, setPercentComplete] = useState<number>(0)
   const [_, setTrigger] = useState<boolean>(false)
 
@@ -52,6 +56,10 @@ const VideoPlayer: FC<IProps> = ({ url }) => {
 
     setIsFullScreen((isFullScreen) => !isFullScreen);
   }, [isFullScreen, setIsFullScreen]);
+
+  // const handleClickPiP = useCallback(() => {
+  //   playerRef.current?.requestPictureInPicture()
+  // }, [])
 
   const handleClickPlay = useCallback(() => {
     if (isPlaying) {
@@ -103,13 +111,21 @@ const VideoPlayer: FC<IProps> = ({ url }) => {
   }, [handleClickPlay])
 
   const updateTimestamp = () => {
-    setCurrentDuration(formatTimestamp(playerRef.current?.currentTime || 0))
+    const time = formatTimestamp(playerRef.current?.currentTime || 0)
+    setCurrentDuration(time)
     setPercentComplete(
       Math.round(
         (1000 * (playerRef.current?.currentTime || 0)) /
         (playerRef.current?.duration || 1)
       ) / 1000
     );
+
+    if (playerRef.current?.currentTime === playerRef.current?.duration) {
+      localStorage.removeItem(`anime-${animeId}-${id}`);
+      onOpenChange(false)
+    } else {
+      localStorage.setItem(`anime-${animeId}-${id}`, (playerRef.current?.currentTime || 0).toString());
+    }
   }
 
   const handleTimeUpdate = useCallback(
@@ -155,9 +171,14 @@ const VideoPlayer: FC<IProps> = ({ url }) => {
     };
   }, [setIsFullScreen]);
 
+  useEffect(() => {
+    if (playerRef.current && history)
+      playerRef.current.currentTime = +history
+  }, [history])
+
   return (
     <div
-      className='relative w-full lg:w-[1100px] h-full max-h-[90%] flex items-center justify-center bg-background m-auto group'
+      className='relative w-full lg:w-[1300px] h-full max-h-[90%] flex items-center justify-center bg-background m-auto group'
     >
       <div
         className='absolute -bottom-[150px] left-1/2 -translate-x-1/2 rounded-lg bg-background/50 backdrop-blur-md transition-all group-hover:bottom-2 duration-500 cursor-pointer z-10 py-3 px-5 ease-in-out w-[400px] md:w-[500px] shadow'
@@ -224,7 +245,17 @@ const VideoPlayer: FC<IProps> = ({ url }) => {
             </div>
 
             {/* Fullscreen */}
-            <div className='flex justify-end -mr-2'>
+            <div className='flex gap-3 justify-end -mr-2'>
+              {/* <Button
+                variant={"ghost"}
+                size={"icon"}
+                rounded={"lg"}
+                className='opacity-0 group-hover:opacity-100 transition-all duration-200'
+                onClick={handleClickPiP}
+              >
+                <LuPictureInPicture className="text-xl" />
+              </Button> */}
+
               <Button
                 variant={"ghost"}
                 size={"icon"}

@@ -1,5 +1,5 @@
 type DetailData = {
-  _id: string;
+  id: string;
   title: string;
   producer: string;
   releaseDate: string;

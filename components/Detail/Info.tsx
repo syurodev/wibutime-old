@@ -22,7 +22,7 @@ import { slideWithoutScale } from '@/lib/motion';
 import AnimeWatchBox from '../Content/AnimeWatchBox';
 
 type IProps = {
-  _id: string;
+  id: string;
   title: string;
   type: "anime" | "manga" | "lightnovel";
   view: number;
@@ -64,7 +64,7 @@ type IProps = {
 }
 
 const Info: FC<IProps> = ({
-  _id,
+  id,
   title,
   type,
   view,
@@ -84,9 +84,11 @@ const Info: FC<IProps> = ({
 }) => {
   const [open, setOpen] = React.useState<boolean>(false)
   const [content, setContent] = React.useState<{
+    animeId: string,
     id: string,
     url: string
   }>({
+    animeId: id,
     id: "",
     url: ""
   })
@@ -352,7 +354,10 @@ const Info: FC<IProps> = ({
                               variant={"secondary"}
                               onClick={() => {
                                 setOpen(true)
-                                setContent({ ...item })
+                                setContent({
+                                  animeId: id,
+                                  ...item
+                                })
                               }}
                             >
                               {index + 1}
