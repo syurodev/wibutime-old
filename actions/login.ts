@@ -6,12 +6,15 @@ import { AuthError } from "next-auth";
 import { loginSchema } from "@/schemas/auth";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { getUserByEmail, getUserByUsername } from "@/data/user";
+import { getUserByUsername } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { isValidEmail } from "@/lib/isEmail";
 import { sendVerificationEmail } from "@/lib/mail";
 
-export const login = async (values: z.infer<typeof loginSchema>) => {
+export const login = async (
+  values: z.infer<typeof loginSchema>,
+  callbackUrl?: string | null
+) => {
   try {
     const validateFields = loginSchema.safeParse(values)
 
@@ -53,7 +56,7 @@ export const login = async (values: z.infer<typeof loginSchema>) => {
     await signIn("credentials", {
       username,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT
     })
     return {
       code: 200,

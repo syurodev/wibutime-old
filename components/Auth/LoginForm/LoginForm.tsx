@@ -33,6 +33,7 @@ const LoginForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
   const searchParams = useSearchParams()
   const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email đã đăng nhập bằng tài khoản liên kết khác" : ""
+  const callbackUrl = searchParams.get("callbackUrl")
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -50,7 +51,7 @@ const LoginForm: FC = () => {
 
   function onSubmit(values: z.infer<typeof loginSchema>) {
     startTransiton(async () => {
-      const res = await login(values)
+      const res = await login(values, callbackUrl)
 
       if (res.code !== 200) {
         toast.error(res.message)
