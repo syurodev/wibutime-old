@@ -45,7 +45,6 @@ const AnimeWatchBox: FC<IProps> = ({
         />
       </DialogContent>
     </Dialog>
-
   )
 }
 

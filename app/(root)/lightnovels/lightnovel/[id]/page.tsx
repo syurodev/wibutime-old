@@ -10,7 +10,7 @@ type IProps = {
 }
 
 const data = {
-  _id: "eqwe",
+  id: "eqwe",
   categories: ["Romance", "School Life", "Comedy"],
   title: "Làm bạn với cô gái đáng yêu thứ hai lớp",
   type: "lightnovel",

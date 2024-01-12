@@ -28,6 +28,10 @@ type DetailData = {
       date: string,
     }[]
   }[];
+  mangachaps?: {
+    id: string,
+    urls: string[]
+  }[],
   current?: number;
   end?: number;
   history?: {

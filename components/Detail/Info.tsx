@@ -20,6 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { slideWithoutScale } from '@/lib/motion';
 import AnimeWatchBox from '../Content/AnimeWatchBox';
+import MangaWatchBox from '../Content/MangaWatchBox';
 
 type IProps = {
   id: string;
@@ -42,6 +43,10 @@ type IProps = {
       date: string,
     }[]
   }[];
+  mangachaps?: {
+    id: string,
+    urls: string[]
+  }[],
   music?: {
     title: string;
     name: string;
@@ -73,6 +78,7 @@ const Info: FC<IProps> = ({
   description,
   eps,
   chaps,
+  mangachaps,
   music,
   producer,
   releaseDate,
@@ -83,6 +89,7 @@ const Info: FC<IProps> = ({
   auth
 }) => {
   const [open, setOpen] = React.useState<boolean>(false)
+  const [currentMangaChapterId, setCurrentMangaChapterId] = React.useState<string>("")
   const [content, setContent] = React.useState<{
     animeId: string,
     id: string,
@@ -185,7 +192,6 @@ const Info: FC<IProps> = ({
                 </motion.div>
               )
             }
-
 
             <div>
               <p>Categories</p>
@@ -330,7 +336,7 @@ const Info: FC<IProps> = ({
               }
 
               {
-                type !== "lightnovel" ? (
+                type === "anime" ? (
                   <div className='flex justify-center gap-3 flex-wrap'>
                     {
                       eps && eps.map((item, index) => {
@@ -367,7 +373,7 @@ const Info: FC<IProps> = ({
                       })
                     }
                   </div>
-                ) : (
+                ) : type === "lightnovel" ? (
                   <div className='flex flex-col justify-start gap-3 flex-wrap'>
                     {
                       chaps && chaps.map((item, index) => {
@@ -422,6 +428,34 @@ const Info: FC<IProps> = ({
                       })
                     }
                   </div>
+                ) : (
+                  <div className='flex justify-center gap-3 flex-wrap'>
+                    {
+                      mangachaps && mangachaps.map((item, index) => {
+                        return (
+                          <motion.div
+                            key={`category-${index}`}
+                            variants={slideWithoutScale}
+                            custom={0.7 + (index * 0.1)}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                          >
+                            <Button
+                              size={"sm"}
+                              variant={"secondary"}
+                              onClick={() => {
+                                setCurrentMangaChapterId(item.id)
+                                setOpen(true)
+                              }}
+                            >
+                              {index + 1}
+                            </Button>
+                          </motion.div>
+                        )
+                      })
+                    }
+                  </div>
                 )
               }
             </div>
@@ -435,6 +469,17 @@ const Info: FC<IProps> = ({
             isOpen={open}
             onOpenChange={setOpen}
             content={content}
+          />
+        )
+      }
+
+      {
+        mangachaps && type === "manga" && open && (
+          <MangaWatchBox
+            isOpen={open}
+            onOpenChange={setOpen}
+            content={mangachaps}
+            currentChapterId={currentMangaChapterId}
           />
         )
       }

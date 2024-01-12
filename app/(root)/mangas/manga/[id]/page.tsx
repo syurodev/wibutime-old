@@ -10,7 +10,7 @@ type IProps = {
 }
 
 const data = {
-  _id: "eqwe",
+  id: "eqwe",
   categories: ["Romance", "School Life", "Comedy"],
   title: "Làm bạn với cô gái đáng yêu thứ hai lớp",
   type: "manga",
@@ -18,69 +18,21 @@ const data = {
   current: 200,
   end: 0,
   duration: 1492,
-  eps: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"],
-  chaps: [
+  mangachaps: [
     {
-      title: "WN Vol.1: Cô gái đáng yêu thứ hai lớp (ĐÃ HOÀN THÀNH)",
-      image: "https://i.docln.net/lightnovel/covers/b14036-4171e987-219e-4140-a25b-abd4c81ae2f4-m.jpg",
-      eps: [
-        {
-          title: "Cô gái đáng yêu thứ hai trong lớp",
-          url: "/",
-          date: "31/05/2021"
-        },
-        {
-          title: "Khởi đầu của cuộc gặp gỡ (1)",
-          url: "/",
-          date: "31/05/2021"
-        },
-        {
-          title: "Khởi đầu của cuộc gặp gỡ (2)",
-          url: "/",
-          date: "01/06/2021"
-        },
+      id: "1",
+      urls: [
+        "https://source.unsplash.com/random",
+        "https://source.unsplash.com/random",
+        "https://source.unsplash.com/random"
       ]
     },
     {
-      title: "WN Vol.2: Giáng sinh (ĐÃ HOÀN THÀNH)",
-      image: "https://i.docln.net/lightnovel/covers/b19083-6f1ef772-22fd-4258-87d3-b1a8358b77d6-m.jpg",
-      eps: [
-        {
-          title: "Một khởi đầu mới",
-          url: "/",
-          date: "31/05/2021"
-        },
-        {
-          title: "Lời mời",
-          url: "/",
-          date: "31/05/2021"
-        },
-        {
-          title: "Cuộc nói chuyện ngượng ngùng",
-          url: "/",
-          date: "01/06/2021"
-        },
-      ]
-    },
-    {
-      title: "WN Vol.3: Amami Yuu (ĐÃ HOÀN THÀNH)",
-      image: "https://i.docln.net/lightnovel/covers/b19997-496c6e25-322d-4ae0-82b4-9fc443110a76-m.jpg",
-      eps: [
-        {
-          title: "Bước ngoặt",
-          url: "/",
-          date: "31/05/2021"
-        },
-        {
-          title: "Ngày cuối đến trường",
-          url: "/",
-          date: "31/05/2021"
-        },
-        {
-          title: "Nghỉ xuân cùng cô ấy",
-          url: "/",
-          date: "01/06/2021"
-        },
+      id: "2",
+      urls: [
+        "https://source.unsplash.com/random",
+        "https://source.unsplash.com/random",
+        "https://source.unsplash.com/random"
       ]
     }
   ],
@@ -106,6 +58,11 @@ const data = {
   thumbnail: "https://i.imgur.com/AF4ivQu.jpeg",
   like: 1920,
   view: 312392,
+  auth: {
+    id: "u283uer8239",
+    image: "https://source.unsplash.com/random",
+    name: "Jame"
+  }
 } as DetailData
 
 const MangaPage: FC<IProps> = ({ params }) => {
