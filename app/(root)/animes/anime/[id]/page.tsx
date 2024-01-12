@@ -18,7 +18,20 @@ const data = {
   current: 200,
   end: 0,
   duration: 1492,
-  eps: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"],
+  eps: [
+    {
+      id: "1",
+      url: "https://utfs.io/f/9fa5b715-c48e-4c41-9042-b727ec6ff493-6mesev.mp4"
+    },
+    {
+      id: "2",
+      url: "https://utfs.io/f/9fa5b715-c48e-4c41-9042-b727ec6ff493-6mesev.mp4"
+    },
+    {
+      id: "3",
+      url: "https://utfs.io/f/9fa5b715-c48e-4c41-9042-b727ec6ff493-6mesev.mp4"
+    },
+  ],
   chaps: [
     {
       title: "WN Vol.1: Cô gái đáng yêu thứ hai lớp (ĐÃ HOÀN THÀNH)",
@@ -106,6 +119,11 @@ const data = {
   thumbnail: "https://i.imgur.com/AF4ivQu.jpeg",
   like: 1920,
   view: 312392,
+  auth: {
+    id: "u283uer8239",
+    image: "https://source.unsplash.com/random",
+    name: "Jame"
+  }
 } as DetailData
 
 const AnimePage: FC<IProps> = ({ params }) => {

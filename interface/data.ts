@@ -15,7 +15,10 @@ type DetailData = {
   }[];
 
   duration: number;
-  eps?: string[];
+  eps?: {
+    id: string,
+    url: string
+  }[];
   chaps?: {
     title: string;
     image: string;
@@ -34,4 +37,9 @@ type DetailData = {
 
   image: string;
   thumbnail: string;
+  auth: {
+    id: string;
+    image: string;
+    name: string;
+  }
 }

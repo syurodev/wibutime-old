@@ -105,10 +105,14 @@ const data = {
   thumbnail: "https://i.imgur.com/AF4ivQu.jpeg",
   like: 1920,
   view: 312392,
+  auth: {
+    id: "u283uer8239",
+    image: "https://source.unsplash.com/random",
+    name: "Jame"
+  }
 } as DetailData
 
 const LightnovelPage: FC<IProps> = ({ params }) => {
-
   return (
     <PageFadeInOut>
       <div>
