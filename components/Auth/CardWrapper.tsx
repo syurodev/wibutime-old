@@ -31,10 +31,10 @@ const CardWrapper: React.FC<IProps> = ({
   const imageUrl = `/images/image${randomImages()}.jpeg`
 
   return (
-    <div className='flex items-center justify-center h-fit relative w-full md:max-w-[80%] rounded-lg overflow-hidden border shadow'>
-      <div className='w-full hidden md:block'></div>
+    <div className='flex items-center justify-center h-fit relative w-full lg:max-w-[80%] md:max-w-[70%] rounded-lg overflow-hidden border shadow'>
+      <div className='w-full hidden lg:block'></div>
 
-      <Card className='md:rounded-none min-w-[400px] max-w-[450px] overflow-hidden z-50 !border-none md:bg-background/70 backdrop-blur-xl shadow-none'>
+      <Card className='lg:rounded-none min-w-[400px] max-w-[450px] overflow-hidden z-50 !border-none lg:bg-background/70 backdrop-blur-xl shadow-none'>
         <CardHeader className='text-center text-lg relative space-y-4 z-0'>
           <div className='relative w-full flex justify-center'>
             <Link
@@ -69,7 +69,7 @@ const CardWrapper: React.FC<IProps> = ({
         fill
         sizes='full'
         priority
-        className='object-cover hidden md:block'
+        className='object-cover hidden lg:block'
       />
     </div>
   )

@@ -50,14 +50,17 @@ const RegisterForm: FC = () => {
       if (res.code !== 200) {
         toast.error(res.message)
       } else {
-        // toast.success(res.message, {
-        //   description: res.submess,
-        // action: {
-        //   label: "Đăng nhập",
-        //   onClick: () => router.push("/auth/login")
-        // },
-        // })
-        router.push("/auth/login")
+        toast.success(res.message, {
+          description: res.submess,
+          action: {
+            label: "Đăng nhập",
+            onClick: () => router.push("/auth/login")
+          },
+        })
+
+        setTimeout(() => {
+          router.push("/auth/login")
+        }, 3000)
       }
     })
   }
