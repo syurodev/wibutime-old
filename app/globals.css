@@ -84,3 +84,11 @@
     @apply bg-background text-foreground transition-colors duration-700 overflow-visible;
   }
 }
+
+ul {
+  list-style: circle;
+}
+
+ol {
+  list-style: decimal;
+}

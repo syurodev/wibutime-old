@@ -66,6 +66,7 @@ const slideIn = {
   }
 }
 
+
 const UserMenu = () => {
   const menuBtnRef = useRef<HTMLDivElement>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -100,25 +101,10 @@ const UserMenu = () => {
               ref={menuBtnRef}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {/* <motion.div
-          className='w-full h-full relative'
-          animate={{ top: isMenuOpen ? "-100%" : 0 }}
-          transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-        >
-          <div className={`bg-mediumgray w-full h-full p-5 ${style.el}`}>
-            <PerspectiveText label="Menu" className="text-primary-foreground" />
-          </div>
-
-          <div className={`bg-background absolute top-full w-full h-full p-5 ${style.el}`}>
-            <PerspectiveText label="Close" className="text-white" />
-          </div>
-        </motion.div> */}
-
               <Avatar>
                 <AvatarImage src={session.image || ""} />
                 <AvatarFallback>{session.name}</AvatarFallback>
               </Avatar>
-
             </div>
 
             <motion.div
@@ -131,7 +117,7 @@ const UserMenu = () => {
                 {
                   isMenuOpen && (
                     <div className='h-full w-full p-[100px_40px_50px_40px] box-border flex flex-col justify-between'>
-                      <div className='flex flex-col gap-4'>
+                      <div className='flex flex-col'>
                         <div
                           className={`${style.linkContainer}`}
                         >
@@ -141,10 +127,50 @@ const UserMenu = () => {
                             exit="exit"
                             initial="initial"
                             custom={0}
+                            className='py-2'
                           >
                             <Link
                               href={""}
                               className='text-4xl font-semibold hover:text-secondary transition-colors'
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              Hồ sơ
+                            </Link>
+                          </motion.div>
+
+                          {
+                            session && session?.permissions.includes("UPLOAD") && (
+                              <motion.div
+                                variants={perspective}
+                                animate="enter"
+                                exit="exit"
+                                initial="initial"
+                                custom={0.1}
+                                className='py-2'
+                              >
+                                <Link
+                                  href={"/upload"}
+                                  className='text-4xl font-semibold hover:text-secondary transition-colors'
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  Upload
+                                </Link>
+                              </motion.div>
+                            )
+                          }
+
+                          <motion.div
+                            variants={perspective}
+                            animate="enter"
+                            exit="exit"
+                            initial="initial"
+                            custom={0.2}
+                            className='py-2'
+                          >
+                            <Link
+                              href={""}
+                              className='text-4xl font-semibold hover:text-secondary transition-colors'
+                              onClick={() => setIsMenuOpen(false)}
                             >
                               Yêu thích
                             </Link>

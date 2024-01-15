@@ -11,8 +11,8 @@ import { generateVerificationToken } from "./lib/tokens";
 declare module 'next-auth' {
   interface Session {
     user: DefaultSession['user'] & {
-      role: "USER" | "ADMIN" | "CREATER";
-      permissions: string[];
+      role: UserRole;
+      permissions: UserPermissions[];
       name: string;
       username?: string;
     };
@@ -66,7 +66,7 @@ export const {
       }
 
       if (token.permissions && session.user) {
-        session.user.permissions = token.permissions as string[]
+        session.user.permissions = token.permissions as UserPermissions[]
       }
 
       if (token.username && session.user) {

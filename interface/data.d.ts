@@ -47,3 +47,8 @@ type DetailData = {
     name: string;
   }
 }
+
+type Category = {
+  id: string,
+  name: string
+}

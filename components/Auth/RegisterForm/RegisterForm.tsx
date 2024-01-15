@@ -88,7 +88,7 @@ const RegisterForm: FC = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tên</FormLabel>
+                  <FormLabel>Tên<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="Jame" disabled={isPending} {...field} />
                   </FormControl>
@@ -104,7 +104,7 @@ const RegisterForm: FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="example@example.com" disabled={isPending} {...field} />
                   </FormControl>
@@ -117,7 +117,7 @@ const RegisterForm: FC = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tên đăng nhập</FormLabel>
+                  <FormLabel>Tên đăng nhập<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="username" disabled={isPending} {...field} />
                   </FormControl>
@@ -130,7 +130,7 @@ const RegisterForm: FC = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mật khẩu</FormLabel>
+                  <FormLabel>Mật khẩu<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <Input {...field} type='password' placeholder='******' disabled={isPending} />
                   </FormControl>
@@ -143,7 +143,7 @@ const RegisterForm: FC = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nhập lại mật khẩu</FormLabel>
+                  <FormLabel>Nhập lại mật khẩu<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <Input {...field} type='password' placeholder='******' disabled={isPending} />
                   </FormControl>

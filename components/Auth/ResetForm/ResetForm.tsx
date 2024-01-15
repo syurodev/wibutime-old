@@ -63,7 +63,7 @@ const ResetForm: FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <Input
                       placeholder="example@example.com"
