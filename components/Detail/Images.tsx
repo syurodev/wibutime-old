@@ -3,16 +3,32 @@
 import React, { FC } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
 import { slide } from '@/lib/motion'
 
 type IProps = {
-  image: string
-  thumbnail: string
+  image?: {
+    key?: string
+    url: string
+  } | null | string,
+  thumbnail?: {
+    key?: string
+    url: string
+  } | null,
+  name: string
+  type: "userAvatar" | "contentImage"
 }
 
 const Hero: FC<IProps> = ({
   image,
   thumbnail,
+  type,
+  name
 }) => {
   return (
     <div className='relative'>
@@ -24,8 +40,14 @@ const Hero: FC<IProps> = ({
         exit="exit"
         className='relative w-full h-[45vh] rounded-lg overflow-hidden shadow'
       >
-        {/* <div className='w-full h-full bottom-0 absolute z-10 backdrop-blur-md bg-primary/20 backdrop-hue-rotate-30' /> */}
-        <Image src={thumbnail} alt='thumbnail' fill sizes='100%' priority className='object-cover brightness-70' />
+        <Image
+          src={thumbnail ? thumbnail.url : "/images/default-cover-image.jpeg"}
+          alt={`thumbnail - ${name}`}
+          fill
+          sizes='100%'
+          priority
+          className='object-cover brightness-70'
+        />
       </motion.div>
 
       <motion.div
@@ -49,9 +71,31 @@ const Hero: FC<IProps> = ({
           scale: 0.9,
           transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] }
         }}
-        className='absolute -bottom-[5%] left-1/2 max-w-[200px] -translate-x-1/2 w-[30vw] aspect-[2/3] rounded-lg overflow-hidden shadow z-20'
+        className={`absolute left-1/2 max-w-[200px] -translate-x-1/2 w-[30vw] aspect-[2/3] rounded-lg overflow-hidden z-20 flex justify-center items-end ${type === 'contentImage' ? "shadow -bottom-[5%]" : "-bottom-[10%]"}`}
       >
-        <Image src={image} alt='thumbnail' fill sizes='100%' priority className='object-cover' />
+        {
+          type === 'contentImage' ? (
+            <Image
+              src={image ? typeof image === "string" ? image : image.url : "/images/image2.jpeg"}
+              alt={`cover image - ${name}`}
+              fill
+              sizes='100%'
+              priority
+              className='object-cover'
+            />
+          ) : (
+            <Avatar
+              className='size-32 md:size-40 bg-background/60 backdrop-blur-lg shadow'
+            >
+              <AvatarImage
+                src={image ? typeof image === "string" ? image : image.url : "/images/default-avatar.webp"}
+                alt={name}
+
+              />
+              <AvatarFallback>{name}</AvatarFallback>
+            </Avatar>
+          )
+        }
       </motion.div>
     </div>
   )

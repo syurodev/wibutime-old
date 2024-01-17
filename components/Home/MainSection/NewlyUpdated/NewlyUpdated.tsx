@@ -4,9 +4,7 @@ import { FC } from 'react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { slide } from '@/lib/motion'
-import { Card, CardContent } from '@/components/ui/card'
-import Image from 'next/image'
-import Link from 'next/link'
+import CardItem from '@/components/shared/Card/CardItem'
 
 type IProps = {
   title: string,
@@ -35,38 +33,13 @@ const NewlyUpdated: FC<IProps> = ({ title, data }) => {
                 animate="animate"
                 exit="exit"
               >
-                <Link
-                  href={`/${item.type}s/${item.type}/${item._id}`}
-                  scroll
-                >
-                  <Card>
-                    <CardContent className="flex aspect-[2/3] items-center justify-center p-6 relative overflow-hidden rounded-lg shadow">
-                      <div className='absolute z-10 w-full bottom-0 p-2 bg-background/60 backdrop-blur-lg'>
-                        <p className='line-clamp-1 font-medium text-sm'>{item.title}</p>
-
-                        <p className='flex gap-1 items-center text-xs uppercase mt-1'>
-                          <span>
-                            {item.type === "anime" ? "EP" : "CHAP"}
-                          </span>
-                          <span className='font-semibold'>
-                            {item.current}
-                          </span>
-                          <span>|</span>
-                          <span>
-                            {item.end || "??"}
-                          </span>
-                        </p>
-                      </div>
-                      <Image
-                        src={item.image}
-                        fill
-                        alt={item._id}
-                        sizes='100%'
-                        className='object-cover'
-                      />
-                    </CardContent>
-                  </Card>
-                </Link>
+                <CardItem
+                  {...item}
+                  image={item.image as {
+                    key?: string;
+                    url: string;
+                  } | null | undefined}
+                />
               </motion.div>
             )
           })

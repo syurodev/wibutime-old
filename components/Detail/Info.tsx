@@ -24,7 +24,7 @@ import MangaWatchBox from '../Content/MangaWatchBox';
 
 type IProps = {
   id: string;
-  title: string;
+  name: string;
   type: "anime" | "manga" | "lightnovel";
   view: number;
   like: number;
@@ -36,7 +36,10 @@ type IProps = {
   }[];
   chaps?: {
     title: string;
-    image: string;
+    image?: {
+      key?: string
+      url: string
+    } | null;
     eps: {
       title: string,
       url: string,
@@ -45,15 +48,20 @@ type IProps = {
   }[];
   mangachaps?: {
     id: string,
-    urls: string[]
+    image: {
+      key?: string
+      url: string
+    }[]
   }[],
   music?: {
     title: string;
     name: string;
     link: string;
   }[];
-  producer: string;
-  releaseDate: string;
+  producer?: string;
+  author?: string;
+  artist?: string;
+  releaseDate?: string;
   current?: number;
   end?: number;
   duration?: number;
@@ -63,14 +71,19 @@ type IProps = {
   };
   auth: {
     id: string;
-    image: string;
+    image: {
+      key?: string
+      url: string
+    } | null | string;
     name: string;
   }
 }
 
 const Info: FC<IProps> = ({
   id,
-  title,
+  name,
+  author,
+  artist,
   type,
   view,
   like,
@@ -112,7 +125,7 @@ const Info: FC<IProps> = ({
             animate="animate"
             exit="exit"
           >
-            {title}
+            {name}
           </motion.h2>
 
           <motion.div
@@ -145,11 +158,10 @@ const Info: FC<IProps> = ({
           >
             <Link
               className='flex items-center gap-2'
-              //TODO: user url
-              href={"#"}
+              href={`/u/${auth.id}`}
             >
               <Avatar>
-                <AvatarImage src={auth.image} alt={auth.name} />
+                <AvatarImage src={auth.image ? typeof auth.image === "string" ? auth.image : auth.image?.url : "/images/default-avatar.webp"} alt={auth.name} />
                 <AvatarFallback>{auth.name}</AvatarFallback>
               </Avatar>
               <p>{auth.name}</p>
@@ -221,29 +233,69 @@ const Info: FC<IProps> = ({
             </div>
 
             <div>
-              <motion.p
-                className='text-base'
-                variants={slideWithoutScale}
-                custom={0.65}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                <span>Release Date:</span>
-                <span>{releaseDate}</span>
-              </motion.p>
+              {
+                releaseDate && (
+                  <motion.p
+                    className='text-base'
+                    variants={slideWithoutScale}
+                    custom={0.65}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <span>Release Date:</span>
+                    <span>{releaseDate}</span>
+                  </motion.p>
+                )
+              }
 
-              <motion.p
-                className='text-base'
-                variants={slideWithoutScale}
-                custom={0.7}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                <span>Producer:</span>
-                <span>{producer}</span>
-              </motion.p>
+              {
+                producer && (
+                  <motion.p
+                    className='text-base'
+                    variants={slideWithoutScale}
+                    custom={0.7}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <span>Producer:</span>
+                    <span>{producer}</span>
+                  </motion.p>
+                )
+              }
+
+              {
+                author && (
+                  <motion.p
+                    className='text-base'
+                    variants={slideWithoutScale}
+                    custom={0.65}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <span>Tác giả:</span>
+                    <span>{author}</span>
+                  </motion.p>
+                )
+              }
+
+              {
+                artist && (
+                  <motion.p
+                    className='text-base'
+                    variants={slideWithoutScale}
+                    custom={0.7}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <span>Hoạ sĩ:</span>
+                    <span>{artist}</span>
+                  </motion.p>
+                )
+              }
             </div>
 
             {
@@ -393,7 +445,13 @@ const Info: FC<IProps> = ({
                               </CardHeader>
                               <CardContent className='flex gap-3'>
                                 <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
-                                  <Image src={item.image} alt={item.title} fill sizes='100%' priority className='object-cover' />
+                                  <Image
+                                    src={item.image ? item.image.url : "images/image2.jpeg"}
+                                    alt={item.title}
+                                    fill sizes='100%'
+                                    priority
+                                    className='object-cover'
+                                  />
                                 </div>
 
                                 <div className='flex flex-col gap-2 w-full'>

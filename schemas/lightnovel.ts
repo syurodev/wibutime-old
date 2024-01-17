@@ -16,7 +16,7 @@ export const lightnovelSchema = z.object({
     id: z.string(),
     name: z.string()
   })),
-  otherName: z.array(
+  otherNames: z.array(
     z.object({
       id: z.string(),
       text: z.string(),
@@ -31,4 +31,9 @@ export const lightnovelSchema = z.object({
     key: z.string().optional(),
     url: z.string().url()
   }).optional(),
+})
+
+export const lightnovelChapterSchema = z.object({
+  name: z.string().min(1, { message: "Vui lòng nhập tên chapter" }),
+  content: LightnovelContentSchema
 })

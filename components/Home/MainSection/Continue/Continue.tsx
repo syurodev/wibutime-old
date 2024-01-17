@@ -57,9 +57,10 @@ const Continue: FC<IProps> = ({ data }) => {
                             </p>
                           </div>
                           <Image
-                            src={item.image}
+                            src={item.image ? item.image.url : "/images/image2.jpeg"}
                             fill
-                            alt={item._id}
+                            alt={item.id}
+                            sizes='full'
                             className='object-cover'
                           />
                         </CardContent>

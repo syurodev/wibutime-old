@@ -117,7 +117,7 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
 
             <FormField
               control={form.control}
-              name="otherName"
+              name="otherNames"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tên tên khác</FormLabel>
@@ -192,7 +192,6 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
                 <FormItem>
                   <FormLabel>Tóm tắt<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
-                    {/* <TiptapEditor content={field.name} onChange={field.onChange} /> */}
                     <Textarea
                       {...field}
                     />
@@ -273,7 +272,6 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
                 </FormItem>
               )}
             />
-
           </div>
         </div>
 

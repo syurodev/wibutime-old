@@ -178,7 +178,14 @@ const News: FC<IProps> = ({ data }) => {
                       animate="animate"
                       exit="exit"
                     >
-                      <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' priority />
+                      <Image
+                        src={item.image ? item.image.url : "/images/image2.jpeg"}
+                        alt={item.title}
+                        fill
+                        sizes='90vw'
+                        className='object-cover'
+                        priority
+                      />
                     </motion.div>
                   </div>
                 )

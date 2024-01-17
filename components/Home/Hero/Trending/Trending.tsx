@@ -55,7 +55,14 @@ const Trending: FC<IProps> = ({ data }) => {
                           scroll
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
-                            <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />
+                            <Image
+                              src={item.image ? item.image.url : "/images/image2.jpeg"}
+                              alt={item.title}
+                              fill
+                              sizes='50px'
+                              className='object-cover'
+                              priority
+                            />
                           </div>
 
                           <div className='flex flex-col w-full'>
@@ -103,7 +110,13 @@ const Trending: FC<IProps> = ({ data }) => {
                           scroll
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
-                            <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />
+                            <Image
+                              src={item.image ? item.image.url : "/images/image2.jpeg"}
+                              alt={item.title}
+                              fill
+                              sizes='full'
+                              className='object-cover'
+                            />
                           </div>
 
                           <div className='flex flex-col w-full'>
@@ -151,7 +164,13 @@ const Trending: FC<IProps> = ({ data }) => {
                           scroll
                         >
                           <div className='min-w-8 w-8 h-12 relative rounded-md overflow-hidden'>
-                            <Image src={item.image} alt={item.title} fill sizes='full' className='object-cover' />
+                            <Image
+                              src={item.image ? item.image.url : "/images/image2.jpeg"}
+                              alt={item.title}
+                              fill
+                              sizes='full'
+                              className='object-cover'
+                            />
                           </div>
 
                           <div className='flex flex-col w-full'>

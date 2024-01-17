@@ -130,7 +130,7 @@ const UserMenu = () => {
                             className='py-2'
                           >
                             <Link
-                              href={""}
+                              href={`/u/${session.id}`}
                               className='text-4xl font-semibold hover:text-secondary transition-colors'
                               onClick={() => setIsMenuOpen(false)}
                             >

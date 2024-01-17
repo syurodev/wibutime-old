@@ -28,7 +28,7 @@ export const createLightnovel = async (values: z.infer<typeof lightnovelSchema>)
       data: {
         ...validationValues.data,
         userId: session.id,
-        otherName: validationValues.data.otherName ? validationValues.data.otherName.map(item => item.text) : [],
+        otherNames: validationValues.data.otherNames ? validationValues.data.otherNames.map(item => item.text) : [],
         categoryIds: validationValues.data.categoryIds.map(item => item.id) as string[],
       }
     })

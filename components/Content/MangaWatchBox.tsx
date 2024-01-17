@@ -14,7 +14,10 @@ type IProps = {
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
   content: {
     id: string,
-    urls: string[]
+    image: {
+      key?: string
+      url: string
+    }[]
   }[]
   currentChapterId: string
   history?: string
@@ -28,7 +31,7 @@ const MangaWatchBox: FC<IProps> = ({
   history
 }) => {
   const [chapter, setChapter] = useState<string>(currentChapterId)
-
+  console.log(content)
   //TODO: Block user download image
 
   return (
@@ -80,8 +83,8 @@ const MangaWatchBox: FC<IProps> = ({
           <AnimatePresence mode='wait'>
             {
               content.map(item => {
-                if (item.id === chapter) {
-                  return item.urls.map((image, index) => {
+                if (item.id === chapter && item.image) {
+                  return item.image.map((image, index) => {
                     return (
                       <motion.div
                         key={`chapter-${item.id}-image${index}`}
@@ -93,7 +96,7 @@ const MangaWatchBox: FC<IProps> = ({
                         exit="exit"
                       >
                         <Image
-                          src={image}
+                          src={image.url}
                           alt=''
                           width={800}
                           height={1280}

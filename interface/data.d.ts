@@ -1,8 +1,10 @@
 type DetailData = {
   id: string;
-  title: string;
+  name: string;
   producer: string;
   releaseDate: string;
+  author?: string;
+  artist?: string;
   view: number;
   like: number;
   categories: string[];
@@ -21,7 +23,10 @@ type DetailData = {
   }[];
   chaps?: {
     title: string;
-    image: string;
+    image?: {
+      key?: string
+      url: string
+    } | null;
     eps: {
       title: string,
       url: string,
@@ -30,7 +35,10 @@ type DetailData = {
   }[];
   mangachaps?: {
     id: string,
-    urls: string[]
+    image: {
+      key?: string
+      url: string
+    }[]
   }[],
   current?: number;
   end?: number;
@@ -38,12 +46,20 @@ type DetailData = {
     title: string,
     url: string
   };
-
-  image: string;
-  thumbnail: string;
+  image?: {
+    key?: string
+    url: string
+  } | null
+  thumbnail?: {
+    key?: string
+    url: string
+  } | null;
   auth: {
     id: string;
-    image: string;
+    image: {
+      key?: string
+      url: string
+    } | string | null;
     name: string;
   }
 }
@@ -52,3 +68,5 @@ type Category = {
   id: string,
   name: string
 }
+
+type ContentType = "anime" | "manga" | "lightnovel"

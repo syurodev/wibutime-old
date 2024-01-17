@@ -2,7 +2,10 @@ type NewsData = {
   _id: string,
   title: string,
   categories: string[],
-  image: string,
+  image?: {
+    key: string
+    url: string
+  } | null,
   type: "anime" | "manga" | "lightnovel",
   ep: string,
   duration: number,
@@ -15,20 +18,29 @@ type TrendingData = {
     title: string;
     view: number;
     like: number;
-    image: string;
+    image?: {
+      key: string
+      url: string
+    } | null,
   }[];
   manga: {
     _id: string;
     title: string;
     view: number;
     like: number;
-    image: string;
+    image?: {
+      key: string
+      url: string
+    } | null,
   }[];
   lightnovel: {
     _id: string;
     title: string;
     view: number;
     like: number;
-    image: string;
+    image?: {
+      key: string
+      url: string
+    } | null,
   }[];
 }

@@ -62,7 +62,7 @@ const TiptapEditor: FC<IProps> = ({
     content: content,
     editorProps: {
       attributes: {
-        class: "rounded-lg border min-h-[200px] border-input bg-background p-2"
+        class: "rounded-lg border min-h-[400px] border-input bg-background p-2"
       }
     },
     onUpdate({ editor }) {

@@ -1,16 +1,22 @@
 type ContinueData = {
-  _id: string;
-  image: string;
+  id: string;
+  image?: {
+    key: string
+    url: string
+  } | null,
   current: number;
   history: number;
   type: string;
 }
 
 type NewlyData = {
-  _id: string;
-  image: string;
+  id: string;
+  image?: {
+    key: string
+    url: string
+  } | null,
   current: number;
   end?: number;
   type: "anime" | "manga" | "lightnovel";
-  title: string;
+  name: string;
 }
