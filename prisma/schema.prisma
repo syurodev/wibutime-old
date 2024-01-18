@@ -6,24 +6,24 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 // USER
 model User {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
+  id             String    @id @default(cuid())
+  name           String    @db.Text
   username       String?   @unique
-  image          String?
-  coverImage     String?
-  description    String?
+  image          String?   @db.Text
+  coverImage     Json?     @db.Json
+  description    String?   @db.Text
   email          String?   @unique
   phone          String?   @unique
-  hashedPassword String?
-  emailVerified  Boolean?
-  phoneVerified  Boolean?
-  roleId         String    @db.ObjectId
+  hashedPassword String?   @db.Text
+  emailVerified  Boolean?  @db.Boolean
+  phoneVerified  Boolean?  @db.Boolean
+  roleId         String    @db.Text
   accounts       Account[]
   createdAt      DateTime  @default(now())
 
@@ -36,42 +36,47 @@ model User {
 }
 
 model Favorite {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String   @db.ObjectId
-  lightnovelIds String[] @db.ObjectId
-  animeIds      String[] @db.ObjectId
-  mangaIds      String[] @db.ObjectId
+  id            String   @id @default(cuid())
+  userId        String   @db.Text
+  lightnovelIds String[]
+  animeIds      String[]
+  mangaIds      String[]
 
   user        User         @relation(fields: [userId], references: [id])
-  lightnovels Lightnovel[] @relation(fields: [lightnovelIds], references: [id])
-  animes      Anime[]      @relation(fields: [animeIds], references: [id])
-  mangas      Manga[]      @relation(fields: [mangaIds], references: [id])
+  // lightnovels Lightnovel[] @relation(fields: [lightnovelIds], references: [id])
+  // animes      Anime[]      @relation(fields: [animeIds], references: [id])
+  // mangas      Manga[]      @relation(fields: [mangaIds], references: [id])
+  lightnovels Lightnovel[]
+  animes      Anime[]
+  mangas      Manga[]
 }
 
 // ROLE
 model Role {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  id   String @id @default(cuid())
+  name String @db.Text
 
   users         User[]
-  permissionIds String[] @db.ObjectId
+  permissionIds String[]
 
-  permissions Permission[] @relation(fields: [permissionIds], references: [id])
+  // permissions Permission[] @relation(fields: [permissionIds], references: [id])
+  permissions Permission[]
 }
 
 // PERMISSION
 model Permission {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id   String @id @default(cuid())
   name String
 
-  roleIds String[] @db.ObjectId
+  roleIds String[]
 
-  roles Role[] @relation(fields: [roleIds], references: [id])
+  // roles Role[] @relation(fields: [roleIds], references: [id])
+  roles Role[]
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  id                String  @id @default(cuid())
+  userId            String
   type              String
   provider          String
   providerAccountId String
@@ -89,8 +94,8 @@ model Account {
 }
 
 model VerificationToken {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String
+  id      String   @id @default(cuid())
+  email   String   @db.Text
   token   String   @unique
   expires DateTime
 
@@ -98,8 +103,8 @@ model VerificationToken {
 }
 
 model ResetPasswordToken {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String
+  id      String   @id @default(cuid())
+  email   String   @db.Text
   token   String   @unique
   expires DateTime
 
@@ -107,40 +112,42 @@ model ResetPasswordToken {
 }
 
 model Lightnovel {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
+  id         String   @id @default(cuid())
+  name       String   @db.Text
   otherNames String[] @default([])
-  author     String?
+  author     String?  @db.Text
   artist     String?  @default("")
-  image      Json?
-  coverImage Json?
-  summary    String
+  image      Json?    @db.Json
+  coverImage Json?    @db.Json
+  summary    String   @db.Text
   createdAt  DateTime @default(now())
   updateAt   DateTime @updatedAt
   deleted    Boolean  @default(false)
 
-  userId      String              @db.ObjectId
+  userId      String              @db.Text
   chapters    LightnovelChapter[]
-  categoryIds String[]            @db.ObjectId
-  favoriteIds String[]            @db.ObjectId
+  categoryIds String[]
+  favoriteIds String[]
 
-  favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
-  categories Category[] @relation(fields: [categoryIds], references: [id])
+  // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
+  // categories Category[] @relation(fields: [categoryIds], references: [id])
+  favorites  Favorite[]
+  categories Category[]
   user       User       @relation(fields: [userId], references: [id])
 
   @@index([name])
 }
 
 model LightnovelChapter {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  content   Json
+  id        String   @id @default(cuid())
+  name      String   @db.Text
+  content   Json     @db.Json
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
 
-  novelId  String    @db.ObjectId
+  novelId  String    @db.Text
   comments Comment[]
 
   novel Lightnovel @relation(fields: [novelId], references: [id])
@@ -148,35 +155,37 @@ model LightnovelChapter {
 
 //TODO: ANIME
 model Anime {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
+  id         String   @id @default(cuid())
+  name       String   @db.Text
   createdAt  DateTime @default(now())
   updateAt   DateTime @updatedAt
   deleted    Boolean  @default(false)
-  image      Json?
-  coverImage Json?
+  image      Json?    @db.Json
+  coverImage Json?    @db.Json
 
-  userId      String         @db.ObjectId
+  userId      String         @db.Text
   episodes    AnimeEpisode[]
-  categoryIds String[]       @db.ObjectId
-  favoriteIds String[]       @db.ObjectId
+  categoryIds String[]
+  favoriteIds String[]
 
-  favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
-  categories Category[] @relation(fields: [categoryIds], references: [id])
+  // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
+  // categories Category[] @relation(fields: [categoryIds], references: [id])
+  favorites  Favorite[]
+  categories Category[]
   user       User       @relation(fields: [userId], references: [id])
 
   @@index([name])
 }
 
 model AnimeEpisode {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  url       String
+  id        String   @id @default(cuid())
+  url       String   @db.Text
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
 
-  animeId  String    @db.ObjectId
+  animeId  String    @db.Text
   comments Comment[]
 
   anime Anime @relation(fields: [animeId], references: [id])
@@ -184,65 +193,70 @@ model AnimeEpisode {
 
 //TODO: MANGA
 model Manga {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
+  id         String   @id @default(cuid())
+  name       String   @db.Text
   createdAt  DateTime @default(now())
   updateAt   DateTime @updatedAt
   deleted    Boolean  @default(false)
-  image      Json?
-  coverImage Json?
+  image      Json?    @db.Json
+  coverImage Json?    @db.Json
 
-  favoriteIds String[]       @db.ObjectId
-  userId      String         @db.ObjectId
+  favoriteIds String[]
+  userId      String         @db.Text
   chapters    MangaChapter[]
-  categoryIds String[]       @db.ObjectId
+  categoryIds String[]
 
-  favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
-  categories Category[] @relation(fields: [categoryIds], references: [id])
+  // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
+  // categories Category[] @relation(fields: [categoryIds], references: [id])
+  favorites  Favorite[]
+  categories Category[]
   user       User       @relation(fields: [userId], references: [id])
 
   @@index([name])
 }
 
 model MangaChapter {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   url       String[]
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
 
-  mangaId  String    @db.ObjectId
+  mangaId  String    @db.Text
   comments Comment[]
 
   manga Manga @relation(fields: [mangaId], references: [id])
 }
 
 model Category {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  id      String  @id @default(cuid())
   name    String  @unique
   deleted Boolean @default(false)
 
-  mangaIds      String[] @db.ObjectId
-  animeIds      String[] @db.ObjectId
-  lightnovelIds String[] @db.ObjectId
+  mangaIds      String[]
+  animeIds      String[]
+  lightnovelIds String[]
 
-  mangas      Manga[]      @relation(fields: [mangaIds], references: [id])
-  animes      Anime[]      @relation(fields: [animeIds], references: [id])
-  lightnovels Lightnovel[] @relation(fields: [lightnovelIds], references: [id])
+  // mangas      Manga[]      @relation(fields: [mangaIds], references: [id])
+  // animes      Anime[]      @relation(fields: [animeIds], references: [id])
+  // lightnovels Lightnovel[] @relation(fields: [lightnovelIds], references: [id])
+  mangas      Manga[]
+  animes      Anime[]
+  lightnovels Lightnovel[]
 }
 
 model Comment {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  comment  String
+  id       String   @id @default(cuid())
+  comment  String   @db.Text
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
   deleted  Boolean  @default(false)
 
-  userId       String  @db.ObjectId
-  lightnovelId String? @db.ObjectId
-  animeId      String? @db.ObjectId
-  mangaId      String? @db.ObjectId
+  userId       String  @db.Text
+  lightnovelId String? @db.Text
+  animeId      String? @db.Text
+  mangaId      String? @db.Text
 
   user       User               @relation(fields: [userId], references: [id])
   lightnovel LightnovelChapter? @relation(fields: [lightnovelId], references: [id])
