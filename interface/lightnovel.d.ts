@@ -4,7 +4,7 @@ type LightnovelQuickInformation = {
   image?: {
     key: string
     url: string
-  } | null,
+  } | {} | null,
   createdAt: Date,
   user: {
     id: string
