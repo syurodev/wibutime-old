@@ -2,7 +2,7 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 
 import { getServerSession } from '@/lib/getServerSession'
-import FormUploadLightnovel from '@/components/Upload/FormUploadLightnovel'
+import FormUploadLightnovel from '@/components/Upload/Lightnovel/FormUploadLightnovel'
 import { getAllCategories } from '@/actions/categories'
 
 const UploadPage = async () => {

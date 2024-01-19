@@ -8,8 +8,6 @@ import ContextMenuComponent from '../ContextMenu/ContextMenuComponent'
 type IProps = {
   type: ContentType,
   id: string,
-  userId?: string,
-  currentUserId?: string,
   name: string,
   image: {
     key?: string;
@@ -27,8 +25,6 @@ const CardItem: FC<IProps> = ({
   image,
   current,
   end,
-  userId,
-  currentUserId,
   poster = false
 }) => {
   return (

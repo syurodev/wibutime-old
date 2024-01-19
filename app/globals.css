@@ -97,22 +97,29 @@ ol {
   display: none;
 }
 
+.tiptap::-webkit-scrollbar {
+  display: block;
+}
+
 /* width */
-/* ::-webkit-scrollbar {
-  width: 3px;
-} */
+.tiptap::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 10px;
+}
 
 /* Track */
-/* ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-} */
+.tiptap::-webkit-scrollbar-track {
+  background: transparent;
+}
 
 /* Handle */
-/* ::-webkit-scrollbar-thumb {
-  background: #888;
-} */
+.tiptap::-webkit-scrollbar-thumb {
+  /* background: #888; */
+  @apply bg-muted transition-all duration-200 rounded-full absolute
+}
 
 /* Handle on hover */
-/* ::-webkit-scrollbar-thumb:hover {
-  background: #555;
-} */
+.tiptap::-webkit-scrollbar-thumb:hover {
+  /* background: #555; */
+  @apply bg-primary
+}

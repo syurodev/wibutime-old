@@ -9,7 +9,16 @@ type MangaQuickInformation = {
   user: {
     id: string
   },
-  chapters: {
-    viewed: number
-  }[],
+  seasons: {
+    id: string,
+    name: string,
+    image: {
+      key: string
+      url: string
+    } | {} | null,
+    chapters: {
+      id: string
+      viewed: number
+    }[],
+  }[]
 }

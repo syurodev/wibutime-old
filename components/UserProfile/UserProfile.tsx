@@ -9,7 +9,6 @@ type IProps = {
 }
 
 const UserProfile: FC<IProps> = ({ data }) => {
-  console.log(data)
   return (
     <div className='flex flex-col gap-5'>
       <Images
@@ -17,7 +16,12 @@ const UserProfile: FC<IProps> = ({ data }) => {
         type='userAvatar'
       />
       <div className='w-full mt-5'>
-        <p className='text-center font-semibold text-2xl lg:text-3xl'>{data.name}</p>
+        <p
+          className='text-center font-semibold text-2xl lg:text-3xl'
+        >
+          {data.name}
+        </p>
+
         {data.username && <p className='text-center text-xs text-secondary-foreground'>@{data.username}</p>}
       </div>
 

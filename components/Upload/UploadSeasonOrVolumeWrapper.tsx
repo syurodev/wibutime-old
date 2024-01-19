@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+
 import {
   Drawer,
   DrawerClose,
@@ -9,7 +10,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import FormUploadLightnovelChapter from './Lightnovel/FormUploadLightnovelChapter'
+import FormUploadLightnovelVolume from './Lightnovel/FormUploadLightnovelVolume'
 
 type IProps = {
   isOpen: boolean
@@ -19,14 +20,13 @@ type IProps = {
   name: string
 }
 
-const UploadChapterOrEPWrapper: FC<IProps> = ({
+const UploadSeasonOrVolumeWrapper: FC<IProps> = ({
   isOpen,
   onOpenChange,
   type,
   id,
   name,
 }) => {
-
   return (
     <Drawer
       onOpenChange={onOpenChange}
@@ -38,15 +38,11 @@ const UploadChapterOrEPWrapper: FC<IProps> = ({
           <DrawerDescription className={`uppercase text-${type} text-xs font-medium text-center`}>{type}</DrawerDescription>
         </DrawerHeader>
         <div className='h-full w-full max-w-[1300px] overflow-y-auto px-2 mx-auto mb-5'>
-          {
-            type === "lightnovel" &&
-            <FormUploadLightnovelChapter novelId={id} onOpenChange={onOpenChange} />
-          }
+          <FormUploadLightnovelVolume id={id} onOpenChange={onOpenChange} />
         </div>
       </DrawerContent>
     </Drawer>
-
   )
 }
 
-export default UploadChapterOrEPWrapper
+export default UploadSeasonOrVolumeWrapper

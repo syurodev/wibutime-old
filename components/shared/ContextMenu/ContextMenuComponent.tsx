@@ -13,6 +13,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import UploadChapterOrEPWrapper from '@/components/Upload/UploadChapterOrEPWrapper'
+import UploadSeasonOrVolumeWrapper from '@/components/Upload/UploadSeasonOrVolumeWrapper'
 
 type IProps = {
   id: string,
@@ -30,7 +31,8 @@ const ContextMenuComponent: FC<IProps> = ({
   children,
 }) => {
 
-  const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false)
+  const [isOpenUploadChapterOrEpisode, setIsOpenUploadChapterOrEpisode] = useState<boolean>(false)
+  const [isOpenUploadVolumeOrSeason, setIsOpenUploadVolumeOrSeason] = useState<boolean>(false)
 
   return (
     <>
@@ -52,24 +54,47 @@ const ContextMenuComponent: FC<IProps> = ({
                     <ContextMenuItem>
                       Chỉnh sửa
                     </ContextMenuItem>
+                    {/* Volume/Season */}
                     {
                       type === "lightnovel" && (
-                        <ContextMenuItem onClick={() => setIsOpenUpload(true)}>
-                          Thêm chap
+                        <ContextMenuItem onClick={() => setIsOpenUploadVolumeOrSeason(true)}>
+                          Thêm Volume
                         </ContextMenuItem>
                       )
                     }
                     {
                       type === "manga" && (
-                        <ContextMenuItem onClick={() => setIsOpenUpload(true)}>
-                          Thêm chap
+                        <ContextMenuItem onClick={() => setIsOpenUploadVolumeOrSeason(true)}>
+                          Thêm Season
                         </ContextMenuItem>
                       )
                     }
                     {
                       type === "anime" && (
-                        <ContextMenuItem onClick={() => setIsOpenUpload(true)}>
-                          Thêm tập
+                        <ContextMenuItem onClick={() => setIsOpenUploadVolumeOrSeason(true)}>
+                          Thêm Season
+                        </ContextMenuItem>
+                      )
+                    }
+                    {/* Chapter/Episode */}
+                    {
+                      type === "lightnovel" && (
+                        <ContextMenuItem onClick={() => setIsOpenUploadChapterOrEpisode(true)}>
+                          Thêm Chapter
+                        </ContextMenuItem>
+                      )
+                    }
+                    {
+                      type === "manga" && (
+                        <ContextMenuItem onClick={() => setIsOpenUploadChapterOrEpisode(true)}>
+                          Thêm Chapter
+                        </ContextMenuItem>
+                      )
+                    }
+                    {
+                      type === "anime" && (
+                        <ContextMenuItem onClick={() => setIsOpenUploadChapterOrEpisode(true)}>
+                          Thêm Episode
                         </ContextMenuItem>
                       )
                     }
@@ -84,9 +109,17 @@ const ContextMenuComponent: FC<IProps> = ({
         </ContextMenuContent>
       </ContextMenu>
 
+      <UploadSeasonOrVolumeWrapper
+        isOpen={isOpenUploadVolumeOrSeason}
+        onOpenChange={setIsOpenUploadVolumeOrSeason}
+        type={type}
+        id={id}
+        name={name}
+      />
+
       <UploadChapterOrEPWrapper
-        isOpen={isOpenUpload}
-        onOpenChange={setIsOpenUpload}
+        isOpen={isOpenUploadChapterOrEpisode}
+        onOpenChange={setIsOpenUploadChapterOrEpisode}
         type={type}
         id={id}
         name={name}

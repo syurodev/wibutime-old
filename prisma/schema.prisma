@@ -124,8 +124,8 @@ model Lightnovel {
   updateAt   DateTime @updatedAt
   deleted    Boolean  @default(false)
 
-  userId      String              @db.Text
-  chapters    LightnovelChapter[]
+  userId      String             @db.Text
+  volumes     LightnovelVolume[]
   categoryIds String[]
   favoriteIds String[]
 
@@ -138,6 +138,20 @@ model Lightnovel {
   @@index([name])
 }
 
+model LightnovelVolume {
+  id        String   @id @default(cuid())
+  name      String   @db.Text
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  image     Json?    @db.Json
+
+  novelId  String              @db.Text
+  chapters LightnovelChapter[]
+
+  novel Lightnovel @relation(fields: [novelId], references: [id], onDelete: Cascade)
+}
+
 model LightnovelChapter {
   id        String   @id @default(cuid())
   name      String   @db.Text
@@ -147,10 +161,10 @@ model LightnovelChapter {
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
 
-  novelId  String    @db.Text
+  volumeId String    @db.Text
   comments Comment[]
 
-  novel Lightnovel @relation(fields: [novelId], references: [id])
+  volume LightnovelVolume @relation(fields: [volumeId], references: [id], onDelete: Cascade)
 }
 
 //TODO: ANIME
@@ -163,8 +177,8 @@ model Anime {
   image      Json?    @db.Json
   coverImage Json?    @db.Json
 
-  userId      String         @db.Text
-  episodes    AnimeEpisode[]
+  userId      String        @db.Text
+  seasons     AnimeSeason[]
   categoryIds String[]
   favoriteIds String[]
 
@@ -177,6 +191,21 @@ model Anime {
   @@index([name])
 }
 
+model AnimeSeason {
+  id        String   @id @default(cuid())
+  name      String   @db.Text
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  viewed    Int      @default(0)
+  image     Json?    @db.Json
+
+  animeId  String         @db.Text
+  episodes AnimeEpisode[]
+
+  anime Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+}
+
 model AnimeEpisode {
   id        String   @id @default(cuid())
   url       String   @db.Text
@@ -185,10 +214,10 @@ model AnimeEpisode {
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
 
-  animeId  String    @db.Text
+  seasonId String    @db.Text
   comments Comment[]
 
-  anime Anime @relation(fields: [animeId], references: [id])
+  season AnimeSeason @relation(fields: [seasonId], references: [id], onDelete: Cascade)
 }
 
 //TODO: MANGA
@@ -202,8 +231,8 @@ model Manga {
   coverImage Json?    @db.Json
 
   favoriteIds String[]
-  userId      String         @db.Text
-  chapters    MangaChapter[]
+  userId      String        @db.Text
+  seasons     MangaSeason[]
   categoryIds String[]
 
   // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
@@ -215,6 +244,20 @@ model Manga {
   @@index([name])
 }
 
+model MangaSeason {
+  id        String   @id @default(cuid())
+  name      String   @db.Text
+  image     Json?    @db.Json
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  deleted   Boolean  @default(false)
+
+  mangaId  String         @db.Text
+  chapters MangaChapter[]
+
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+}
+
 model MangaChapter {
   id        String   @id @default(cuid())
   url       String[]
@@ -223,10 +266,10 @@ model MangaChapter {
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
 
-  mangaId  String    @db.Text
+  seasonId String    @db.Text
   comments Comment[]
 
-  manga Manga @relation(fields: [mangaId], references: [id])
+  season MangaSeason @relation(fields: [seasonId], references: [id], onDelete: Cascade)
 }
 
 model Category {
@@ -258,8 +301,8 @@ model Comment {
   animeId      String? @db.Text
   mangaId      String? @db.Text
 
-  user       User               @relation(fields: [userId], references: [id])
-  lightnovel LightnovelChapter? @relation(fields: [lightnovelId], references: [id])
-  anime      AnimeEpisode?      @relation(fields: [animeId], references: [id])
-  manga      MangaChapter?      @relation(fields: [mangaId], references: [id])
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lightnovel LightnovelChapter? @relation(fields: [lightnovelId], references: [id], onDelete: Cascade)
+  anime      AnimeEpisode?      @relation(fields: [animeId], references: [id], onDelete: Cascade)
+  manga      MangaChapter?      @relation(fields: [mangaId], references: [id], onDelete: Cascade)
 }

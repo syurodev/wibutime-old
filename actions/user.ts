@@ -30,9 +30,17 @@ export const getUserDetail = async (id: string) => {
                 id: true
               }
             },
-            episodes: {
+            seasons: {
               select: {
-                viewed: true
+                id: true,
+                name: true,
+                image: true,
+                episodes: {
+                  select: {
+                    id: true,
+                    viewed: true
+                  }
+                }
               }
             }
           }
@@ -48,9 +56,17 @@ export const getUserDetail = async (id: string) => {
                 id: true
               }
             },
-            chapters: {
+            seasons: {
               select: {
-                viewed: true
+                id: true,
+                name: true,
+                image: true,
+                chapters: {
+                  select: {
+                    id: true,
+                    viewed: true
+                  }
+                }
               }
             }
           }
@@ -66,9 +82,17 @@ export const getUserDetail = async (id: string) => {
                 id: true
               }
             },
-            chapters: {
+            volumes: {
               select: {
-                viewed: true
+                id: true,
+                name: true,
+                image: true,
+                chapters: {
+                  select: {
+                    id: true,
+                    viewed: true
+                  }
+                }
               }
             }
           }

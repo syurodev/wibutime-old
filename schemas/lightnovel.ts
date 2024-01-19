@@ -2,7 +2,7 @@ import * as z from "zod"
 
 export const LightnovelContentSchema = z.object({
   type: z.string(),
-  content: z.array(z.unknown()).refine((data) => data.length > 0, {
+  content: z.array(z.any()).refine((data) => data.length > 0, {
     message: "Vui lòng nhập nội dung",
   }),
 });
@@ -26,8 +26,16 @@ export const lightnovelSchema = z.object({
   image: z.object({
     key: z.string().optional(),
     url: z.string().url()
-  }),
+  }).optional(),
   coverImage: z.object({
+    key: z.string().optional(),
+    url: z.string().url()
+  }).optional(),
+})
+
+export const lightnovelVolumeSchema = z.object({
+  name: z.string().min(1, { message: "Vui lòng nhập tên chapter" }),
+  image: z.object({
     key: z.string().optional(),
     url: z.string().url()
   }).optional(),
@@ -35,5 +43,6 @@ export const lightnovelSchema = z.object({
 
 export const lightnovelChapterSchema = z.object({
   name: z.string().min(1, { message: "Vui lòng nhập tên chapter" }),
+  volumeId: z.string().min(1, { message: "Vui lòng chọn volume" }),
   content: LightnovelContentSchema
 })

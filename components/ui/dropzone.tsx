@@ -13,7 +13,7 @@ const Dropzone = React.forwardRef<HTMLInputElement, DropzoneProps>(
           <div className={`flex flex-col items-center justify-center rounded-lg p-5 z-20  ${value ? "bg-background/60 backdrop-blur-lg" : ""}`}>
             {
               disabled ? (
-                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                <ReloadIcon className="h-4 w-4 animate-spin" />
               ) : (
                 <>
                   <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">

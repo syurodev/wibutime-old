@@ -9,7 +9,16 @@ type LightnovelQuickInformation = {
   user: {
     id: string
   },
-  chapters: {
-    viewed: number
-  }[],
+  volumes: {
+    id: string,
+    name: string,
+    image: {
+      key: string
+      url: string
+    } | {} | null,
+    chapters: {
+      id: string
+      viewed: number
+    }[],
+  }[]
 }

@@ -9,7 +9,16 @@ type AnimeQuickInformation = {
   user: {
     id: string
   },
-  episodes: {
-    viewed: number
+  seasons: {
+    id: string,
+    name: string,
+    image: {
+      key: string
+      url: string
+    } | {} | null,
+    episodes: {
+      id: string
+      viewed: number
+    }[]
   }[]
 }

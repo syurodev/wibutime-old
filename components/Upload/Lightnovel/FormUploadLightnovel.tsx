@@ -4,6 +4,7 @@ import React, { FC, useState, useTransition } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { useRouter } from 'next/navigation';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -18,15 +19,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { Tag, TagInput } from "@/components/ui/tag-input";
 import { lightnovelSchema } from '@/schemas/lightnovel';
-import MultiSelect from '../ui/select-multi';
+import MultiSelect from '../../ui/select-multi';
 import { Textarea } from "@/components/ui/textarea"
 import { compressFile } from '@/lib/compressFile';
 import { uploadFiles } from '@/lib/uploadthing';
 import { deleteFiles } from '@/actions/uploadthing';
-import { Dropzone } from '../ui/dropzone';
+import { Dropzone } from '../../ui/dropzone';
 import { createLightnovel } from '@/actions/lightnovel';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import { ReloadIcon } from '@radix-ui/react-icons';
 
 type IProps = {
@@ -84,7 +84,7 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
 
     const result = await compressFile(
       e.target.files,
-      endpoint === 'smallImage' ? 1 : 1.5
+      endpoint === 'smallImage' ? 0.5 : 1
     )
     if (image.key !== "") {
       await deleteFiles(image.key)
@@ -193,6 +193,7 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
                   <FormLabel>Tóm tắt<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <Textarea
+                      className='min-h-[200px]'
                       {...field}
                     />
                   </FormControl>
@@ -208,7 +209,7 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ảnh tác phẩm<span className='text-destructive'>*</span></FormLabel>
+                  <FormLabel>Ảnh tác phẩm</FormLabel>
                   <FormControl>
                     <Dropzone
                       type='file'

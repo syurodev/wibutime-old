@@ -1,5 +1,5 @@
 'use client'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { useEditor, EditorContent, JSONContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Heading from '@tiptap/extension-heading'
@@ -9,18 +9,27 @@ import Blockquote from '@tiptap/extension-blockquote'
 import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
 import Strike from '@tiptap/extension-strike'
+import { default as TiptapImage } from '@tiptap/extension-image'
 
 import Toolbar from './Toolbar'
+import { toast } from 'sonner'
+import { compressFile } from '@/lib/compressFile'
+import { uploadFiles } from '@/lib/uploadthing'
 
 type IProps = {
   content: string,
   onChange: (richText: JSONContent) => void
+  id: string
 }
 
 const TiptapEditor: FC<IProps> = ({
   content,
   onChange,
+  id
 }) => {
+  const [imageUpload, setImageUpload] = useState<boolean>(false)
+  const history = localStorage.getItem(`editor-new-content-${id}`)
+  const historyData = history ? JSON.parse(history) : "";
 
   const editor = useEditor({
     extensions: [
@@ -58,22 +67,70 @@ const TiptapEditor: FC<IProps> = ({
           class: "line-through"
         }
       }),
+      TiptapImage.configure({
+        inline: false,
+        HTMLAttributes: {
+          class: "mx-auto rounded-lg"
+        }
+      })
     ],
-    content: content,
+    content: historyData || content,
     editorProps: {
       attributes: {
-        class: "rounded-lg border min-h-[400px] border-input bg-background p-2"
+        class: "rounded-lg border min-h-[400px] max-h-[700px] overflow-y-auto border-input bg-background p-2"
+      },
+      handleDrop: function (view, event, slice, moved) {
+        if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
+          let file = event.dataTransfer.files;
+          let filesize = ((file[0].size / 1024) / 1024).toFixed(4);
+          console.log(file[0].type)
+          if (file[0].type.startsWith("image/") && +filesize < 5) {
+            let _URL = window.URL || window.webkitURL;
+            let img: HTMLImageElement = new Image();
+            img.src = _URL.createObjectURL(file[0]);
+            img.onload = async () => {
+              if (img.width > 5000 || img.height > 5000) {
+                toast.error("Vui lòng chọn hình ảnh có kích thước dưới 5000x5000")
+              } else {
+                const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
+
+                if (!coordinates) {
+                  toast.error("Có lỗi xảy ra vui lòng thử lại")
+                  return
+                }
+
+                setImageUpload(true)
+                const result = await compressFile(
+                  file, 0.8
+                )
+
+                const [res] = await uploadFiles('smallImage', { files: [result] })
+                setImageUpload(false)
+
+                const { schema } = view.state;
+                const node = schema.nodes.image.create({ src: res.url });
+                const transaction = view.state.tr.insert(coordinates.pos, node);
+                return view.dispatch(transaction);
+              }
+            };
+          } else {
+            toast.error("Vui lòng chọn hình ảnh dưới 5mb");
+          }
+          return true;
+        }
+        return false;
       }
     },
     onUpdate({ editor }) {
-      console.log(editor.getJSON())
+      localStorage.setItem(`editor-new-content-${id}`, JSON.stringify(editor.getJSON()))
       onChange(editor.getJSON())
+      console.log(editor.getJSON())
     }
   })
 
   return (
     <div>
-      <Toolbar editor={editor} />
+      <Toolbar editor={editor} imageUpload={imageUpload} />
       <EditorContent editor={editor} />
     </div>
   )
