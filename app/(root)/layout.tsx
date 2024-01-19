@@ -1,4 +1,4 @@
-
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '@/app/globals.css'
@@ -35,6 +35,7 @@ export default async function RootLayout({
             <Header />
             <main className='min-h-dvh pt-20 px-4 max-w-[1300px] mx-auto'>
               {children}
+              <Analytics />
             </main>
             <Toaster />
             <Footer />
