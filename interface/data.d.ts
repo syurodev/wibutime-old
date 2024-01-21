@@ -6,7 +6,7 @@ type DetailData = {
   author?: string;
   artist?: string;
   view: number;
-  like: number;
+  favorites: any[];
   categories: string[];
   description: string;
   type: "anime" | "manga" | "lightnovel";
@@ -21,18 +21,7 @@ type DetailData = {
     id: string,
     url: string
   }[];
-  chaps?: {
-    title: string;
-    image?: {
-      key?: string
-      url: string
-    } | null;
-    eps: {
-      title: string,
-      url: string,
-      date: string,
-    }[]
-  }[];
+  volumes: LightnovelVolumeDetail[],
   mangachaps?: {
     id: string,
     image: {

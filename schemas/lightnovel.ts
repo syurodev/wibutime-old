@@ -12,7 +12,7 @@ export const lightnovelSchema = z.object({
   author: z.string().trim().min(1, { message: "Tên tác giả là bắt buộc" }),
   artist: z.string().optional(),
   // content: LightnovelContentSchema,
-  categoryIds: z.array(z.object({
+  categories: z.array(z.object({
     id: z.string(),
     name: z.string()
   })),

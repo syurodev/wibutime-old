@@ -36,7 +36,7 @@ const AnimeWatchBox: FC<IProps> = ({
       onOpenChange={onOpenChange}
     >
       <DialogContent
-        className="bg-background max-w-[97%] lg:w-fit rounded-lg overflow-hidden p-0"
+        className="bg-background max-w-[97%] max-h-[97%] lg:w-fit rounded-lg overflow-hidden p-0 aspect-video"
       >
         <VideoPlayer
           {...content}

@@ -4,6 +4,8 @@ import PageFadeInOut from '@/components/shared/PageAnimatePresence/PageFadeInOut
 
 import Images from '@/components/Detail/Images'
 import Info from '@/components/Detail/Info';
+import { getLightnovelDetail } from '@/actions/lightnovel';
+import { redirect } from 'next/navigation';
 
 type IProps = {
   params: { id: string };
@@ -122,7 +124,12 @@ const data = {
   }
 } as DetailData
 
-const LightnovelPage: FC<IProps> = ({ params }) => {
+const LightnovelPage: FC<IProps> = async ({ params }) => {
+  const lightnovel = await getLightnovelDetail(params.id)
+  if (lightnovel.code !== 200) {
+    redirect("/")
+  }
+
   return (
     <PageFadeInOut>
       <div>
@@ -131,7 +138,19 @@ const LightnovelPage: FC<IProps> = ({ params }) => {
           type='contentImage'
         />
         <Info
-          {...data}
+          id={lightnovel.data?.id!}
+          name={lightnovel.data?.name!}
+          otherNames={lightnovel.data?.otherNames}
+          favorites={lightnovel.data?.favorites as []}
+          categories={lightnovel.data?.categories!}
+          createdAt={lightnovel.data?.createdAt!}
+          updateAt={lightnovel.data?.updateAt!}
+          summary={lightnovel.data?.summary!}
+          volumes={lightnovel.data?.volumes!}
+          author={lightnovel.data?.author}
+          artist={lightnovel.data?.artist}
+          user={lightnovel.data?.user!}
+          type={lightnovel.data?.type!}
         />
       </div>
     </PageFadeInOut>

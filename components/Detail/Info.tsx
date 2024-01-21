@@ -25,25 +25,35 @@ import MangaWatchBox from '../Content/MangaWatchBox';
 type IProps = {
   id: string;
   name: string;
+  otherNames?: string[];
   type: "anime" | "manga" | "lightnovel";
-  view: number;
-  like: number;
-  categories: string[];
-  description: string;
+  favorites: [];
+  categories: {
+    id: string,
+    name: string
+  }[];
+  createdAt: string
+  updateAt: string
+  summary: string;
   eps?: {
     id: string,
     url: string
   }[];
-  chaps?: {
-    title: string;
+  volumes?: {
+    id: string;
+    name: string;
+    createdAt: string;
+    updateAt: string;
     image?: {
-      key?: string
-      url: string
+      key?: string;
+      url: string;
     } | null;
-    eps: {
-      title: string,
-      url: string,
-      date: string,
+    chapters: {
+      id: string;
+      name: string;
+      content: any;
+      createdAt: string;
+      viewed: number
     }[]
   }[];
   mangachaps?: {
@@ -58,23 +68,20 @@ type IProps = {
     name: string;
     link: string;
   }[];
-  producer?: string;
-  author?: string;
-  artist?: string;
-  releaseDate?: string;
-  current?: number;
-  end?: number;
+  producer?: string | null;
+  author?: string | null;
+  artist?: string | null;
+  releaseDate?: string | null;
+  current?: number | null;
+  end?: number | null;
   duration?: number;
   history?: {
     title: string,
     url: string
   };
-  auth: {
+  user: {
     id: string;
-    image: {
-      key?: string
-      url: string
-    } | null | string;
+    image: string | null;
     name: string;
   }
 }
@@ -82,24 +89,26 @@ type IProps = {
 const Info: FC<IProps> = ({
   id,
   name,
-  author,
-  artist,
+  otherNames,
   type,
-  view,
-  like,
+  favorites,
   categories,
-  description,
+  createdAt,
+  updateAt,
+  summary,
   eps,
-  chaps,
+  volumes,
   mangachaps,
   music,
   producer,
+  author,
+  artist,
   releaseDate,
   current,
   end,
   duration,
   history,
-  auth
+  user,
 }) => {
   const [open, setOpen] = React.useState<boolean>(false)
   const [currentMangaChapterId, setCurrentMangaChapterId] = React.useState<string>("")
@@ -136,16 +145,16 @@ const Info: FC<IProps> = ({
             animate="animate"
             exit="exit"
           >
-            <div className='flex items-center gap-1'>
+            {/* <div className='flex items-center gap-1'>
               <IoEyeOutline />
-              <span className='text-xs'>{view}</span>
-            </div>
+              <span className='text-xs'>{viewed}</span>
+            </div> */}
             <Button
               variant={"ghost"}
               className='group items-center gap-1'
             >
               <GoHeart className="group-hover:text-rose-300 transition-colors" />
-              <span className='text-xs'>{like}</span>
+              <span className='text-xs'>{favorites.length}</span>
             </Button>
           </motion.div>
 
@@ -158,13 +167,13 @@ const Info: FC<IProps> = ({
           >
             <Link
               className='flex items-center gap-2'
-              href={`/u/${auth.id}`}
+              href={`/u/${user.id}`}
             >
               <Avatar>
-                <AvatarImage src={auth.image ? typeof auth.image === "string" ? auth.image : auth.image?.url : "/images/default-avatar.webp"} alt={auth.name} />
-                <AvatarFallback>{auth.name}</AvatarFallback>
+                <AvatarImage src={user.image || "/images/default-avatar.webp"} alt={user.name} />
+                <AvatarFallback>{user.name}</AvatarFallback>
               </Avatar>
-              <p>{auth.name}</p>
+              <p>{user.name}</p>
               {/* <p className={`text-xs select-none p-2 bg-${type}`}>nhóm dịch</p> */}
               <Badge variant={type}>Nhóm dịch</Badge>
             </Link>
@@ -223,7 +232,7 @@ const Info: FC<IProps> = ({
                           href={"#"}
                           className={badgeVariants({ variant: "outline" })}
                         >
-                          {item}
+                          {item.name}
                         </Link>
                       </motion.div>
                     )
@@ -275,7 +284,7 @@ const Info: FC<IProps> = ({
                     animate="animate"
                     exit="exit"
                   >
-                    <span>Tác giả:</span>
+                    <span>Tác giả: </span>
                     <span>{author}</span>
                   </motion.p>
                 )
@@ -291,7 +300,7 @@ const Info: FC<IProps> = ({
                     animate="animate"
                     exit="exit"
                   >
-                    <span>Hoạ sĩ:</span>
+                    <span>Hoạ sĩ: </span>
                     <span>{artist}</span>
                   </motion.p>
                 )
@@ -347,7 +356,7 @@ const Info: FC<IProps> = ({
               animate="animate"
               exit="exit"
             >
-              {description}
+              {summary}
             </motion.p>
           </div>
 
@@ -428,7 +437,7 @@ const Info: FC<IProps> = ({
                 ) : type === "lightnovel" ? (
                   <div className='flex flex-col justify-start gap-3 flex-wrap'>
                     {
-                      chaps && chaps.map((item, index) => {
+                      volumes && volumes.map((item, index) => {
                         return (
                           <motion.div
                             key={`category-${index}`}
@@ -440,14 +449,14 @@ const Info: FC<IProps> = ({
                           >
                             <Card>
                               <CardHeader>
-                                <CardTitle>{item.title}</CardTitle>
-                                <CardDescription>{`${item.eps.length} Chapters`}</CardDescription>
+                                <CardTitle>{item.name}</CardTitle>
+                                <CardDescription>{`${item.chapters.length} Chapters`}</CardDescription>
                               </CardHeader>
                               <CardContent className='flex gap-3'>
                                 <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
                                   <Image
                                     src={item.image ? item.image.url : "images/image2.jpeg"}
-                                    alt={item.title}
+                                    alt={item.name}
                                     fill sizes='100%'
                                     priority
                                     className='object-cover'
@@ -456,21 +465,21 @@ const Info: FC<IProps> = ({
 
                                 <div className='flex flex-col gap-2 w-full'>
                                   {
-                                    item.eps.map((ep, index) => {
+                                    item.chapters.map((chapter, index) => {
                                       return (
                                         <Link
-                                          key={`${item.title}-${ep.title}`}
-                                          href={ep.url}
+                                          key={`${item.name}-${chapter.name}`}
+                                          href={"#"}
                                         >
                                           <div
                                             className='flex items-center justify-between w-full'
                                           >
                                             <p className='line-clamp-1'>
-                                              {`Chapter ${index + 1}: ${ep.title}`}
+                                              {chapter.name}
                                             </p>
 
                                             <span className='text-xs text-secondary-foreground'>
-                                              {ep.date}
+                                              {chapter.createdAt}
                                             </span>
                                           </div>
                                         </Link>

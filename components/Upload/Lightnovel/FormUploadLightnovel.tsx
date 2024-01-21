@@ -143,7 +143,7 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
             {categories && (
               <FormField
                 control={form.control}
-                name="categoryIds"
+                name="categories"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Thể loại<span className='text-destructive'>*</span></FormLabel>

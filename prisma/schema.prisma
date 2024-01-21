@@ -124,13 +124,9 @@ model Lightnovel {
   updateAt   DateTime @updatedAt
   deleted    Boolean  @default(false)
 
-  userId      String             @db.Text
-  volumes     LightnovelVolume[]
-  categoryIds String[]
-  favoriteIds String[]
+  userId  String             @db.Text
+  volumes LightnovelVolume[]
 
-  // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
-  // categories Category[] @relation(fields: [categoryIds], references: [id])
   favorites  Favorite[]
   categories Category[]
   user       User       @relation(fields: [userId], references: [id])
@@ -177,10 +173,8 @@ model Anime {
   image      Json?    @db.Json
   coverImage Json?    @db.Json
 
-  userId      String        @db.Text
-  seasons     AnimeSeason[]
-  categoryIds String[]
-  favoriteIds String[]
+  userId  String        @db.Text
+  seasons AnimeSeason[]
 
   // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
   // categories Category[] @relation(fields: [categoryIds], references: [id])
@@ -230,10 +224,8 @@ model Manga {
   image      Json?    @db.Json
   coverImage Json?    @db.Json
 
-  favoriteIds String[]
-  userId      String        @db.Text
-  seasons     MangaSeason[]
-  categoryIds String[]
+  userId  String        @db.Text
+  seasons MangaSeason[]
 
   // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
   // categories Category[] @relation(fields: [categoryIds], references: [id])

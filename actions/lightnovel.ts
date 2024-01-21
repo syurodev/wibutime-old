@@ -30,7 +30,7 @@ export const createLightnovel = async (values: z.infer<typeof lightnovelSchema>)
         ...validationValues.data,
         userId: session.id,
         otherNames: validationValues.data.otherNames ? validationValues.data.otherNames.map(item => item.text) : [],
-        categoryIds: validationValues.data.categoryIds.map(item => item.id) as string[],
+        categories: validationValues.data.categories.map(item => item.id) as any,
       }
     })
 
@@ -192,6 +192,118 @@ export const getVolumes = async (novelId: string) => {
       code: 200,
       message: "success",
       data: volumes
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server vui lòng thử lại",
+      data: null
+    }
+  }
+}
+
+export const getLightnovelDetail = async (novelId: string) => {
+  try {
+    const lightnovel = await db.lightnovel.findUnique({
+      where: {
+        id: novelId,
+        deleted: false
+      },
+      select: {
+        id: true,
+        artist: true,
+        author: true,
+        categories: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        coverImage: true,
+        createdAt: true,
+        image: true,
+        name: true,
+        otherNames: true,
+        summary: true,
+        updateAt: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true
+          }
+        },
+        volumes: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            createdAt: true,
+            updateAt: true,
+            chapters: {
+              select: {
+                id: true,
+                name: true,
+                content: true,
+                viewed: true,
+                createdAt: true,
+              }
+            }
+          }
+        },
+        favorites: {
+          select: {
+            _count: true
+          }
+        }
+      }
+    })
+
+    if (!lightnovel) return {
+      code: 404,
+      message: "Không tìm thấy lightnovel",
+      data: null
+    }
+
+    const result: LightnovelDetail = {
+      id: lightnovel.id,
+      name: lightnovel.name,
+      type: "lightnovel",
+      createdAt: lightnovel.createdAt.toISOString(),
+      updateAt: lightnovel.updateAt.toISOString(),
+      categories: lightnovel.categories,
+      favorites: lightnovel.favorites,
+      otherNames: lightnovel.otherNames,
+      summary: lightnovel.summary,
+      user: lightnovel.user,
+      artist: lightnovel.artist,
+      author: lightnovel.author,
+      volumes: lightnovel.volumes.map(item => (
+        {
+          id: item.id,
+          name: item.name,
+          createdAt: item.createdAt.toISOString(),
+          updateAt: item.updateAt.toISOString(),
+          image: item.image as {
+            key?: string,
+            url: string
+          } | null,
+          chapters: item.chapters.map(chapter => ({
+            id: chapter.id,
+            name: chapter.name,
+            content: chapter.content as any,
+            createdAt: chapter.createdAt.toISOString(),
+            viewed: chapter.viewed
+          }))
+        }
+      ))
+    }
+
+    return {
+      code: 200,
+      message: "success",
+      data: result
     }
   } catch (error) {
     console.log(error)

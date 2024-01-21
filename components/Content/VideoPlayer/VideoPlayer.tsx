@@ -178,10 +178,10 @@ const VideoPlayer: FC<IProps> = ({ animeId, url, id, history, onOpenChange }) =>
 
   return (
     <div
-      className='relative w-full lg:w-[1300px] h-full max-h-[90%] flex items-center justify-center bg-background m-auto group'
+      className='relative w-full lg:w-[1300px] h-full flex items-center justify-center bg-background m-auto group'
     >
       <div
-        className='absolute -bottom-[150px] left-1/2 -translate-x-1/2 rounded-lg bg-background/50 backdrop-blur-md transition-all group-hover:bottom-2 duration-500 cursor-pointer z-10 py-3 px-5 ease-in-out w-[400px] md:w-[500px] shadow'
+        className='absolute -bottom-[200px] left-1/2 -translate-x-1/2 rounded-lg bg-background/50 backdrop-blur-md transition-all group-hover:bottom-2 duration-500 cursor-pointer z-10 py-3 px-5 ease-in-out w-[400px] md:w-[500px] shadow'
       >
         <div
           className="flex flex-col items-center justify-between gap-2"
@@ -292,7 +292,7 @@ const VideoPlayer: FC<IProps> = ({ animeId, url, id, history, onOpenChange }) =>
         ref={playerRef}
         src={url}
         autoPlay
-        className='rounded-lg w-full aspect-video z-[5]'
+        className='rounded-lg w-full aspect-video z-[5] block'
         controls={false}
         onClick={handleClickPlay}
         onTimeUpdate={updateTimestamp}
