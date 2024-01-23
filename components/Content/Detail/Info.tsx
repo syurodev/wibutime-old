@@ -19,8 +19,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { slideWithoutScale } from '@/lib/motion';
-import AnimeWatchBox from '../Content/AnimeWatchBox';
-import MangaWatchBox from '../Content/MangaWatchBox';
+import AnimeWatchBox from '@/components/Content/AnimeWatchBox';
+import MangaWatchBox from '@/components/Content/MangaWatchBox';
 
 type IProps = {
   id: string;

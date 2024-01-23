@@ -10,6 +10,7 @@ export const getAllCategories = async () => {
         name: true
       }
     })
+    await db.$disconnect()
 
     return {
       code: 200,

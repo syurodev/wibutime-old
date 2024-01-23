@@ -6,33 +6,66 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ContentStatus {
+  Pause
+  Complete
+  InProcess
 }
 
 // USER
 model User {
-  id             String    @id @default(cuid())
-  name           String    @db.Text
-  username       String?   @unique
-  image          String?   @db.Text
-  coverImage     Json?     @db.Json
-  description    String?   @db.Text
-  email          String?   @unique
-  phone          String?   @unique
-  hashedPassword String?   @db.Text
-  emailVerified  Boolean?  @db.Boolean
-  phoneVerified  Boolean?  @db.Boolean
-  roleId         String    @db.Text
-  accounts       Account[]
-  createdAt      DateTime  @default(now())
+  id                 String    @id @default(cuid())
+  name               String    @db.Text
+  username           String?   @unique
+  image              String?   @db.Text
+  description        Json?     @db.Json
+  email              String?   @unique
+  phone              String?   @unique
+  hashedPassword     String?   @db.Text
+  emailVerified      Boolean?  @db.Boolean
+  phoneVerified      Boolean?  @db.Boolean
+  roleId             String?   @db.Text
+  accounts           Account[]
+  createdAt          DateTime  @default(now())
+  translationGroupId String?   @db.Text
 
-  role        Role         @relation(fields: [roleId], references: [id])
+  translationGroups TranslationGroupMembers[]
+  lightnovels       Lightnovel[]
+  animes            Anime[]
+  mangas            Manga[]
+  rating            Rating[]
+  comments          Comment[]
+  favorites         Favorite[]
+
+  role Role? @relation(fields: [roleId], references: [id])
+}
+
+model TranslationGroupMembers {
+  userId             String
+  translationGroupId String
+  role               String
+
+  user             User             @relation(fields: [userId], references: [id])
+  translationGroup TranslationGroup @relation(fields: [translationGroupId], references: [id])
+
+  @@id([userId, translationGroupId])
+}
+
+model TranslationGroup {
+  id          String @id @default(cuid())
+  description Json?  @db.Json
+  image       Json?
+  name        String
+
   lightnovels Lightnovel[]
   animes      Anime[]
   mangas      Manga[]
-  comments    Comment[]
-  favorites   Favorite[]
+  members     TranslationGroupMembers[]
 }
 
 model Favorite {
@@ -56,10 +89,8 @@ model Role {
   id   String @id @default(cuid())
   name String @db.Text
 
-  users         User[]
-  permissionIds String[]
+  users User[]
 
-  // permissions Permission[] @relation(fields: [permissionIds], references: [id])
   permissions Permission[]
 }
 
@@ -68,9 +99,6 @@ model Permission {
   id   String @id @default(cuid())
   name String
 
-  roleIds String[]
-
-  // roles Role[] @relation(fields: [roleIds], references: [id])
   roles Role[]
 }
 
@@ -112,24 +140,28 @@ model ResetPasswordToken {
 }
 
 model Lightnovel {
-  id         String   @id @default(cuid())
-  name       String   @db.Text
-  otherNames String[] @default([])
-  author     String?  @db.Text
-  artist     String?  @default("")
-  image      Json?    @db.Json
-  coverImage Json?    @db.Json
-  summary    String   @db.Text
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt
-  deleted    Boolean  @default(false)
+  id         String        @id @default(cuid())
+  name       String        @db.Text
+  otherNames String[]      @default([])
+  author     String?       @db.Text
+  artist     String?       @default("")
+  image      Json?         @db.Json
+  summary    Json          @db.Json
+  createdAt  DateTime      @default(now())
+  updateAt   DateTime      @updatedAt
+  deleted    Boolean       @default(false)
+  status     ContentStatus @default(InProcess)
+  note       Json?         @db.Json
 
-  userId  String             @db.Text
-  volumes LightnovelVolume[]
+  userId             String             @db.Text
+  translationGroupId String?            @db.Text
+  volumes            LightnovelVolume[]
+  rating             Rating[]
+  favorites          Favorite[]
+  categories         Category[]
 
-  favorites  Favorite[]
-  categories Category[]
-  user       User       @relation(fields: [userId], references: [id])
+  user             User              @relation(fields: [userId], references: [id])
+  translationGroup TranslationGroup? @relation(fields: [translationGroupId], references: [id])
 
   @@index([name])
 }
@@ -156,6 +188,7 @@ model LightnovelChapter {
   updateAt  DateTime @updatedAt
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
+  words     Int      @default(0)
 
   volumeId String    @db.Text
   comments Comment[]
@@ -165,22 +198,25 @@ model LightnovelChapter {
 
 //TODO: ANIME
 model Anime {
-  id         String   @id @default(cuid())
-  name       String   @db.Text
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt
-  deleted    Boolean  @default(false)
-  image      Json?    @db.Json
-  coverImage Json?    @db.Json
+  id        String        @id @default(cuid())
+  name      String        @db.Text
+  createdAt DateTime      @default(now())
+  updateAt  DateTime      @updatedAt
+  deleted   Boolean       @default(false)
+  image     Json?         @db.Json
+  status    ContentStatus @default(InProcess)
+  note      Json
 
-  userId  String        @db.Text
-  seasons AnimeSeason[]
-
+  translationGroupId String?           @db.Text
+  userId             String            @db.Text
+  seasons            AnimeSeason[]
+  rating             Rating[]
   // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
   // categories Category[] @relation(fields: [categoryIds], references: [id])
-  favorites  Favorite[]
-  categories Category[]
-  user       User       @relation(fields: [userId], references: [id])
+  favorites          Favorite[]
+  categories         Category[]
+  user               User              @relation(fields: [userId], references: [id])
+  translationGroup   TranslationGroup? @relation(fields: [translationGroupId], references: [id])
 
   @@index([name])
 }
@@ -216,22 +252,25 @@ model AnimeEpisode {
 
 //TODO: MANGA
 model Manga {
-  id         String   @id @default(cuid())
-  name       String   @db.Text
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt
-  deleted    Boolean  @default(false)
-  image      Json?    @db.Json
-  coverImage Json?    @db.Json
-
-  userId  String        @db.Text
-  seasons MangaSeason[]
+  id                 String        @id @default(cuid())
+  name               String        @db.Text
+  createdAt          DateTime      @default(now())
+  updateAt           DateTime      @updatedAt
+  deleted            Boolean       @default(false)
+  image              Json?         @db.Json
+  status             ContentStatus @default(InProcess)
+  userId             String        @db.Text
+  seasons            MangaSeason[]
+  rating             Rating[]
+  note               Json
+  translationGroupId String?       @db.Text
 
   // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
   // categories Category[] @relation(fields: [categoryIds], references: [id])
-  favorites  Favorite[]
-  categories Category[]
-  user       User       @relation(fields: [userId], references: [id])
+  favorites        Favorite[]
+  categories       Category[]
+  user             User              @relation(fields: [userId], references: [id])
+  translationGroup TranslationGroup? @relation(fields: [translationGroupId], references: [id])
 
   @@index([name])
 }
@@ -269,13 +308,6 @@ model Category {
   name    String  @unique
   deleted Boolean @default(false)
 
-  mangaIds      String[]
-  animeIds      String[]
-  lightnovelIds String[]
-
-  // mangas      Manga[]      @relation(fields: [mangaIds], references: [id])
-  // animes      Anime[]      @relation(fields: [animeIds], references: [id])
-  // lightnovels Lightnovel[] @relation(fields: [lightnovelIds], references: [id])
   mangas      Manga[]
   animes      Anime[]
   lightnovels Lightnovel[]
@@ -297,4 +329,19 @@ model Comment {
   lightnovel LightnovelChapter? @relation(fields: [lightnovelId], references: [id], onDelete: Cascade)
   anime      AnimeEpisode?      @relation(fields: [animeId], references: [id], onDelete: Cascade)
   manga      MangaChapter?      @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+}
+
+model Rating {
+  id    String @id @default(cuid())
+  score Int
+
+  userId       String
+  lightnovelId String? @db.Text
+  animeId      String? @db.Text
+  mangaId      String? @db.Text
+
+  lightnovel Lightnovel? @relation(fields: [lightnovelId], references: [id], onDelete: Cascade)
+  anime      Anime?      @relation(fields: [animeId], references: [id], onDelete: Cascade)
+  manga      Manga?      @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  user       User        @relation(fields: [userId], references: [id])
 }

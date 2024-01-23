@@ -7,9 +7,12 @@ export const getUserByUsername = async (username: string) => {
         username,
       }
     })
+    await db.$disconnect()
 
     return existingUser
   } catch (error) {
+    await db.$disconnect()
+
     console.log(error)
     return null;
   }
@@ -22,9 +25,12 @@ export const getUserByEmail = async (email: string) => {
         email,
       }
     })
+    await db.$disconnect()
 
     return existingUser
   } catch (error) {
+    await db.$disconnect()
+
     console.log(error)
     return null;
   }
@@ -37,24 +43,29 @@ export const getUserById = async (id: string) => {
         id,
       }
     })
+    await db.$disconnect()
 
     return existingUser
   } catch (error) {
+    await db.$disconnect()
     console.log(error)
     return null;
   }
 }
 
-export const getRole = async (name: string) => {
+export const getRole = async (name: UserRole) => {
   try {
     const existingRole = await db.role.findFirst({
       where: {
         name,
       }
     })
+    await db.$disconnect()
 
     return existingRole
   } catch (error) {
+    await db.$disconnect()
+
     console.log(error)
     return null;
   }

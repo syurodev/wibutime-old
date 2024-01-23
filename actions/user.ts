@@ -2,9 +2,13 @@
 
 import { db } from "@/lib/db"
 
-export const getUserDetail = async (id: string) => {
+export const getUserDetail = async (id: string): Promise<{
+  code: number,
+  message: string,
+  data: UserProfile | null
+}> => {
   try {
-    const user: UserProfile | null = await db.user.findUnique({
+    const user = await db.user.findUnique({
       where: {
         id,
       },
@@ -17,7 +21,6 @@ export const getUserDetail = async (id: string) => {
         email: true,
         createdAt: true,
         emailVerified: true,
-        coverImage: true,
         description: true,
         animes: {
           select: {
@@ -87,6 +90,7 @@ export const getUserDetail = async (id: string) => {
                 id: true,
                 name: true,
                 image: true,
+                createdAt: true,
                 chapters: {
                   select: {
                     id: true,
@@ -139,6 +143,7 @@ export const getUserDetail = async (id: string) => {
         },
       },
     })
+    await db.$disconnect()
 
     if (!user) return {
       code: 404,
@@ -146,12 +151,99 @@ export const getUserDetail = async (id: string) => {
       data: null
     }
 
+    const result: UserProfile = {
+      id: user.id,
+      username: user.username,
+      name: user.name,
+      image: user.image,
+      email: user.email,
+      createdAt: user.createdAt.toISOString(),
+      description: user.description,
+      emailVerified: user.emailVerified,
+      animes: user.animes ? user.animes.map(anime => ({
+        id: anime.id,
+        name: anime.name,
+        image: anime.image as {
+          key?: string,
+          url: string,
+        } | null,
+        createdAt: anime.createdAt.toISOString(),
+        user: {
+          id: anime.user.id
+        },
+        seasons: anime.seasons ? anime.seasons.map(season => ({
+          id: season.id,
+          name: season.name,
+          image: season.image as {
+            key?: string,
+            url: string,
+          } | null,
+          episodes: season.episodes ? season.episodes.map(ep => ({
+            id: ep.id,
+            viewed: ep.viewed
+          })) : []
+        })) : []
+      })) : [],
+      mangas: user.mangas ? user.mangas.map(manga => ({
+        id: manga.id,
+        name: manga.name,
+        image: manga.image as {
+          key?: string,
+          url: string,
+        } | null,
+        createdAt: manga.createdAt.toISOString(),
+        user: {
+          id: manga.user.id
+        },
+        seasons: manga.seasons ? manga.seasons.map(season => ({
+          id: season.id,
+          name: season.name,
+          image: season.image as {
+            key?: string,
+            url: string,
+          } | null,
+          chapters: season.chapters ? season.chapters.map(chap => ({
+            id: chap.id,
+            viewed: chap.viewed
+          })) : []
+        })) : []
+      })) : [],
+      lightnovels: user.lightnovels ? user.lightnovels.map((lightnovel) => ({
+        id: lightnovel.id,
+        name: lightnovel.name,
+        image: lightnovel.image as {
+          key?: string,
+          url: string,
+        } | null,
+        createdAt: lightnovel.createdAt.toISOString(),
+        user: {
+          id: lightnovel.user.id
+        },
+        volumes: lightnovel.volumes ? lightnovel.volumes.map(volume => ({
+          id: volume.id,
+          name: volume.name,
+          createdAt: volume.createdAt.toISOString(),
+          image: volume.image as {
+            key?: string,
+            url: string,
+          } | null,
+          chapters: volume.chapters ? volume.chapters.map(chap => ({
+            id: chap.id,
+            viewed: chap.viewed
+          })) : []
+        })) : []
+      })) : [],
+      favorites: user.favorites
+    }
+
     return {
       code: 200,
       message: "success",
-      data: user
+      data: result
     }
   } catch (error) {
+    await db.$disconnect()
+
     console.log(error)
     return {
       code: 500,

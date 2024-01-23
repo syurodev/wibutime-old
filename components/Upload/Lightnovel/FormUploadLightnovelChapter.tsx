@@ -45,6 +45,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
       url: string
     } | {} | null
   }[] | null>(null)
+  const [words, setWords] = useState<number>(0)
 
   useEffect(() => {
     const fetchVolumes = async (novelId: string) => {
@@ -77,7 +78,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
 
   function onSubmit(values: z.infer<typeof lightnovelChapterSchema>) {
     startTransitonUpload(async () => {
-      const res = await createLightnovelChapter(JSON.stringify(values), novelId)
+      const res = await createLightnovelChapter(JSON.stringify(values), novelId, words)
 
       if (res?.code !== 200) {
         toast.error(res?.message)
@@ -154,6 +155,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
                     content={field.name}
                     onChange={field.onChange}
                     id={novelId}
+                    setWords={setWords}
                   />
                 </FormControl>
                 <FormMessage />

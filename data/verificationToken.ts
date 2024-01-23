@@ -7,9 +7,12 @@ export const getVerificationTokenByEmail = async (
     const verificationToken = await db.verificationToken.findFirst({
       where: { email }
     });
+    await db.$disconnect()
 
     return verificationToken;
   } catch (error) {
+    await db.$disconnect()
+
     console.log(error)
     return null
   }
@@ -22,9 +25,12 @@ export const getVerificationTokenByToken = async (
     const verificationToken = await db.verificationToken.findUnique({
       where: { token }
     });
+    await db.$disconnect()
 
     return verificationToken;
   } catch (error) {
+    await db.$disconnect()
+
     console.log(error)
     return null
   }

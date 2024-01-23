@@ -74,9 +74,11 @@ const FormUploadLightnovelVolume: FC<IProps> = ({
       e.target.files,
       endpoint === 'smallImage' ? 0.5 : 1
     )
+
     if (image.key !== "") {
       await deleteFiles(image.key)
     }
+
     const [res] = await uploadFiles(endpoint, { files: [result] })
 
     setIsUploadSmallImage(false)

@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useEditor, EditorContent, JSONContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Heading from '@tiptap/extension-heading'
@@ -9,6 +9,8 @@ import Blockquote from '@tiptap/extension-blockquote'
 import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
 import Strike from '@tiptap/extension-strike'
+import CharacterCount from '@tiptap/extension-character-count'
+import Typography from '@tiptap/extension-typography'
 import { default as TiptapImage } from '@tiptap/extension-image'
 
 import Toolbar from './Toolbar'
@@ -19,22 +21,31 @@ import { uploadFiles } from '@/lib/uploadthing'
 type IProps = {
   content: string,
   onChange: (richText: JSONContent) => void
-  id: string
+  id?: string
+  setWords?: React.Dispatch<React.SetStateAction<number>>
 }
 
 const TiptapEditor: FC<IProps> = ({
   content,
   onChange,
-  id
+  id,
+  setWords
 }) => {
   const [imageUpload, setImageUpload] = useState<boolean>(false)
-  const history = localStorage.getItem(`editor-new-content-${id}`)
-  const historyData = history ? JSON.parse(history) : "";
+  const [historyData, setHistoryData] = useState<any>("")
+
+  useEffect(() => {
+    if (id) {
+      const history = localStorage.getItem(`editor-new-content-${id}`)
+      setHistoryData(history ? JSON.parse(history) : "")
+    }
+  }, [id])
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
       }),
+      Typography,
       Heading.configure({
         HTMLAttributes: {
           class: "text-xl font-bold",
@@ -62,6 +73,7 @@ const TiptapEditor: FC<IProps> = ({
         }
       }),
       OrderedList,
+      CharacterCount,
       Strike.configure({
         HTMLAttributes: {
           class: "line-through"
@@ -70,7 +82,7 @@ const TiptapEditor: FC<IProps> = ({
       TiptapImage.configure({
         inline: false,
         HTMLAttributes: {
-          class: "mx-auto rounded-lg"
+          class: "mx-auto rounded-lg object-cover max-w-[70%]"
         }
       })
     ],
@@ -122,9 +134,11 @@ const TiptapEditor: FC<IProps> = ({
       }
     },
     onUpdate({ editor }) {
-      localStorage.setItem(`editor-new-content-${id}`, JSON.stringify(editor.getJSON()))
+      if (id) {
+        localStorage.setItem(`editor-new-content-${id}`, JSON.stringify(editor.getJSON()))
+      }
+      setWords && setWords(editor.storage.characterCount.words())
       onChange(editor.getJSON())
-      console.log(editor.getJSON())
     }
   })
 

@@ -39,9 +39,12 @@ export const changePassword = async (token: string | null, values: z.infer<typeo
 
   const existingUser = await getUserByEmail(existingToken.email)
 
-  if (!existingUser) return {
-    code: 404,
-    message: "Không tìm thấy người dùng"
+  if (!existingUser) {
+    await db.$disconnect()
+    return {
+      code: 404,
+      message: "Không tìm thấy người dùng"
+    }
   }
 
   const { password } = validateValues.data
@@ -63,6 +66,7 @@ export const changePassword = async (token: string | null, values: z.infer<typeo
     }
   })
 
+  await db.$disconnect()
   return {
     code: 200,
     message: "Đổi mật khẩu thành công"

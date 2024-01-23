@@ -7,9 +7,12 @@ export const getResetPasswordTokenByEmail = async (
     const resetPasswordToken = await db.resetPasswordToken.findFirst({
       where: { email }
     });
+    await db.$disconnect()
 
     return resetPasswordToken;
   } catch (error) {
+    await db.$disconnect()
+
     console.log(error)
     return null
   }
@@ -22,9 +25,12 @@ export const getResetPasswordTokenByToken = async (
     const resetPasswordToken = await db.resetPasswordToken.findUnique({
       where: { token }
     });
+    await db.$disconnect()
 
     return resetPasswordToken;
   } catch (error) {
+    await db.$disconnect()
+
     console.log(error)
     return null
   }

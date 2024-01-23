@@ -149,11 +149,11 @@ const UserMenu = () => {
                                 className='py-2'
                               >
                                 <Link
-                                  href={"/upload"}
+                                  href={"/lightnovels/upload"}
                                   className='text-4xl font-semibold hover:text-secondary transition-colors'
                                   onClick={() => setIsMenuOpen(false)}
                                 >
-                                  Upload
+                                  Upload Lightnovel
                                 </Link>
                               </motion.div>
                             )

@@ -33,12 +33,12 @@ export default async function RootLayout({
             defaultTheme="light"
           >
             <Header />
-            <main className='min-h-dvh pt-20 px-4 max-w-[1300px] mx-auto'>
+            <main className='min-h-dvh pt-20 px-4 max-w-[1280px] mx-auto'>
               {children}
               <Analytics />
             </main>
             <Toaster />
-            <Footer />
+            {/* <Footer /> */}
           </ThemeProvider>
         </body>
       </html>

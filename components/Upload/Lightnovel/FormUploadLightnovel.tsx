@@ -28,6 +28,7 @@ import { Dropzone } from '../../ui/dropzone';
 import { createLightnovel } from '@/actions/lightnovel';
 import { toast } from 'sonner';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import TiptapEditor from '@/components/shared/TextEditor/TiptapEditor';
 
 type IProps = {
   categories: Category[] | null
@@ -35,15 +36,7 @@ type IProps = {
 
 const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
   const [isUploadSmallImage, setIsUploadSmallImage] = useState<boolean>(false)
-  const [isUploadCoverImage, setIsUploadCoverImage] = useState<boolean>(false)
   const [image, setImage] = useState<{
-    key: string,
-    url: string
-  }>({
-    key: "",
-    url: "",
-  });
-  const [coverImage, setCoverImage] = useState<{
     key: string,
     url: string
   }>({
@@ -55,7 +48,6 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
     resolver: zodResolver(lightnovelSchema),
     defaultValues: {
       name: "",
-      summary: ""
     },
   })
 
@@ -64,7 +56,7 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
 
   function onSubmit(values: z.infer<typeof lightnovelSchema>) {
     startTransiton(async () => {
-      const res = await createLightnovel(values)
+      const res = await createLightnovel(JSON.stringify(values))
 
       if (res?.code !== 200) {
         toast.error(res?.message)
@@ -78,20 +70,19 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
     })
   }
 
-  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>, endpoint: "smallImage" | "coverImage") => {
+  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>, endpoint: "smallImage") => {
     if (!e.target.files) return
-    endpoint === 'smallImage' ? setIsUploadSmallImage(true) : setIsUploadCoverImage(true)
+    setIsUploadSmallImage(true)
 
     const result = await compressFile(
-      e.target.files,
-      endpoint === 'smallImage' ? 0.5 : 1
+      e.target.files, 1
     )
     if (image.key !== "") {
       await deleteFiles(image.key)
     }
     const [res] = await uploadFiles(endpoint, { files: [result] })
 
-    endpoint === 'smallImage' ? setIsUploadSmallImage(false) : setIsUploadCoverImage(false)
+    setIsUploadSmallImage(false)
 
     return res
   }
@@ -192,9 +183,9 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
                 <FormItem>
                   <FormLabel>Tóm tắt<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
-                    <Textarea
-                      className='min-h-[200px]'
-                      {...field}
+                    <TiptapEditor
+                      content={field.name}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -241,34 +232,16 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
 
             <FormField
               control={form.control}
-              name="coverImage"
+              name="note"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ảnh bìa</FormLabel>
+                  <FormLabel>Ghi chú</FormLabel>
                   <FormControl>
-                    <Dropzone
-                      type='file'
-                      accept='image/*'
-                      id="dropzone-file"
-                      disabled={isUploadCoverImage}
-                      value={coverImage.url}
-                      onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-                        const res = await handleUploadImage(e, "coverImage")
-                        if (!res) return
-                        field.onChange({
-                          key: res.key,
-                          url: res.url
-                        })
-                        setCoverImage({
-                          key: res.key,
-                          url: res.url
-                        })
-                      }}
+                    <TiptapEditor
+                      content={field.name}
+                      onChange={field.onChange}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Ảnh dạng ngang
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

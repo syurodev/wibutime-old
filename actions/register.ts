@@ -27,6 +27,7 @@ export const register = async (values: z.infer<typeof registerSchema>) => {
     const existingUser = await getUserByUsername(username)
 
     if (existingUser) {
+      await db.$disconnect()
       return {
         code: 400,
         message: "Tên đăng nhập đã được sử dụng"
@@ -46,13 +47,14 @@ export const register = async (values: z.infer<typeof registerSchema>) => {
     const verificationToken = await generateVerificationToken(email)
 
     await sendVerificationEmail(verificationToken.email, verificationToken.token)
-
+    await db.$disconnect()
     return {
       code: 200,
       message: "Đăng ký thành công",
       submess: "Liên kết xác thực đã được gửi đến email của bạn, liên kết sẻ hết hạn sau 1 giờ"
     }
   } catch (error) {
+    await db.$disconnect()
     console.log(error)
     return {
       code: 500,

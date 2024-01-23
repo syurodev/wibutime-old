@@ -4,7 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { db } from "@/lib/db"
 import authConfig from "@/auth.config"
 import type { DefaultSession } from 'next-auth';
-import { getUserById } from "./data/user";
+import { getRole, getUserById } from "./data/user";
 import { sendVerificationEmail } from "./lib/mail";
 import { generateVerificationToken } from "./lib/tokens";
 
@@ -53,6 +53,21 @@ export const {
         await sendVerificationEmail(verificationToken.email, verificationToken.token)
       }
 
+      if (!existingUser?.roleId) {
+        const role = await getRole("USER")
+
+        if (role) {
+          await db.user.update({
+            where: {
+              id: user.id
+            },
+            data: {
+              roleId: role.id
+            }
+          })
+        }
+      }
+      await db.$disconnect()
       return true
     },
 
@@ -94,14 +109,15 @@ export const {
           },
         },
       })
+      await db.$disconnect()
 
       if (!userData) return token
 
-      token.role = userData.role.name;
+      token.role = userData.role ? userData.role.name : "USER";
       if (userData?.username) {
         token.username = userData.username;
       }
-      token.permissions = userData.role.permissions.map(permission => permission.name)
+      token.permissions = userData.role && userData.role.permissions ? userData.role.permissions.map(permission => permission.name) : ["COMMENT", "FAVORITE"]
 
       return token
     }

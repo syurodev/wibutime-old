@@ -2,21 +2,21 @@ type AnimeQuickInformation = {
   id: string,
   name: string,
   image: {
-    key: string
+    key?: string
     url: string
-  } | {} | null,
-  createdAt: Date,
+  } | null,
+  createdAt: string,
   user: {
     id: string
   },
   seasons: {
     id: string,
     name: string,
-    image: {
-      key: string
+    image?: {
+      key?: string
       url: string
-    } | {} | null,
-    episodes: {
+    } | null,
+    episodes?: {
       id: string
       viewed: number
     }[]

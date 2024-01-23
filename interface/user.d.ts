@@ -43,13 +43,9 @@ type UserProfile = {
   name: string,
   username?: string | null,
   email: string | null,
-  createdAt: Date,
+  createdAt: string,
   emailVerified: boolean | null,
-  coverImage?: {
-    key?: string,
-    url: string
-  } | {} | null,
-  description?: string | null,
+  description?: any,
   animes: AnimeQuickInformation[],
   mangas: MangaQuickInformation[],
   lightnovels: LightnovelQuickInformation[],

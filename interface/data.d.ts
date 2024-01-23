@@ -59,3 +59,5 @@ type Category = {
 }
 
 type ContentType = "anime" | "manga" | "lightnovel"
+
+type ContentStatus = "Pause" | "Complete" | "InProcess"

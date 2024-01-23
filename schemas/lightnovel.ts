@@ -11,7 +11,7 @@ export const lightnovelSchema = z.object({
   name: z.string().trim().min(1, { message: "Tên lightnovel là bắt buộc" }),
   author: z.string().trim().min(1, { message: "Tên tác giả là bắt buộc" }),
   artist: z.string().optional(),
-  // content: LightnovelContentSchema,
+  note: LightnovelContentSchema.optional(),
   categories: z.array(z.object({
     id: z.string(),
     name: z.string()
@@ -22,12 +22,8 @@ export const lightnovelSchema = z.object({
       text: z.string(),
     })
   ).optional(),
-  summary: z.string().trim().min(1, { message: "Vui lòng nhập phần tóm tắt" }),
+  summary: LightnovelContentSchema,
   image: z.object({
-    key: z.string().optional(),
-    url: z.string().url()
-  }).optional(),
-  coverImage: z.object({
     key: z.string().optional(),
     url: z.string().url()
   }).optional(),

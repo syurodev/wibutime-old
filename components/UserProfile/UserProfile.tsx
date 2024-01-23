@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 
-import Images from '@/components/Detail/Images'
 import UserInfo from './_component/Info'
 import Uploaded from './_component/Uploaded'
 
@@ -11,10 +10,7 @@ type IProps = {
 const UserProfile: FC<IProps> = ({ data }) => {
   return (
     <div className='flex flex-col gap-5'>
-      <Images
-        {...data}
-        type='userAvatar'
-      />
+
       <div className='w-full mt-5'>
         <p
           className='text-center font-semibold text-2xl lg:text-3xl'

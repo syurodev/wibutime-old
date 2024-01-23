@@ -20,10 +20,12 @@ export const newVerification = async (token: string) => {
   }
 
   const existingUser = await getUserByEmail(existingToken.email)
-
-  if (!existingUser) return {
-    code: 404,
-    message: "Không tìm thấy người dùng"
+  if (!existingUser) {
+    await db.$disconnect()
+    return {
+      code: 404,
+      message: "Không tìm thấy người dùng"
+    }
   }
 
   await db.user.update({
@@ -41,6 +43,7 @@ export const newVerification = async (token: string) => {
       id: existingToken.id
     }
   })
+  await db.$disconnect()
 
   return {
     code: 200,
