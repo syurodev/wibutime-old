@@ -3,17 +3,27 @@
 import React, { FC } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useQuery } from '@tanstack/react-query'
+import { notFound } from 'next/navigation'
 import { IoEyeOutline } from "react-icons/io5";
 import { GoHeart } from "react-icons/go";
 import { motion } from 'framer-motion';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { slide } from '@/lib/motion/slide'
+import { getHero } from '@/actions/home'
 
-type IProps = {
-  data: TrendingData
-}
 
-const Trending: FC<IProps> = ({ data }) => {
+const Trending: FC = () => {
+  const { data, error } = useQuery({
+    queryKey: ["news", "trending"],
+    queryFn: getHero
+  })
+
+  if (!data?.data) {
+    notFound()
+  }
+
   return (
     <div>
       <h1 className='uppercase font-semibold text-lg'>Trending</h1>
@@ -38,7 +48,7 @@ const Trending: FC<IProps> = ({ data }) => {
                 className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.anime.map((item, index) => {
+                  data.data.trending.animes.length > 0 ? data.data.trending.animes.map((item, index) => {
                     return (
                       <motion.div
                         key={`animetranding-${index}`}
@@ -50,14 +60,14 @@ const Trending: FC<IProps> = ({ data }) => {
                         className='flex gap-2 w-1/2 lg:w-full px-1'
                       >
                         <Link
-                          href={`/animes/anime/${item._id}`}
+                          href={`/animes/anime/${item.id}`}
                           className='flex gap-2 w-full'
                           scroll
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image
                               src={item.image ? item.image.url : "/images/image2.jpeg"}
-                              alt={item.title}
+                              alt={item.name}
                               fill
                               sizes='50px'
                               className='object-cover'
@@ -66,23 +76,25 @@ const Trending: FC<IProps> = ({ data }) => {
                           </div>
 
                           <div className='flex flex-col w-full'>
-                            <p className='line-clamp-1'>{item.title}</p>
+                            <p className='line-clamp-1'>{item.name}</p>
 
                             <div className='grid grid-cols-2 gap-3 text-secondary-foreground font-medium'>
                               <div className='flex items-center gap-1'>
                                 <IoEyeOutline />
-                                <span className='text-xs'>{item.view}</span>
+                                <span className='text-xs'>{item.totalviews}</span>
                               </div>
                               <div className='flex items-center gap-1'>
                                 <GoHeart />
-                                <span className='text-xs'>{item.like}</span>
+                                <span className='text-xs'>{item.numfavorites}</span>
                               </div>
                             </div>
                           </div>
                         </Link>
                       </motion.div>
                     )
-                  })
+                  }) : (
+                    <p className='text-center'>Không có dữ liệu</p>
+                  )
                 }
               </div>
             </TabsContent>
@@ -90,10 +102,10 @@ const Trending: FC<IProps> = ({ data }) => {
             {/* Manga */}
             <TabsContent value="manga" className='h-[calc(100%-40px)]'>
               <div
-                className='flex flex-wrap justify-between h-full w-full'
+                className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.manga.map((item, index) => {
+                  data.data.trending.mangas.length > 0 ? data.data.trending.mangas.map((item, index) => {
                     return (
                       <motion.div
                         key={`mangatranding-${index}`}
@@ -105,14 +117,14 @@ const Trending: FC<IProps> = ({ data }) => {
                         className='flex gap-2 w-1/2 lg:w-full px-3'
                       >
                         <Link
-                          href={`/mangas/manga/${item._id}`}
+                          href={`/mangas/manga/${item.id}`}
                           className='flex gap-1 w-full'
                           scroll
                         >
                           <div className='min-w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image
                               src={item.image ? item.image.url : "/images/image2.jpeg"}
-                              alt={item.title}
+                              alt={item.name}
                               fill
                               sizes='full'
                               className='object-cover'
@@ -120,23 +132,25 @@ const Trending: FC<IProps> = ({ data }) => {
                           </div>
 
                           <div className='flex flex-col w-full'>
-                            <p className='line-clamp-1'>{item.title}</p>
+                            <p className='line-clamp-1'>{item.name}</p>
 
                             <div className='grid grid-cols-2 gap-3 text-secondary-foreground font-medium'>
                               <div className='flex items-center gap-1'>
                                 <IoEyeOutline />
-                                <span className='text-xs line-clamp-1'>{item.view}</span>
+                                <span className='text-xs line-clamp-1'>{item.totalviews}</span>
                               </div>
                               <div className='flex items-center gap-1'>
                                 <GoHeart />
-                                <span className='text-xs line-clamp-1'>{item.like}</span>
+                                <span className='text-xs line-clamp-1'>{item.numfavorites}</span>
                               </div>
                             </div>
                           </div>
                         </Link>
                       </motion.div>
                     )
-                  })
+                  }) : (
+                    <p className='text-center'>Không có dữ liệu</p>
+                  )
                 }
               </div>
             </TabsContent>
@@ -147,7 +161,7 @@ const Trending: FC<IProps> = ({ data }) => {
                 className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.lightnovel.map((item, index) => {
+                  data.data.trending.lightnovels.length > 0 ? data.data.trending.lightnovels.map((item, index) => {
                     return (
                       <motion.div
                         key={`lightnoveltranding-${index}`}
@@ -159,14 +173,14 @@ const Trending: FC<IProps> = ({ data }) => {
                         className='flex gap-2 w-1/2 lg:w-full px-1'
                       >
                         <Link
-                          href={`/lightnovels/lightnovel/${item._id}`}
+                          href={`/lightnovels/lightnovel/${item.id}`}
                           className='flex gap-2 w-full'
                           scroll
                         >
                           <div className='min-w-8 w-8 h-12 relative rounded-md overflow-hidden'>
                             <Image
                               src={item.image ? item.image.url : "/images/image2.jpeg"}
-                              alt={item.title}
+                              alt={item.name}
                               fill
                               sizes='full'
                               className='object-cover'
@@ -174,23 +188,25 @@ const Trending: FC<IProps> = ({ data }) => {
                           </div>
 
                           <div className='flex flex-col w-full'>
-                            <p className='line-clamp-1'>{item.title}</p>
+                            <p className='line-clamp-1'>{item.name}</p>
 
                             <div className='grid grid-cols-2 gap-3 text-secondary-foreground font-medium'>
                               <div className='flex items-center gap-1'>
                                 <IoEyeOutline />
-                                <span className='text-xs'>{item.view}</span>
+                                <span className='text-xs'>{item.totalviews}</span>
                               </div>
                               <div className='flex items-center gap-1'>
                                 <GoHeart />
-                                <span className='text-xs'>{item.like}</span>
+                                <span className='text-xs'>{item.numfavorites}</span>
                               </div>
                             </div>
                           </div>
                         </Link>
                       </motion.div>
                     )
-                  })
+                  }) : (
+                    <p className='text-center'>Không có dữ liệu</p>
+                  )
                 }
               </div>
             </TabsContent>

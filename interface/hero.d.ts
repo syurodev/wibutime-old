@@ -36,34 +36,12 @@ type NewsData = {
 }[]
 
 type TrendingData = {
-  anime: {
-    _id: string;
-    title: string;
-    view: number;
-    like: number;
-    image?: {
-      key: string
-      url: string
-    } | null,
-  }[];
-  manga: {
-    _id: string;
-    title: string;
-    view: number;
-    like: number;
-    image?: {
-      key: string
-      url: string
-    } | null,
-  }[];
-  lightnovel: {
-    _id: string;
-    title: string;
-    view: number;
-    like: number;
-    image?: {
-      key: string
-      url: string
-    } | null,
-  }[];
+  id: string,
+  name: string,
+  image: {
+    key: string,
+    url: string,
+  },
+  numfavorites: string,
+  totalviews: string
 }

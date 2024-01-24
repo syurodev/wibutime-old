@@ -10,26 +10,26 @@ import { LuCaseSensitive, LuDot } from "react-icons/lu";
 import { AnimatePresence, motion } from 'framer-motion'
 import { slide, slideWithoutScale } from '@/lib/motion/slide'
 import { useQuery } from '@tanstack/react-query'
-import { getNews } from '@/actions/home'
+import { getHero } from '@/actions/home';
 import { notFound } from 'next/navigation'
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
 
 const News: FC = () => {
   const { data, error } = useQuery({
-    queryKey: ["news"],
-    queryFn: getNews
+    queryKey: ["news", "trending"],
+    queryFn: getHero
   })
-
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
 
   if (!data?.data) {
     notFound()
   }
 
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
+
   useEffect(() => {
-    if (data?.data && data?.data?.length > 1) {
+    if (data?.data && data?.data?.news && data?.data?.news.length > 1) {
       const interval = setInterval(() => {
-        if (currentIndex >= data?.data?.length! - 1) {
+        if (currentIndex >= data?.data?.news.length! - 1) {
           setCurrentIndex(0);
         } else {
           setCurrentIndex(currentIndex + 1);
@@ -56,7 +56,7 @@ const News: FC = () => {
       >
         <AnimatePresence mode='wait'>
           {
-            data.data.map((item, index) => {
+            data.data.news.map((item, index) => {
               return (
                 index === currentIndex && (
                   <div

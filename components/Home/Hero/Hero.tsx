@@ -9,7 +9,7 @@ const Hero = async () => {
   return (
     <section className='grid grid-cols-[1fr] lg:grid-cols-[3fr_1fr] gap-5'>
       <News />
-      {/* <Trending /> */}
+      <Trending />
     </section>
   )
 }
