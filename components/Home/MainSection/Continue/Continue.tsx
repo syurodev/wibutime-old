@@ -6,7 +6,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { motion } from 'framer-motion'
-import { slide } from '@/lib/motion'
+import { slide } from '@/lib/motion/slide'
 
 type IProps = {
   data: ContinueData[]

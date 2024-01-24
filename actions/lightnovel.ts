@@ -107,6 +107,11 @@ export const createLightnovelVolume = async (
       }
     })
 
+    await db.lightnovel.update({
+      where: { id: novelId },
+      data: { updateAt: new Date() },
+    });
+
     revalidatePath(`/u/${lightnovel.userId}`)
     await db.$disconnect()
 
@@ -173,6 +178,16 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
         words: words
       }
     })
+
+    await db.lightnovel.update({
+      where: { id: novelId },
+      data: { updateAt: new Date() },
+    });
+
+    await db.lightnovelVolume.update({
+      where: { id: result.volumeId },
+      data: { updateAt: new Date() },
+    });
 
     revalidatePath(`/u/${lightnovel.userId}`)
     await db.$disconnect()

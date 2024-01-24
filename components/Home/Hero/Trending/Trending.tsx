@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { IoEyeOutline } from "react-icons/io5";
 import { GoHeart } from "react-icons/go";
 import { motion } from 'framer-motion';
-import { slide } from '@/lib/motion'
+import { slide } from '@/lib/motion/slide'
 
 type IProps = {
   data: TrendingData

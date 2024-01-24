@@ -204,8 +204,9 @@ model Anime {
   updateAt  DateTime      @updatedAt
   deleted   Boolean       @default(false)
   image     Json?         @db.Json
+  summary   Json          @db.Json
   status    ContentStatus @default(InProcess)
-  note      Json
+  note      Json?         @db.Json
 
   translationGroupId String?           @db.Text
   userId             String            @db.Text
@@ -243,6 +244,7 @@ model AnimeEpisode {
   updateAt  DateTime @updatedAt
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
+  index     String   @db.Text
 
   seasonId String    @db.Text
   comments Comment[]
@@ -262,7 +264,8 @@ model Manga {
   userId             String        @db.Text
   seasons            MangaSeason[]
   rating             Rating[]
-  note               Json
+  note               Json?         @db.Json
+  summary            Json          @db.Json
   translationGroupId String?       @db.Text
 
   // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
@@ -296,6 +299,7 @@ model MangaChapter {
   updateAt  DateTime @updatedAt
   deleted   Boolean  @default(false)
   viewed    Int      @default(0)
+  index     String   @db.Text
 
   seasonId String    @db.Text
   comments Comment[]

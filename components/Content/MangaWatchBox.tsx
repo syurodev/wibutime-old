@@ -7,7 +7,7 @@ import { MdOutlineNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Button } from '@/components/ui/button'
-import { slide } from '@/lib/motion';
+import { slide } from '@/lib/motion/slide';
 
 type IProps = {
   isOpen: boolean

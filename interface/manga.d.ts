@@ -22,3 +22,27 @@ type MangaQuickInformation = {
     }[],
   }[]
 }
+
+type MangaNew = {
+  id: string,
+  name: string,
+  type: ContentType,
+  summary: any,
+  categories: {
+    id: string,
+    name: string,
+  }[],
+  image: {
+    key?: string,
+    url: string
+  } | null,
+  seasons: {
+    id: string,
+    name: string,
+    chapters: {
+      id: string,
+      index: string,
+    } | null,
+  } | null,
+  favorites: string,
+}

@@ -9,7 +9,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { slide, slideWithoutScale } from '@/lib/motion'
+import { slide, slideWithoutScale } from '@/lib/motion/slide'
 
 type IProps = {
   image?: {

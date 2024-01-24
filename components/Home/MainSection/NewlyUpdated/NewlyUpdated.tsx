@@ -3,7 +3,7 @@
 import { FC } from 'react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
-import { slide } from '@/lib/motion'
+import { slide } from '@/lib/motion/slide'
 import CardItem from '@/components/shared/Card/CardItem'
 
 type IProps = {

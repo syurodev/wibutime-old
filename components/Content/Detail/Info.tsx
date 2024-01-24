@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-import { slideWithoutScale } from '@/lib/motion';
+import { slideWithoutScale } from '@/lib/motion/slide';
 import AnimeWatchBox from '@/components/Content/AnimeWatchBox';
 import MangaWatchBox from '@/components/Content/MangaWatchBox';
 

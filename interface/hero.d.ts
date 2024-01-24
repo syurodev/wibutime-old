@@ -1,16 +1,39 @@
 type NewsData = {
-  _id: string,
-  title: string,
-  categories: string[],
-  image?: {
-    key: string
+  id: string,
+  name: string,
+  type: ContentType,
+  summary: any,
+  categories: {
+    id: string,
+    name: string,
+  }[],
+  image: {
+    key?: string,
     url: string
   } | null,
-  type: "anime" | "manga" | "lightnovel",
-  ep: string,
-  duration: number,
-  description: string
-}
+  volumes?: {
+    id: string,
+    name: string,
+    chapters: {
+      id: string,
+      name: string,
+      words: string,
+    } | null,
+  } | null,
+  seasons?: {
+    id: string,
+    name: string,
+    chapters?: {
+      id: string,
+      index: string,
+    } | null,
+    episodes?: {
+      id: string,
+      index: string,
+    } | null,
+  } | null,
+  favorites: string,
+}[]
 
 type TrendingData = {
   anime: {

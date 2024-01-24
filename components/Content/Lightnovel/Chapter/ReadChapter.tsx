@@ -9,6 +9,7 @@ type IProps = {
 }
 
 const ReadChapter: FC<IProps> = ({ data }) => {
+
   return (
     <div className='flex flex-col gap-8'>
       <div className='w-full flex flex-col items-center justify-center'>

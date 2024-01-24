@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+
 import '@/app/globals.css'
 import Header from '@/components/shared/Header/Header'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
@@ -8,6 +9,7 @@ import Footer from '@/components/shared/Footer/Footer'
 import { Toaster } from '@/components/ui/sonner'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
+import QueryProvider from '@/components/providers/QueryProvider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,23 +27,25 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <SessionProvider session={session}>
-      <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <SessionProvider session={session}>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
           >
             <Header />
             <main className='min-h-dvh pt-20 px-4 max-w-[1280px] mx-auto'>
-              {children}
+              <QueryProvider>
+                {children}
+              </QueryProvider>
               <Analytics />
             </main>
             <Toaster />
             {/* <Footer /> */}
           </ThemeProvider>
-        </body>
-      </html>
-    </SessionProvider>
+        </SessionProvider>
+      </body>
+    </html>
   )
 }

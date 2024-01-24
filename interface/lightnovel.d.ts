@@ -107,3 +107,28 @@ type LightnovelChapterDetail = {
     createAt: string;
   }[];
 }
+
+type LightnovelNew = {
+  id: string,
+  name: string,
+  type: ContentType,
+  summary: any,
+  categories: {
+    id: string,
+    name: string,
+  }[],
+  image: {
+    key?: string,
+    url: string
+  } | null,
+  volumes: {
+    id: string,
+    name: string,
+    chapters: {
+      id: string,
+      name: string,
+      words: string,
+    } | null,
+  } | null,
+  favorites: string,
+}
