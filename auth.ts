@@ -53,7 +53,7 @@ export const {
         await sendVerificationEmail(verificationToken.email, verificationToken.token)
       }
 
-      if (!existingUser?.roleId) {
+      if (!existingUser?.role_id) {
         const role = await getRole("USER")
 
         if (role) {
@@ -62,7 +62,7 @@ export const {
               id: user.id
             },
             data: {
-              roleId: role.id
+              role_id: role.id
             }
           })
         }

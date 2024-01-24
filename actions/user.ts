@@ -19,14 +19,14 @@ export const getUserDetail = async (id: string): Promise<{
         name: true,
         username: true,
         email: true,
-        createdAt: true,
+        created_at: true,
         emailVerified: true,
         description: true,
         animes: {
           select: {
             name: true,
             image: true,
-            createdAt: true,
+            created_at: true,
             id: true,
             user: {
               select: {
@@ -52,7 +52,7 @@ export const getUserDetail = async (id: string): Promise<{
           select: {
             name: true,
             image: true,
-            createdAt: true,
+            created_at: true,
             id: true,
             user: {
               select: {
@@ -78,7 +78,7 @@ export const getUserDetail = async (id: string): Promise<{
           select: {
             name: true,
             image: true,
-            createdAt: true,
+            created_at: true,
             id: true,
             user: {
               select: {
@@ -90,7 +90,7 @@ export const getUserDetail = async (id: string): Promise<{
                 id: true,
                 name: true,
                 image: true,
-                createdAt: true,
+                created_at: true,
                 chapters: {
                   select: {
                     id: true,
@@ -157,7 +157,7 @@ export const getUserDetail = async (id: string): Promise<{
       name: user.name,
       image: user.image,
       email: user.email,
-      createdAt: user.createdAt.toISOString(),
+      createdAt: user.created_at.toISOString(),
       description: user.description,
       emailVerified: user.emailVerified,
       animes: user.animes ? user.animes.map(anime => ({
@@ -167,7 +167,7 @@ export const getUserDetail = async (id: string): Promise<{
           key?: string,
           url: string,
         } | null,
-        createdAt: anime.createdAt.toISOString(),
+        createdAt: anime.created_at.toISOString(),
         user: {
           id: anime.user.id
         },
@@ -191,7 +191,7 @@ export const getUserDetail = async (id: string): Promise<{
           key?: string,
           url: string,
         } | null,
-        createdAt: manga.createdAt.toISOString(),
+        createdAt: manga.created_at.toISOString(),
         user: {
           id: manga.user.id
         },
@@ -215,14 +215,14 @@ export const getUserDetail = async (id: string): Promise<{
           key?: string,
           url: string,
         } | null,
-        createdAt: lightnovel.createdAt.toISOString(),
+        createdAt: lightnovel.created_at.toISOString(),
         user: {
           id: lightnovel.user.id
         },
         volumes: lightnovel.volumes ? lightnovel.volumes.map(volume => ({
           id: volume.id,
           name: volume.name,
-          createdAt: volume.createdAt.toISOString(),
+          createdAt: volume.created_at.toISOString(),
           image: volume.image as {
             key?: string,
             url: string,

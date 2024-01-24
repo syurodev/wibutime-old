@@ -114,7 +114,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
 
           <FormField
             control={form.control}
-            name="volumeId"
+            name="volume_id"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Chọn volume</FormLabel>

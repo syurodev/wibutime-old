@@ -35,8 +35,8 @@ export const createLightnovel = async (values: string) => {
     const result = await db.lightnovel.create({
       data: {
         ...validationValues.data,
-        userId: session.id,
-        otherNames: validationValues.data.otherNames ? validationValues.data.otherNames.map(name => name.text) : [],
+        user_id: session.id,
+        other_names: validationValues.data.other_names ? validationValues.data.other_names.map(name => name.text) : [],
         categories: {
           connect: validationValues.data.categories.map(category => ({ id: category.id })),
         },
@@ -94,25 +94,25 @@ export const createLightnovelVolume = async (
       }
     }
 
-    if (!session?.permissions.includes("UPLOAD") || session?.id !== lightnovel.userId) return {
+    if (!session?.permissions.includes("UPLOAD") || session?.id !== lightnovel.user_id) return {
       code: 401,
       message: "Bạn không có quyền thêm volume",
       data: null
     }
 
-    const result = await db.lightnovelVolume.create({
+    const result = await db.lightnovel_volume.create({
       data: {
         ...validationValues.data,
-        novelId
+        novel_id: novelId
       }
     })
 
     await db.lightnovel.update({
       where: { id: novelId },
-      data: { updateAt: new Date() },
+      data: { update_at: new Date() },
     });
 
-    revalidatePath(`/u/${lightnovel.userId}`)
+    revalidatePath(`/u/${lightnovel.user_id}`)
     await db.$disconnect()
 
     return {
@@ -163,7 +163,7 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
       }
     }
 
-    if (!session?.permissions.includes("UPLOAD") || session?.id !== lightnovel.userId) {
+    if (!session?.permissions.includes("UPLOAD") || session?.id !== lightnovel.user_id) {
       await db.$disconnect()
       return {
         code: 401,
@@ -172,7 +172,7 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
       }
     }
 
-    const result = await db.lightnovelChapter.create({
+    const result = await db.lightnovel_chapter.create({
       data: {
         ...validationValues.data,
         words: words
@@ -181,15 +181,15 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
 
     await db.lightnovel.update({
       where: { id: novelId },
-      data: { updateAt: new Date() },
+      data: { update_at: new Date() },
     });
 
-    await db.lightnovelVolume.update({
-      where: { id: result.volumeId },
-      data: { updateAt: new Date() },
+    await db.lightnovel_volume.update({
+      where: { id: result.volume_id },
+      data: { update_at: new Date() },
     });
 
-    revalidatePath(`/u/${lightnovel.userId}`)
+    revalidatePath(`/u/${lightnovel.user_id}`)
     await db.$disconnect()
 
     return {
@@ -213,12 +213,12 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
 
 export const getVolumes = async (novelId: string) => {
   try {
-    const volumes = await db.lightnovelVolume.findMany({
+    const volumes = await db.lightnovel_volume.findMany({
       where: {
-        novelId
+        novel_id: novelId
       },
       orderBy: {
-        createdAt: "desc"
+        created_at: "desc"
       },
       select: {
         id: true,
@@ -260,13 +260,13 @@ export const getLightnovelDetail = async (novelId: string) => {
             name: true
           }
         },
-        createdAt: true,
+        created_at: true,
         image: true,
         name: true,
-        otherNames: true,
+        other_names: true,
         summary: true,
         note: true,
-        updateAt: true,
+        update_at: true,
         user: {
           select: {
             id: true,
@@ -286,8 +286,8 @@ export const getLightnovelDetail = async (novelId: string) => {
             id: true,
             name: true,
             image: true,
-            createdAt: true,
-            updateAt: true,
+            created_at: true,
+            update_at: true,
             chapters: {
               select: {
                 id: true,
@@ -295,7 +295,7 @@ export const getLightnovelDetail = async (novelId: string) => {
                 content: true,
                 viewed: true,
                 words: true,
-                createdAt: true,
+                created_at: true,
               }
             }
           }
@@ -322,11 +322,11 @@ export const getLightnovelDetail = async (novelId: string) => {
       id: lightnovel.id,
       name: lightnovel.name,
       type: "lightnovel",
-      createdAt: lightnovel.createdAt.toISOString(),
-      updateAt: lightnovel.updateAt.toISOString(),
+      createdAt: lightnovel.created_at.toISOString(),
+      updateAt: lightnovel.update_at.toISOString(),
       categories: lightnovel.categories,
       favorites: lightnovel.favorites,
-      otherNames: lightnovel.otherNames,
+      otherNames: lightnovel.other_names,
       summary: lightnovel.summary,
       note: lightnovel.note,
       user: lightnovel.user,
@@ -358,8 +358,8 @@ export const getLightnovelDetail = async (novelId: string) => {
         {
           id: item.id,
           name: item.name,
-          createdAt: item.createdAt.toISOString(),
-          updateAt: item.updateAt.toISOString(),
+          createdAt: item.created_at.toISOString(),
+          updateAt: item.update_at.toISOString(),
           image: item.image as {
             key?: string,
             url: string
@@ -368,7 +368,7 @@ export const getLightnovelDetail = async (novelId: string) => {
             id: chapter.id,
             name: chapter.name,
             content: chapter.content as any,
-            createdAt: chapter.createdAt.toISOString(),
+            createdAt: chapter.created_at.toISOString(),
             viewed: chapter.viewed
           }))
         }
@@ -398,7 +398,7 @@ export const getChapterContent = async (chapterId: string): Promise<{
   data: LightnovelChapterDetail | null
 }> => {
   try {
-    const content = await db.lightnovelChapter.findUnique({
+    const content = await db.lightnovel_chapter.findUnique({
       where: {
         id: chapterId,
         deleted: false
@@ -407,8 +407,8 @@ export const getChapterContent = async (chapterId: string): Promise<{
         id: true,
         name: true,
         content: true,
-        createdAt: true,
-        updateAt: true,
+        created_at: true,
+        update_at: true,
         viewed: true,
         words: true,
         comments: {
@@ -422,8 +422,8 @@ export const getChapterContent = async (chapterId: string): Promise<{
               }
             },
             comment: true,
-            createAt: true,
-            updateAt: true
+            create_at: true,
+            update_at: true
           }
         }
       }
@@ -445,8 +445,8 @@ export const getChapterContent = async (chapterId: string): Promise<{
       content: content.content,
       comments: content.comments.length > 0 ? content.comments.map(comment => ({
         id: comment.id,
-        createAt: comment.createAt.toISOString(),
-        updateAt: comment.updateAt.toISOString(),
+        createAt: comment.create_at.toISOString(),
+        updateAt: comment.update_at.toISOString(),
         comment: comment.comment,
         user: {
           id: comment.user.id,
@@ -454,8 +454,8 @@ export const getChapterContent = async (chapterId: string): Promise<{
           name: comment.user.name,
         }
       })) : [],
-      createdAt: content.createdAt.toISOString(),
-      updateAt: content.updateAt.toISOString(),
+      createdAt: content.created_at.toISOString(),
+      updateAt: content.update_at.toISOString(),
       viewed: formatNumber(content.viewed || 0),
       words: formatNumber(content.words || 0)
     }
@@ -480,9 +480,9 @@ export const getChapterContent = async (chapterId: string): Promise<{
 
 export const updateLightnovelChapterViewed = async (chapterId: string) => {
   try {
-    await db.lightnovelChapter.update({
+    await db.lightnovel_chapter.update({
       where: { id: chapterId },
-      data: { viewed: { increment: 1 }, viewedAt: new Date() },
+      data: { viewed: { increment: 1 }, viewed_at: new Date() },
     });
 
     await db.$disconnect()

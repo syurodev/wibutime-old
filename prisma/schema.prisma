@@ -18,88 +18,88 @@ enum ContentStatus {
 }
 
 // USER
-model User {
-  id                 String    @id @default(cuid())
-  name               String    @db.Text
-  username           String?   @unique
-  image              String?   @db.Text
-  description        Json?     @db.Json
-  email              String?   @unique
-  phone              String?   @unique
-  hashedPassword     String?   @db.Text
-  emailVerified      Boolean?  @db.Boolean
-  phoneVerified      Boolean?  @db.Boolean
-  roleId             String?   @db.Text
-  accounts           Account[]
-  createdAt          DateTime  @default(now())
-  translationGroupId String?   @db.Text
+model user {
+  id                   String    @id @default(cuid())
+  name                 String    @db.Text
+  username             String?   @unique
+  image                String?   @db.Text
+  description          Json?     @db.Json
+  email                String?   @unique
+  phone                String?   @unique
+  hashed_password      String?   @db.Text
+  emailVerified        Boolean?  @db.Boolean
+  phoneVerified        Boolean?  @db.Boolean
+  role_id              String?   @db.Text
+  accounts             Account[]
+  created_at           DateTime  @default(now())
+  translation_group_id String?   @db.Text
 
-  translationGroups TranslationGroupMembers[]
-  lightnovels       Lightnovel[]
-  animes            Anime[]
-  mangas            Manga[]
-  rating            Rating[]
-  comments          Comment[]
-  favorites         Favorite[]
+  translation_groups translation_group_members[]
+  lightnovels        lightnovel[]
+  animes             anime[]
+  mangas             manga[]
+  rating             rating[]
+  comments           comment[]
+  favorites          favorite[]
 
-  role Role? @relation(fields: [roleId], references: [id])
+  role role? @relation(fields: [role_id], references: [id])
 }
 
-model TranslationGroupMembers {
-  userId             String
-  translationGroupId String
-  role               String
+model translation_group_members {
+  user_id              String
+  translation_group_id String
+  role                 String
 
-  user             User             @relation(fields: [userId], references: [id])
-  translationGroup TranslationGroup @relation(fields: [translationGroupId], references: [id])
+  user              user              @relation(fields: [user_id], references: [id])
+  translation_group translation_group @relation(fields: [translation_group_id], references: [id])
 
-  @@id([userId, translationGroupId])
+  @@id([user_id, translation_group_id])
 }
 
-model TranslationGroup {
+model translation_group {
   id          String @id @default(cuid())
   description Json?  @db.Json
   image       Json?
   name        String
 
-  lightnovels Lightnovel[]
-  animes      Anime[]
-  mangas      Manga[]
-  members     TranslationGroupMembers[]
+  lightnovels lightnovel[]
+  animes      anime[]
+  mangas      manga[]
+  members     translation_group_members[]
 }
 
-model Favorite {
-  id            String   @id @default(cuid())
-  userId        String   @db.Text
-  lightnovelIds String[]
-  animeIds      String[]
-  mangaIds      String[]
+model favorite {
+  id             String   @id @default(cuid())
+  user_id        String   @db.Text
+  lightnovel_ids String[]
+  anime_ids      String[]
+  manga_ids      String[]
 
-  user        User         @relation(fields: [userId], references: [id])
+  user        user         @relation(fields: [user_id], references: [id])
   // lightnovels Lightnovel[] @relation(fields: [lightnovelIds], references: [id])
   // animes      Anime[]      @relation(fields: [animeIds], references: [id])
   // mangas      Manga[]      @relation(fields: [mangaIds], references: [id])
-  lightnovels Lightnovel[]
-  animes      Anime[]
-  mangas      Manga[]
+  lightnovels lightnovel[]
+  animes      anime[]
+  mangas      manga[]
 }
 
 // ROLE
-model Role {
+model role {
   id   String @id @default(cuid())
   name String @db.Text
 
-  users User[]
+  users user[]
 
-  permissions Permission[]
+  permissions permission[]
 }
 
 // PERMISSION
-model Permission {
+model permission {
   id   String @id @default(cuid())
   name String
 
-  roles Role[]
+  roles role[]
 }
 
 model Account {
@@ -116,12 +116,12 @@ model Account {
   id_token          String?
   session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
-model VerificationToken {
+model verification_token {
   id      String   @id @default(cuid())
   email   String   @db.Text
   token   String   @unique
@@ -130,7 +130,7 @@ model VerificationToken {
   @@unique([email, token])
 }
 
-model ResetPasswordToken {
+model reset_password_token {
   id      String   @id @default(cuid())
   email   String   @db.Text
   token   String   @unique
@@ -139,216 +139,216 @@ model ResetPasswordToken {
   @@unique([email, token])
 }
 
-model Lightnovel {
-  id         String        @id @default(cuid())
-  name       String        @db.Text
-  otherNames String[]      @default([])
-  author     String?       @db.Text
-  artist     String?       @default("")
-  image      Json?         @db.Json
-  summary    Json          @db.Json
-  createdAt  DateTime      @default(now())
-  updateAt   DateTime      @updatedAt
-  deleted    Boolean       @default(false)
-  status     ContentStatus @default(InProcess)
-  note       Json?         @db.Json
+model lightnovel {
+  id          String        @id @default(cuid())
+  name        String        @db.Text
+  other_names String[]      @default([])
+  author      String?       @db.Text
+  artist      String?       @default("")
+  image       Json?         @db.Json
+  summary     Json          @db.Json
+  created_at  DateTime      @default(now())
+  update_at   DateTime      @updatedAt
+  deleted     Boolean       @default(false)
+  status      ContentStatus @default(InProcess)
+  note        Json?         @db.Json
 
-  userId             String             @db.Text
-  translationGroupId String?            @db.Text
-  volumes            LightnovelVolume[]
-  rating             Rating[]
-  favorites          Favorite[]
-  categories         Category[]
+  user_id              String              @db.Text
+  translation_group_id String?             @db.Text
+  volumes              lightnovel_volume[]
+  rating               rating[]
+  favorites            favorite[]
+  categories           category[]
 
-  user             User              @relation(fields: [userId], references: [id])
-  translationGroup TranslationGroup? @relation(fields: [translationGroupId], references: [id])
+  user             user               @relation(fields: [user_id], references: [id])
+  translationGroup translation_group? @relation(fields: [translation_group_id], references: [id])
 
   @@index([name])
 }
 
-model LightnovelVolume {
-  id        String   @id @default(cuid())
-  name      String   @db.Text
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  deleted   Boolean  @default(false)
-  image     Json?    @db.Json
+model lightnovel_volume {
+  id         String   @id @default(cuid())
+  name       String   @db.Text
+  created_at DateTime @default(now())
+  update_at  DateTime @updatedAt
+  deleted    Boolean  @default(false)
+  image      Json?    @db.Json
 
-  novelId  String              @db.Text
-  chapters LightnovelChapter[]
+  novel_id String               @db.Text
+  chapters lightnovel_chapter[]
 
-  novel Lightnovel @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  novel lightnovel @relation(fields: [novel_id], references: [id], onDelete: Cascade)
 }
 
-model LightnovelChapter {
-  id        String    @id @default(cuid())
-  name      String    @db.Text
-  content   Json      @db.Json
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-  deleted   Boolean   @default(false)
-  viewed    Int       @default(0)
-  words     Int       @default(0)
-  viewedAt  DateTime? @db.Date
+model lightnovel_chapter {
+  id         String    @id @default(cuid())
+  name       String    @db.Text
+  content    Json      @db.Json
+  created_at DateTime  @default(now())
+  update_at  DateTime  @updatedAt
+  deleted    Boolean   @default(false)
+  viewed     Int       @default(0)
+  words      Int       @default(0)
+  viewed_at  DateTime? @db.Date
 
-  volumeId String    @db.Text
-  comments Comment[]
+  volume_id String    @db.Text
+  comments  comment[]
 
-  volume LightnovelVolume @relation(fields: [volumeId], references: [id], onDelete: Cascade)
+  volume lightnovel_volume @relation(fields: [volume_id], references: [id], onDelete: Cascade)
 }
 
 //TODO: ANIME
-model Anime {
-  id        String        @id @default(cuid())
-  name      String        @db.Text
-  createdAt DateTime      @default(now())
-  updateAt  DateTime      @updatedAt
-  deleted   Boolean       @default(false)
-  image     Json?         @db.Json
-  summary   Json          @db.Json
-  status    ContentStatus @default(InProcess)
-  note      Json?         @db.Json
+model anime {
+  id         String        @id @default(cuid())
+  name       String        @db.Text
+  created_at DateTime      @default(now())
+  update_at  DateTime      @updatedAt
+  deleted    Boolean       @default(false)
+  image      Json?         @db.Json
+  summary    Json          @db.Json
+  status     ContentStatus @default(InProcess)
+  note       Json?         @db.Json
 
-  translationGroupId String?           @db.Text
-  userId             String            @db.Text
-  seasons            AnimeSeason[]
-  rating             Rating[]
+  translation_group_id String?            @db.Text
+  user_id              String             @db.Text
+  seasons              anime_season[]
+  rating               rating[]
   // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
   // categories Category[] @relation(fields: [categoryIds], references: [id])
-  favorites          Favorite[]
-  categories         Category[]
-  user               User              @relation(fields: [userId], references: [id])
-  translationGroup   TranslationGroup? @relation(fields: [translationGroupId], references: [id])
+  favorites            favorite[]
+  categories           category[]
+  user                 user               @relation(fields: [user_id], references: [id])
+  translationGroup     translation_group? @relation(fields: [translation_group_id], references: [id])
 
   @@index([name])
 }
 
-model AnimeSeason {
-  id        String   @id @default(cuid())
-  name      String   @db.Text
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  deleted   Boolean  @default(false)
-  viewed    Int      @default(0)
-  image     Json?    @db.Json
+model anime_season {
+  id         String   @id @default(cuid())
+  name       String   @db.Text
+  created_at DateTime @default(now())
+  update_at  DateTime @updatedAt
+  deleted    Boolean  @default(false)
+  viewed     Int      @default(0)
+  image      Json?    @db.Json
 
-  animeId  String         @db.Text
-  episodes AnimeEpisode[]
+  anime_id String          @db.Text
+  episodes anime_episode[]
 
-  anime Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+  anime anime @relation(fields: [anime_id], references: [id], onDelete: Cascade)
 }
 
-model AnimeEpisode {
-  id        String    @id @default(cuid())
-  url       String    @db.Text
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-  deleted   Boolean   @default(false)
-  viewed    Int       @default(0)
-  index     String    @db.Text
-  viewedAt  DateTime? @db.Date
+model anime_episode {
+  id         String    @id @default(cuid())
+  url        String    @db.Text
+  created_at DateTime  @default(now())
+  update_at  DateTime  @updatedAt
+  deleted    Boolean   @default(false)
+  viewed     Int       @default(0)
+  index      String    @db.Text
+  viewed_at  DateTime? @db.Date
 
-  seasonId String    @db.Text
-  comments Comment[]
+  season_id String    @db.Text
+  comments  comment[]
 
-  season AnimeSeason @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  season anime_season @relation(fields: [season_id], references: [id], onDelete: Cascade)
 }
 
 //TODO: MANGA
-model Manga {
-  id                 String        @id @default(cuid())
-  name               String        @db.Text
-  createdAt          DateTime      @default(now())
-  updateAt           DateTime      @updatedAt
-  deleted            Boolean       @default(false)
-  image              Json?         @db.Json
-  status             ContentStatus @default(InProcess)
-  userId             String        @db.Text
-  seasons            MangaSeason[]
-  rating             Rating[]
-  note               Json?         @db.Json
-  summary            Json          @db.Json
-  translationGroupId String?       @db.Text
+model manga {
+  id                   String         @id @default(cuid())
+  name                 String         @db.Text
+  created_at           DateTime       @default(now())
+  update_at            DateTime       @updatedAt
+  deleted              Boolean        @default(false)
+  image                Json?          @db.Json
+  status               ContentStatus  @default(InProcess)
+  user_id              String         @db.Text
+  seasons              manga_season[]
+  rating               rating[]
+  note                 Json?          @db.Json
+  summary              Json           @db.Json
+  translation_group_id String?        @db.Text
 
   // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
   // categories Category[] @relation(fields: [categoryIds], references: [id])
-  favorites        Favorite[]
-  categories       Category[]
-  user             User              @relation(fields: [userId], references: [id])
-  translationGroup TranslationGroup? @relation(fields: [translationGroupId], references: [id])
+  favorites         favorite[]
+  categories        category[]
+  user              user               @relation(fields: [user_id], references: [id])
+  translation_group translation_group? @relation(fields: [translation_group_id], references: [id])
 
   @@index([name])
 }
 
-model MangaSeason {
-  id        String   @id @default(cuid())
-  name      String   @db.Text
-  image     Json?    @db.Json
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  deleted   Boolean  @default(false)
+model manga_season {
+  id         String   @id @default(cuid())
+  name       String   @db.Text
+  image      Json?    @db.Json
+  created_at DateTime @default(now())
+  update_at  DateTime @updatedAt
+  deleted    Boolean  @default(false)
 
-  mangaId  String         @db.Text
-  chapters MangaChapter[]
+  manga_id String          @db.Text
+  chapters manga_chapter[]
 
-  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  manga manga @relation(fields: [manga_id], references: [id], onDelete: Cascade)
 }
 
-model MangaChapter {
-  id        String    @id @default(cuid())
-  url       String[]
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-  deleted   Boolean   @default(false)
-  viewed    Int       @default(0)
-  index     String    @db.Text
-  viewedAt  DateTime? @db.Date
+model manga_chapter {
+  id         String    @id @default(cuid())
+  url        String[]
+  created_at DateTime  @default(now())
+  update_at  DateTime  @updatedAt
+  deleted    Boolean   @default(false)
+  viewed     Int       @default(0)
+  index      String    @db.Text
+  viewed_at  DateTime? @db.Date
 
-  seasonId String    @db.Text
-  comments Comment[]
+  season_id String    @db.Text
+  comments  comment[]
 
-  season MangaSeason @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  season manga_season @relation(fields: [season_id], references: [id], onDelete: Cascade)
 }
 
-model Category {
+model category {
   id      String  @id @default(cuid())
   name    String  @unique
   deleted Boolean @default(false)
 
-  mangas      Manga[]
-  animes      Anime[]
-  lightnovels Lightnovel[]
+  mangas      manga[]
+  animes      anime[]
+  lightnovels lightnovel[]
 }
 
-model Comment {
-  id       String   @id @default(cuid())
-  comment  String   @db.Text
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-  deleted  Boolean  @default(false)
+model comment {
+  id        String   @id @default(cuid())
+  comment   String   @db.Text
+  create_at DateTime @default(now())
+  update_at DateTime @updatedAt
+  deleted   Boolean  @default(false)
 
-  userId       String  @db.Text
-  lightnovelId String? @db.Text
-  animeId      String? @db.Text
-  mangaId      String? @db.Text
+  user_id       String  @db.Text
+  lightnovel_id String? @db.Text
+  anime_id      String? @db.Text
+  manga_id      String? @db.Text
 
-  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lightnovel LightnovelChapter? @relation(fields: [lightnovelId], references: [id], onDelete: Cascade)
-  anime      AnimeEpisode?      @relation(fields: [animeId], references: [id], onDelete: Cascade)
-  manga      MangaChapter?      @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  user       user                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  lightnovel lightnovel_chapter? @relation(fields: [lightnovel_id], references: [id], onDelete: Cascade)
+  anime      anime_episode?      @relation(fields: [anime_id], references: [id], onDelete: Cascade)
+  manga      manga_chapter?      @relation(fields: [manga_id], references: [id], onDelete: Cascade)
 }
 
-model Rating {
+model rating {
   id    String @id @default(cuid())
   score Int
 
-  userId       String
-  lightnovelId String? @db.Text
-  animeId      String? @db.Text
-  mangaId      String? @db.Text
+  user_id       String
+  lightnovel_id String? @db.Text
+  anime_id      String? @db.Text
+  manga_id      String? @db.Text
 
-  lightnovel Lightnovel? @relation(fields: [lightnovelId], references: [id], onDelete: Cascade)
-  anime      Anime?      @relation(fields: [animeId], references: [id], onDelete: Cascade)
-  manga      Manga?      @relation(fields: [mangaId], references: [id], onDelete: Cascade)
-  user       User        @relation(fields: [userId], references: [id])
+  lightnovel lightnovel? @relation(fields: [lightnovel_id], references: [id], onDelete: Cascade)
+  anime      anime?      @relation(fields: [anime_id], references: [id], onDelete: Cascade)
+  manga      manga?      @relation(fields: [manga_id], references: [id], onDelete: Cascade)
+  user       user        @relation(fields: [user_id], references: [id])
 }

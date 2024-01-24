@@ -16,7 +16,6 @@ export default {
         name: profile.name,
         image: profile.picture,
         email: profile.email,
-        roleId: process.env.USER_ROLE_ID
       }
     }
   }),
@@ -29,9 +28,9 @@ export default {
 
         const user = await getUserByUsername(username)
 
-        if (!user || !user.hashedPassword) return null
+        if (!user || !user.hashed_password) return null
 
-        const isPasswordMatch = await bcrypt.compare(password, user.hashedPassword)
+        const isPasswordMatch = await bcrypt.compare(password, user.hashed_password)
 
         if (isPasswordMatch) return user
       }

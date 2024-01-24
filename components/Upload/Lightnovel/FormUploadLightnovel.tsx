@@ -108,7 +108,7 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
 
             <FormField
               control={form.control}
-              name="otherNames"
+              name="other_names"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tên tên khác</FormLabel>

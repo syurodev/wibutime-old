@@ -149,6 +149,27 @@ const UserMenu = () => {
                                 className='py-2'
                               >
                                 <Link
+                                  href={"/animes/upload"}
+                                  className='text-4xl font-semibold hover:text-secondary transition-colors'
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  Upload Anime
+                                </Link>
+                              </motion.div>
+                            )
+                          }
+
+                          {
+                            session && session?.permissions.includes("UPLOAD") && (
+                              <motion.div
+                                variants={perspective}
+                                animate="enter"
+                                exit="exit"
+                                initial="initial"
+                                custom={0.1}
+                                className='py-2'
+                              >
+                                <Link
                                   href={"/lightnovels/upload"}
                                   className='text-4xl font-semibold hover:text-secondary transition-colors'
                                   onClick={() => setIsMenuOpen(false)}

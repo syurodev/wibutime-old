@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 
 import Hero from "@/components/Home/Hero/Hero";
 import MainSection from "@/components/Home/MainSection/MainSection";
-import { getNews } from '@/actions/home';
+import { getNews, getTrending } from '@/actions/home';
 
 export default async function Home() {
   const queryClient = new QueryClient()
@@ -10,6 +10,8 @@ export default async function Home() {
     queryKey: ["news"],
     queryFn: getNews
   })
+
+  await getTrending()
 
   return (
     <div className="flex flex-col gap-5">

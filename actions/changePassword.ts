@@ -56,11 +56,11 @@ export const changePassword = async (token: string | null, values: z.infer<typeo
       id: existingUser.id
     },
     data: {
-      hashedPassword: newHasedPassword,
+      hashed_password: newHasedPassword,
     }
   })
 
-  await db.resetPasswordToken.delete({
+  await db.reset_password_token.delete({
     where: {
       id: existingToken.id
     }

@@ -14,7 +14,7 @@ export const getNews = async (): Promise<{
         deleted: false,
       },
       orderBy: {
-        updateAt: 'desc',
+        update_at: 'desc',
       },
       take: 3,
       select: {
@@ -33,7 +33,7 @@ export const getNews = async (): Promise<{
             deleted: false,
           },
           orderBy: {
-            updateAt: 'desc',
+            update_at: 'desc',
           },
           take: 1,
           select: {
@@ -45,7 +45,7 @@ export const getNews = async (): Promise<{
                 deleted: false,
               },
               orderBy: {
-                updateAt: 'desc',
+                update_at: 'desc',
               },
               take: 1,
               select: {
@@ -68,7 +68,7 @@ export const getNews = async (): Promise<{
         deleted: false,
       },
       orderBy: {
-        updateAt: 'desc',
+        update_at: 'desc',
       },
       take: 3,
       select: {
@@ -87,7 +87,7 @@ export const getNews = async (): Promise<{
             deleted: false,
           },
           orderBy: {
-            updateAt: 'desc',
+            update_at: 'desc',
           },
           take: 1,
           select: {
@@ -98,7 +98,7 @@ export const getNews = async (): Promise<{
                 deleted: false,
               },
               orderBy: {
-                updateAt: 'desc',
+                update_at: 'desc',
               },
               take: 1,
               select: {
@@ -121,7 +121,7 @@ export const getNews = async (): Promise<{
         deleted: false,
       },
       orderBy: {
-        updateAt: 'desc',
+        update_at: 'desc',
       },
       take: 3,
       select: {
@@ -140,7 +140,7 @@ export const getNews = async (): Promise<{
             deleted: false,
           },
           orderBy: {
-            updateAt: 'desc',
+            update_at: 'desc',
           },
           take: 1,
           select: {
@@ -151,7 +151,7 @@ export const getNews = async (): Promise<{
                 deleted: false,
               },
               orderBy: {
-                updateAt: 'desc',
+                update_at: 'desc',
               },
               take: 1,
               select: {
@@ -253,6 +253,83 @@ export const getNews = async (): Promise<{
   } catch (error) {
     await db.$disconnect()
 
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server",
+      data: null
+    }
+  }
+}
+
+
+export const getTrending = async () => {
+  const currentDate = new Date();
+
+  const startOfDay = new Date(currentDate);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  try {
+    const lightnovelTrending = await db.$queryRaw`
+    SELECT l.id, l.name, l.image, COUNT(c.id) AS chapter_count, SUM(c.viewed) AS total_viewed
+    FROM lightnovel l
+    LEFT JOIN lightnovel_volume v ON l.id = v.novel_id
+    LEFT JOIN lightnovel_chapter c ON v.id = c.volume_id
+    WHERE c.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+    GROUP BY l.id
+    ORDER BY total_viewed DESC
+    LIMIT 8;
+  `;
+
+    // const topAnime = await db.$queryRaw`
+    //   SELECT
+    //     a.id,
+    //     a.name,
+    //     s.id as seasonId,
+    //     s.name as seasonName,
+    //     e.id as episodeId,
+    //     e.viewed
+    //   FROM
+    //     anime a
+    //   LEFT JOIN
+    //     anime_season s ON a.id = s.anime_id
+    //   LEFT JOIN
+    //     anime_episode e ON s.id = e.season_id
+    //   WHERE
+    //     e.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+    //   ORDER BY
+    //     e.viewed DESC
+    //   LIMIT
+    //     8
+    // `;
+
+    // const topManga = await db.$queryRaw`
+    //   SELECT
+    //     m.id,
+    //     m.name,
+    //     s.id as seasonId,
+    //     s.name as seasonName,
+    //     c.id as chapterId,
+    //     c.viewed
+    //   FROM
+    //     manga m
+    //   LEFT JOIN
+    //     manga_season s ON m.id = s.manga_id
+    //   LEFT JOIN
+    //     manga_chapter c ON s.id = c.season_id
+    //   WHERE
+    //     c.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+    //   ORDER BY
+    //     c.viewed DESC
+    //   LIMIT
+    //     8
+    // `;
+
+    db.$disconnect()
+
+    console.log(lightnovelTrending)
+  } catch (error) {
+    db.$disconnect()
     console.log(error)
     return {
       code: 500,
