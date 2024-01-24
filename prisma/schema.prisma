@@ -181,14 +181,15 @@ model LightnovelVolume {
 }
 
 model LightnovelChapter {
-  id        String   @id @default(cuid())
-  name      String   @db.Text
-  content   Json     @db.Json
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  deleted   Boolean  @default(false)
-  viewed    Int      @default(0)
-  words     Int      @default(0)
+  id        String    @id @default(cuid())
+  name      String    @db.Text
+  content   Json      @db.Json
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deleted   Boolean   @default(false)
+  viewed    Int       @default(0)
+  words     Int       @default(0)
+  viewedAt  DateTime? @db.Date
 
   volumeId String    @db.Text
   comments Comment[]
@@ -238,13 +239,14 @@ model AnimeSeason {
 }
 
 model AnimeEpisode {
-  id        String   @id @default(cuid())
-  url       String   @db.Text
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  deleted   Boolean  @default(false)
-  viewed    Int      @default(0)
-  index     String   @db.Text
+  id        String    @id @default(cuid())
+  url       String    @db.Text
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deleted   Boolean   @default(false)
+  viewed    Int       @default(0)
+  index     String    @db.Text
+  viewedAt  DateTime? @db.Date
 
   seasonId String    @db.Text
   comments Comment[]
@@ -293,13 +295,14 @@ model MangaSeason {
 }
 
 model MangaChapter {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   url       String[]
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  deleted   Boolean  @default(false)
-  viewed    Int      @default(0)
-  index     String   @db.Text
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deleted   Boolean   @default(false)
+  viewed    Int       @default(0)
+  index     String    @db.Text
+  viewedAt  DateTime? @db.Date
 
   seasonId String    @db.Text
   comments Comment[]

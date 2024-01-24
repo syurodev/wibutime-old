@@ -1,14 +1,25 @@
-import React, { FC } from 'react'
+"use client"
+import React, { FC, useEffect } from 'react'
 
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
-import { Button } from '@/components/ui/button'
 import { LuCaseSensitive, LuEye, LuHeart, LuMessageCircle } from 'react-icons/lu'
+import { updateLightnovelChapterViewed } from '@/actions/lightnovel'
 
 type IProps = {
   data: LightnovelChapterDetail
 }
 
 const ReadChapter: FC<IProps> = ({ data }) => {
+  useEffect(() => {
+    const upViewed = setTimeout(async () => {
+      await updateLightnovelChapterViewed(data.id)
+    }, 30 * 1000)
+
+    return () => {
+      clearTimeout(upViewed)
+    }
+  }, [data.id])
+
 
   return (
     <div className='flex flex-col gap-8'>

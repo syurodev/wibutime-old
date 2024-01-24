@@ -477,3 +477,26 @@ export const getChapterContent = async (chapterId: string): Promise<{
     }
   }
 }
+
+export const updateLightnovelChapterViewed = async (chapterId: string) => {
+  try {
+    await db.lightnovelChapter.update({
+      where: { id: chapterId },
+      data: { viewed: { increment: 1 }, viewedAt: new Date() },
+    });
+
+    await db.$disconnect()
+    return {
+      code: 200,
+      message: "success"
+    }
+  } catch (error) {
+    await db.$disconnect()
+    console.log(error)
+
+    return {
+      code: 500,
+      message: "Lỗi server"
+    }
+  }
+}
