@@ -61,11 +61,11 @@ const News: FC = () => {
                 index === currentIndex && (
                   <div
                     key={`heroNew-${index}`}
-                    className='aspect-[2/3] w-full md:max-h-[60vh] overflow-hidden rounded-2xl relative flex flex-col md:flex-row'
+                    className='aspect-[2/3] min-h-[500px] w-full md:max-h-[60vh] overflow-hidden rounded-2xl relative flex flex-col md:flex-row'
                   >
                     {/* Image */}
                     <motion.div
-                      className='h-full w-full min-w-[377px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
+                      className='min-h-[500px] w-full min-w-[377px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
                       variants={slide}
                       initial="initial"
                       animate="animate"
