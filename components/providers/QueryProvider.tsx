@@ -2,7 +2,6 @@
 
 import { FC, ReactNode, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 type IProps = {
   children: ReactNode
@@ -24,7 +23,6 @@ const QueryProvider: FC<IProps> = ({ children }) => {
     <QueryClientProvider
       client={queryClient}
     >
-      <ReactQueryDevtools initialIsOpen={false} />
       {children}
     </QueryClientProvider>
   )

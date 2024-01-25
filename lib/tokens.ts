@@ -11,14 +11,14 @@ export const generateVerificationToken = async (email: string) => {
   const existingToken = await getVerificationTokenByEmail(email)
 
   if (existingToken) {
-    await db.verificationToken.delete({
+    await db.verification_token.delete({
       where: {
         id: existingToken.id
       }
     })
   }
 
-  const verificationToken = await db.verificationToken.create({
+  const verificationToken = await db.verification_token.create({
     data: {
       email,
       token,
@@ -36,14 +36,14 @@ export const generateResetPasswordToken = async (email: string) => {
   const existingToken = await getResetPasswordTokenByEmail(email)
 
   if (existingToken) {
-    await db.resetPasswordToken.delete({
+    await db.reset_password_token.delete({
       where: {
         id: existingToken.id
       }
     })
   }
 
-  const resetPasswordToken = await db.resetPasswordToken.create({
+  const resetPasswordToken = await db.reset_password_token.create({
     data: {
       email,
       token,

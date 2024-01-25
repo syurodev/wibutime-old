@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 
 export const getAllCategories = async () => {
   try {
-    const data = await db.category.findMany({
+    const categories = await db.category.findMany({
       select: {
         id: true,
         name: true
@@ -15,7 +15,7 @@ export const getAllCategories = async () => {
     return {
       code: 200,
       message: "success",
-      data
+      data: categories
     }
   } catch (error) {
     console.log(error)

@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 
 import { getServerSession } from '@/lib/getServerSession'
-import FormUploadLightnovel from '@/components/Upload/Lightnovel/FormUploadLightnovel'
+import FormCreateLightnovel from '@/components/Upload/Lightnovel/FormCreateLightnovel'
 import { getAllCategories } from '@/actions/categories'
 import { buttonVariants } from '@/components/ui/button'
 
@@ -25,7 +25,7 @@ const UploadPage = async () => {
 
   return (
     <div>
-      <FormUploadLightnovel categories={categories.data} />
+      <FormCreateLightnovel categories={categories.data} />
     </div>
   )
 }

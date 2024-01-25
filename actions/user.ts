@@ -25,7 +25,6 @@ export const getUserDetail = async (id: string): Promise<{
         animes: {
           select: {
             name: true,
-            image: true,
             created_at: true,
             id: true,
             user: {
@@ -107,7 +106,11 @@ export const getUserDetail = async (id: string): Promise<{
               select: {
                 name: true,
                 id: true,
-                image: true,
+                seasons: {
+                  select: {
+                    image: true
+                  }
+                },
                 user: {
                   select: {
                     id: true
@@ -163,7 +166,7 @@ export const getUserDetail = async (id: string): Promise<{
       animes: user.animes ? user.animes.map(anime => ({
         id: anime.id,
         name: anime.name,
-        image: anime.image as {
+        image: anime.seasons[-1].image as {
           key?: string,
           url: string,
         } | null,

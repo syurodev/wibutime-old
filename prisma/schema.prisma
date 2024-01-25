@@ -199,38 +199,42 @@ model lightnovel_chapter {
 
 //TODO: ANIME
 model anime {
-  id         String        @id @default(cuid())
-  name       String        @db.Text
-  created_at DateTime      @default(now())
-  update_at  DateTime      @updatedAt
-  deleted    Boolean       @default(false)
-  image      Json?         @db.Json
-  summary    Json          @db.Json
-  status     ContentStatus @default(InProcess)
-  note       Json?         @db.Json
+  id          String        @id @default(cuid())
+  name        String        @db.Text
+  created_at  DateTime      @default(now())
+  update_at   DateTime      @updatedAt
+  deleted     Boolean       @default(false)
+  summary     Json          @db.Json
+  status      ContentStatus @default(InProcess)
+  note        Json?         @db.Json
+  other_names String[]      @default([])
 
-  translation_group_id String?            @db.Text
-  user_id              String             @db.Text
+  translation_group_id String?        @db.Text
+  user_id              String         @db.Text
   seasons              anime_season[]
   rating               rating[]
-  // favorites  Favorite[] @relation(fields: [favoriteIds], references: [id])
-  // categories Category[] @relation(fields: [categoryIds], references: [id])
   favorites            favorite[]
   categories           category[]
-  user                 user               @relation(fields: [user_id], references: [id])
-  translationGroup     translation_group? @relation(fields: [translation_group_id], references: [id])
+
+  user             user               @relation(fields: [user_id], references: [id])
+  translationGroup translation_group? @relation(fields: [translation_group_id], references: [id])
 
   @@index([name])
 }
 
 model anime_season {
-  id         String   @id @default(cuid())
-  name       String   @db.Text
-  created_at DateTime @default(now())
-  update_at  DateTime @updatedAt
-  deleted    Boolean  @default(false)
-  viewed     Int      @default(0)
-  image      Json?    @db.Json
+  id                 String   @id @default(cuid())
+  name               String   @db.Text
+  created_at         DateTime @default(now())
+  update_at          DateTime @updatedAt
+  deleted            Boolean  @default(false)
+  image              Json?    @db.Json
+  musics             Json?    @db.Json
+  studio             String   @db.Text
+  broadcast_time     DateTime @db.Date
+  broadcast_day      String   @db.Text
+  aired              DateTime @db.Date
+  number_of_episodes Int?     @db.Integer
 
   anime_id String          @db.Text
   episodes anime_episode[]

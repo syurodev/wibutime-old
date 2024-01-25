@@ -1,17 +1,12 @@
 import * as z from "zod"
 
-export const LightnovelContentSchema = z.object({
-  type: z.string(),
-  content: z.array(z.any()).refine((data) => data.length > 0, {
-    message: "Vui lòng nhập nội dung",
-  }),
-});
+import { EditorContentSchema } from "./shared"
 
 export const lightnovelSchema = z.object({
   name: z.string().trim().min(1, { message: "Tên lightnovel là bắt buộc" }),
   author: z.string().trim().min(1, { message: "Tên tác giả là bắt buộc" }),
   artist: z.string().optional(),
-  note: LightnovelContentSchema.optional(),
+  note: EditorContentSchema.optional(),
   categories: z.array(z.object({
     id: z.string(),
     name: z.string()
@@ -22,7 +17,7 @@ export const lightnovelSchema = z.object({
       text: z.string(),
     })
   ).optional(),
-  summary: LightnovelContentSchema,
+  summary: EditorContentSchema,
   image: z.object({
     key: z.string().optional(),
     url: z.string().url()
@@ -40,5 +35,5 @@ export const lightnovelVolumeSchema = z.object({
 export const lightnovelChapterSchema = z.object({
   name: z.string().min(1, { message: "Vui lòng nhập tên chapter" }),
   volume_id: z.string().min(1, { message: "Vui lòng chọn volume" }),
-  content: LightnovelContentSchema
+  content: EditorContentSchema
 })

@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import NewVerificationForm from '@/components/Auth/NewVerificationForm/NewVerificationForm'
 
 const NewVerificationPage = () => {
   return (
-    <div>
+    <Suspense>
       <NewVerificationForm />
-    </div>
+    </Suspense>
   )
 }
 

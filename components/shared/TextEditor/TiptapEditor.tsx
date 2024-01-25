@@ -44,6 +44,13 @@ const TiptapEditor: FC<IProps> = ({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
+        heading: false,
+        bold: false,
+        italic: false,
+        blockquote: false,
+        listItem: false,
+        orderedList: false,
+        strike: false
       }),
       Typography,
       Heading.configure({

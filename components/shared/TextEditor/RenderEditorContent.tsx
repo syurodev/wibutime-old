@@ -11,6 +11,7 @@ import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
 import Strike from '@tiptap/extension-strike'
 import Typography from '@tiptap/extension-typography'
+import HardBreak from '@tiptap/extension-hard-break'
 import { default as TiptapImage } from '@tiptap/extension-image'
 
 type IDescription = {
@@ -42,6 +43,7 @@ const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontS
         }
       }),
       Typography,
+      HardBreak,
       Heading.configure({
         HTMLAttributes: {
           class: "text-xl font-bold select-none",

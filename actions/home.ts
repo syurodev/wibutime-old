@@ -20,7 +20,6 @@ export const getNews = async (): Promise<{
       select: {
         id: true,
         name: true,
-        image: true,
         summary: true,
         categories: {
           select: {
@@ -39,6 +38,7 @@ export const getNews = async (): Promise<{
           select: {
             id: true,
             name: true,
+            image: true,
             _count: true,
             episodes: {
               where: {
@@ -176,11 +176,11 @@ export const getNews = async (): Promise<{
       summary: anime.summary,
       type: "anime" as ContentType,
       categories: anime.categories,
-      image: anime.image as {
+      image: !anime.seasons || anime.seasons.length === 0 ? null : anime.seasons[-1].image as {
         key?: string,
         url: string
       } | null,
-      seasons: anime.seasons.length === 0 ? null : {
+      seasons: !anime.seasons || anime.seasons.length === 0 ? null : {
         id: anime.seasons[0].id,
         name: anime.seasons[0].name,
         episodes: anime.seasons[0].episodes.length === 0 ? null : {
@@ -264,10 +264,10 @@ export const getNews = async (): Promise<{
 
 
 export const getTrending = async () => {
-  const currentDate = new Date();
+  const endOfWeek = new Date();
 
-  const startOfDay = new Date(currentDate);
-  startOfDay.setHours(0, 0, 0, 0);
+  const startOfWeek = new Date(endOfWeek);
+  startOfWeek.setHours(0, 0, 0, 0);
 
   try {
     const lightnovelTrending: {
@@ -295,7 +295,7 @@ export const getTrending = async () => {
         LEFT JOIN
           favorite f ON ln.id = ANY(f.lightnovel_ids)
         WHERE
-          lnc.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+          lnc.viewed_at BETWEEN ${startOfWeek} AND ${endOfWeek}
         GROUP BY
           ln.id, ln.name, lnv.id, lnc.id
         ORDER BY
@@ -326,7 +326,7 @@ export const getTrending = async () => {
           LEFT JOIN anime_episode e ON s.id = e.season_id
           LEFT JOIN favorite f ON a.id = ANY(f.anime_ids)
         WHERE
-          e.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+          e.viewed_at BETWEEN ${startOfWeek} AND ${endOfWeek}
         GROUP BY
           a.id, a.name, s.id, e.id
         ORDER BY
@@ -357,7 +357,7 @@ export const getTrending = async () => {
           LEFT JOIN manga_chapter c ON s.id = c.season_id
           LEFT JOIN favorite f ON m.id = ANY(f.manga_ids)
         WHERE
-          c.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+          c.viewed_at BETWEEN ${startOfWeek} AND ${endOfWeek}
         GROUP BY
           m.id, m.name, s.id, c.id
         ORDER BY
@@ -435,8 +435,16 @@ export const getHero = async (): Promise<{
   try {
     const currentDate = new Date();
 
-    const startOfDay = new Date(currentDate);
-    startOfDay.setHours(0, 0, 0, 0);
+    // const startOfDay = new Date(currentDate);
+    // startOfDay.setHours(0, 0, 0, 0);
+
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+
+    // Lấy ngày cuối cùng của tuần
+    const endOfWeek = new Date(currentDate);
+    endOfWeek.setDate(currentDate.getDate() + (6 - currentDate.getDay()));
+
 
     const latestAnimes = await db.anime.findMany({
       where: {
@@ -449,7 +457,6 @@ export const getHero = async (): Promise<{
       select: {
         id: true,
         name: true,
-        image: true,
         summary: true,
         categories: {
           select: {
@@ -468,6 +475,7 @@ export const getHero = async (): Promise<{
           select: {
             id: true,
             name: true,
+            image: true,
             _count: true,
             episodes: {
               where: {
@@ -605,10 +613,10 @@ export const getHero = async (): Promise<{
       summary: anime.summary,
       type: "anime" as ContentType,
       categories: anime.categories,
-      image: anime.image as {
+      image: anime.seasons && anime.seasons.length > 0 ? anime.seasons[0].image as {
         key?: string,
         url: string
-      } | null,
+      } | null : null,
       seasons: anime.seasons.length === 0 ? null : {
         id: anime.seasons[0].id,
         name: anime.seasons[0].name,
@@ -698,7 +706,7 @@ export const getHero = async (): Promise<{
         LEFT JOIN
           favorite f ON ln.id = ANY(f.lightnovel_ids)
         WHERE
-          lnc.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+          lnc.viewed_at BETWEEN ${startOfWeek} AND ${endOfWeek}
         GROUP BY
           ln.id, ln.name, lnv.id, lnc.id
         ORDER BY
@@ -720,7 +728,7 @@ export const getHero = async (): Promise<{
         SELECT
           a.id,
           a.name,
-          a.image,
+          s.image,
           COUNT(DISTINCT f.id) as numFavorites,
           SUM(e.viewed) AS totalViews
         FROM
@@ -729,7 +737,7 @@ export const getHero = async (): Promise<{
           LEFT JOIN anime_episode e ON s.id = e.season_id
           LEFT JOIN favorite f ON a.id = ANY(f.anime_ids)
         WHERE
-          e.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+          e.viewed_at BETWEEN ${startOfWeek} AND ${endOfWeek}
         GROUP BY
           a.id, a.name, s.id, e.id
         ORDER BY
@@ -760,7 +768,7 @@ export const getHero = async (): Promise<{
           LEFT JOIN manga_chapter c ON s.id = c.season_id
           LEFT JOIN favorite f ON m.id = ANY(f.manga_ids)
         WHERE
-          c.viewed_at BETWEEN ${startOfDay} AND ${currentDate}
+          c.viewed_at BETWEEN ${startOfWeek} AND ${endOfWeek}
         GROUP BY
           m.id, m.name, s.id, c.id
         ORDER BY

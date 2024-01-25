@@ -34,7 +34,7 @@ type IProps = {
   categories: Category[] | null
 }
 
-const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
+const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
   const [isUploadSmallImage, setIsUploadSmallImage] = useState<boolean>(false)
   const [image, setImage] = useState<{
     key: string,
@@ -257,8 +257,7 @@ const FormUploadLightnovel: FC<IProps> = ({ categories }) => {
         </div>
       </form>
     </Form>
-
   )
 }
 
-export default FormUploadLightnovel
+export default FormCreateLightnovel

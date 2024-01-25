@@ -61,3 +61,7 @@ type Category = {
 type ContentType = "anime" | "manga" | "lightnovel"
 
 type ContentStatus = "Pause" | "Complete" | "InProcess"
+
+type DaysOfTheWeek = "Sun" | "Mon" | "Tues" | "Wed" | "Thurs" | "Fri" | "Sat"
+
+type MusicType = "Opening Theme" | "Ending Theme" | "OST"
