@@ -63,7 +63,8 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
         type: "Opening Theme",
         name: "",
       }],
-      studio: ""
+      studio: "",
+      number_of_episodes: 0,
     },
   })
 
