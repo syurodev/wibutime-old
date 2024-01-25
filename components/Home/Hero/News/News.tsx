@@ -61,11 +61,11 @@ const News: FC = () => {
                 index === currentIndex && (
                   <div
                     key={`heroNew-${index}`}
-                    className='w-full h-[60vh] min-h-[500px] overflow-hidden rounded-2xl relative flex'
+                    className='aspect-[3/5] w-full md:max-h-[60vh] overflow-hidden rounded-2xl relative flex flex-col md:flex-row'
                   >
                     {/* Image */}
                     <motion.div
-                      className='h-full w-full aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
+                      className='h-full w-full min-w-[377px] aspect-[3/5] relative flex items-start overflow-hidden flex-auto'
                       variants={slide}
                       initial="initial"
                       animate="animate"
@@ -82,7 +82,7 @@ const News: FC = () => {
                     </motion.div>
 
                     <motion.div
-                      className='h-full overflow-hidden'
+                      className='h-full overflow-hidden absolute top-1/2 bg-background/80 backdrop-blur-lg md:bg-transparent md:backdrop-blur-none md:top-0 md:relative'
                       variants={slideWithoutScale}
                       custom={0.2}
                       initial="initial"
@@ -90,7 +90,9 @@ const News: FC = () => {
                       exit="exit"
                     >
                       <div className='relative overflow-hidden h-full'>
-                        <div className='flex flex-col gap-3 p-3 bg-background/80 backdrop-blur-lg h-full overflow-hidden relative'>
+                        <div
+                          className='flex flex-col gap-5 p-3 h-full overflow-hidden relative w-full md:bg-background/80 md:backdrop-blur-lg'
+                        >
                           {/* type and watch now btn */}
                           <div className='flex items-center justify-between'>
                             <motion.div
@@ -154,7 +156,7 @@ const News: FC = () => {
                             animate="animate"
                             exit="exit"
                           >
-                            <span className='uppercase text-sm'>
+                            <span className='uppercase text-xs'>
                               {item.type === "anime"
                                 ? item.seasons?.episodes
                                   ? `EP: ${item.seasons?.episodes?.index}`
@@ -184,7 +186,7 @@ const News: FC = () => {
                                     className='flex items-center gap-1'
                                   >
                                     <LuCaseSensitive className="text-xl" />
-                                    <span className='text-sm'>{item.volumes?.chapters?.words}</span>
+                                    <span className='text-xs'>{item.volumes?.chapters?.words}</span>
                                   </div>
                                 </>
                               )
@@ -238,7 +240,7 @@ const News: FC = () => {
                           alt={item.name}
                           fill
                           sizes='90vw'
-                          className='object-cover -z-10'
+                          className='object-cover -z-10 hidden md:block'
                           priority
                         />
                       </div>
