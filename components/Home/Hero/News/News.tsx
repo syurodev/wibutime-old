@@ -61,11 +61,11 @@ const News: FC = () => {
                 index === currentIndex && (
                   <div
                     key={`heroNew-${index}`}
-                    className='aspect-[3/5] w-full md:max-h-[60vh] overflow-hidden rounded-2xl relative flex flex-col md:flex-row'
+                    className='aspect-[2/3] w-full md:max-h-[60vh] overflow-hidden rounded-2xl relative flex flex-col md:flex-row'
                   >
                     {/* Image */}
                     <motion.div
-                      className='h-full w-full min-w-[377px] aspect-[3/5] relative flex items-start overflow-hidden flex-auto'
+                      className='h-full w-full min-w-[377px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
                       variants={slide}
                       initial="initial"
                       animate="animate"
@@ -82,7 +82,7 @@ const News: FC = () => {
                     </motion.div>
 
                     <motion.div
-                      className='h-full overflow-hidden absolute top-1/2 bg-background/80 backdrop-blur-lg md:bg-transparent md:backdrop-blur-none md:top-0 md:relative'
+                      className='h-full overflow-hidden absolute top-1/2 bg-background/80 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none md:top-0 md:relative'
                       variants={slideWithoutScale}
                       custom={0.2}
                       initial="initial"
@@ -91,7 +91,7 @@ const News: FC = () => {
                     >
                       <div className='relative overflow-hidden h-full'>
                         <div
-                          className='flex flex-col gap-5 p-3 h-full overflow-hidden relative w-full md:bg-background/80 md:backdrop-blur-lg'
+                          className='flex flex-col gap-3 md:gap-5 p-3 h-full overflow-hidden relative w-full md:bg-background/80 md:backdrop-blur-xl'
                         >
                           {/* type and watch now btn */}
                           <div className='flex items-center justify-between'>

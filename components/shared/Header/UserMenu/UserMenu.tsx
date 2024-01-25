@@ -202,7 +202,7 @@ const UserMenu = () => {
                       {/* footer */}
                       <div className='flex justify-between w-full'>
                         <div
-                          className={`${style.linkContainer} w-1/2 text-destructive cursor-pointer`}
+                          className={`${style.linkContainer} w-1/2 text-destructive cursor-pointer select-none`}
                           onClick={() => signOut()}
                         >
                           <motion.div

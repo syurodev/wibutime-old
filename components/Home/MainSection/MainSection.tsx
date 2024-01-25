@@ -1,6 +1,9 @@
 import React from 'react'
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
+
 import Continue from './Continue/Continue'
 import NewlyUpdated from './NewlyUpdated/NewlyUpdated'
+import { getNews } from '@/actions/home';
 
 const data = {
   continue: [
@@ -150,12 +153,20 @@ const data = {
 }
 
 const MainSection = async () => {
+  const queryClient = new QueryClient()
+  await queryClient.prefetchQuery({
+    queryKey: ["main section", "animenews", "manganews", "lightnovelnews"],
+    queryFn: async () => await getNews(12)
+  })
+
   return (
     <>
       <Continue data={data.continue} />
-      <NewlyUpdated title='Newly updated anime' data={data.animenews} />
-      <NewlyUpdated title='Newly updated manga' data={data.manganews} />
-      <NewlyUpdated title='Newly updated lightnovel' data={data.lightnovelnews} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <NewlyUpdated title='Newly updated anime' type='anime' />
+        <NewlyUpdated title='Newly updated manga' type='manga' />
+        <NewlyUpdated title='Newly updated lightnovel' type='lightnovel' />
+      </HydrationBoundary>
     </>
   )
 }

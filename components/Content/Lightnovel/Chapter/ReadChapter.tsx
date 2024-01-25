@@ -24,7 +24,7 @@ const ReadChapter: FC<IProps> = ({ data }) => {
   return (
     <div className='flex flex-col gap-8'>
       <div className='w-full flex flex-col items-center justify-center'>
-        <h3>{data.name}</h3>
+        <h3 className='text-center'>{data.name}</h3>
         <div
           className='flex gap-5 justify-center'
         >

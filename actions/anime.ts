@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db"
+import { formatNumber } from "@/lib/formatNumber"
 import { getServerSession } from "@/lib/getServerSession"
 import { animeSchema } from "@/schemas/anime"
 
@@ -85,6 +86,115 @@ export const createAnime = async (
     await db.$disconnect()
     console.log(error)
 
+    return {
+      code: 500,
+      message: "Lỗi server",
+      data: null
+    }
+  }
+}
+
+export const getAnimeNews = async (limit: number = 12): Promise<{
+  code: number,
+  message: string,
+  data: AnimeNew[] | null
+}> => {
+  try {
+    const latestAnimes = await db.anime.findMany({
+      where: {
+        deleted: false,
+      },
+      orderBy: {
+        update_at: 'desc',
+      },
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        summary: true,
+        categories: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        seasons: {
+          where: {
+            deleted: false,
+          },
+          orderBy: {
+            update_at: 'desc',
+          },
+          take: 1,
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            _count: true,
+            episodes: {
+              where: {
+                deleted: false,
+              },
+              orderBy: {
+                update_at: 'desc',
+              },
+              take: 1,
+              select: {
+                id: true,
+                index: true,
+              }
+            },
+          }
+        },
+        favorites: {
+          select: {
+            _count: true
+          }
+        }
+      }
+    });
+
+    if (!latestAnimes) {
+      await db.$disconnect()
+
+      return {
+        code: 404,
+        message: "Không tìm thấy danh sách anime",
+        data: null
+      }
+    }
+
+    const fotmatAnimes: AnimeNew[] | null = latestAnimes.length === 0 ? null : latestAnimes.map((anime) => ({
+      id: anime.id,
+      name: anime.name,
+      summary: anime.summary,
+      type: "anime" as ContentType,
+      categories: anime.categories,
+      image: !anime.seasons || anime.seasons.length === 0 ? null : anime.seasons[-1].image as {
+        key?: string,
+        url: string
+      } | null,
+      seasons: !anime.seasons || anime.seasons.length === 0 ? null : {
+        id: anime.seasons[0].id,
+        name: anime.seasons[0].name,
+        episodes: anime.seasons[0].episodes.length === 0 ? null : {
+          id: anime.seasons[0].episodes[0].id,
+          index: anime.seasons[0].episodes[0].index
+        }
+      },
+      favorites: formatNumber(anime.favorites.length)
+    }))
+
+    return {
+      code: 200,
+      message: "success",
+      data: fotmatAnimes
+    }
+
+  } catch (error) {
+    await db.$disconnect()
+
+    console.log(error)
     return {
       code: 500,
       message: "Lỗi server",

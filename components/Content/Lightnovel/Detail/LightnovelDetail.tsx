@@ -312,6 +312,7 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
         </ResizablePanel>
       </ResizablePanelGroup>
 
+      {/* Mobile */}
       <div className='md:!hidden w-full flex flex-col gap-4'>
         <div className='w-full h-dvh flex flex-col items-center'>
           <div
@@ -368,7 +369,7 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
 
             {/* Image */}
             <motion.div
-              className='aspect-[2/3] w-full max-w-[50%] relative rounded-lg overflow-hidden shadow-xl'
+              className='aspect-[2/3] w-full max-w-[65%] relative rounded-lg overflow-hidden shadow-xl'
               variants={slide}
               initial="initial"
               animate="animate"
@@ -590,8 +591,6 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
           }
         </div>
       </div>
-
-
     </div>
   )
 }

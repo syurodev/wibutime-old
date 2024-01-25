@@ -3,10 +3,14 @@
 import { db } from "@/lib/db"
 import { formatNumber } from "@/lib/formatNumber";
 
-export const getNews = async (): Promise<{
+export const getNews = async (limit: number = 12): Promise<{
   code: number,
   message: string,
-  data: NewsData | null
+  data: {
+    anime: AnimeNew[],
+    manga: MangaNew[],
+    lightnovel: LightnovelNew[]
+  } | null
 }> => {
   try {
     const latestAnimes = await db.anime.findMany({
@@ -16,7 +20,7 @@ export const getNews = async (): Promise<{
       orderBy: {
         update_at: 'desc',
       },
-      take: 3,
+      take: limit,
       select: {
         id: true,
         name: true,
@@ -70,7 +74,7 @@ export const getNews = async (): Promise<{
       orderBy: {
         update_at: 'desc',
       },
-      take: 3,
+      take: limit,
       select: {
         id: true,
         name: true,
@@ -123,7 +127,7 @@ export const getNews = async (): Promise<{
       orderBy: {
         update_at: 'desc',
       },
-      take: 3,
+      take: limit,
       select: {
         id: true,
         name: true,
@@ -176,7 +180,7 @@ export const getNews = async (): Promise<{
       summary: anime.summary,
       type: "anime" as ContentType,
       categories: anime.categories,
-      image: !anime.seasons || anime.seasons.length === 0 ? null : anime.seasons[-1].image as {
+      image: !anime.seasons || anime.seasons.length === 0 ? null : anime.seasons[0].image as {
         key?: string,
         url: string
       } | null,
@@ -234,20 +238,14 @@ export const getNews = async (): Promise<{
       favorites: formatNumber(novel.favorites.length)
     }))
 
-    let result: NewsData = []
-
-    const formatsToCheck = [fotmatAnimes, formatMangas, formatLightnovels];
-
-    for (const format of formatsToCheck) {
-      if (format) {
-        result = [...result, ...format];
-      }
-    }
-
     return {
       code: 200,
       message: "success",
-      data: result
+      data: {
+        anime: fotmatAnimes || [],
+        manga: formatMangas || [],
+        lightnovel: formatLightnovels || [],
+      }
     }
 
   } catch (error) {

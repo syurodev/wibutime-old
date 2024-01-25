@@ -1,18 +1,61 @@
 'use client'
 
 import { FC } from 'react'
-import { Button } from '@/components/ui/button'
+import { useQuery } from '@tanstack/react-query'
+import { notFound } from 'next/navigation'
 import { motion } from 'framer-motion'
+
+import { Button } from '@/components/ui/button'
 import { slide } from '@/lib/motion/slide'
 import CardItem from '@/components/shared/Card/CardItem'
+import { getNews } from '@/actions/home'
 
 type IProps = {
   title: string,
-  data: NewlyData[]
+  type: ContentType
 }
 
-const NewlyUpdated: FC<IProps> = ({ title, data }) => {
+const NewlyUpdated: FC<IProps> = ({ title, type }) => {
+  const { data, error } = useQuery({
+    queryKey: ["main section", "animenews", "manganews", "lightnovelnews"],
+    queryFn: async () => await getNews(12)
+  })
+
+  if (!data?.data) {
+    notFound()
+  }
+
+  function getDataByType(data: {
+    anime: AnimeNew[],
+    manga: MangaNew[],
+    lightnovel: LightnovelNew[]
+  },
+    type: ContentType
+  ): AnimeNew[] | MangaNew[] | LightnovelNew[] | null {
+    if (data === null) {
+      notFound()
+    }
+
+    switch (type) {
+      case "anime":
+        return data.anime;
+      case "manga":
+        return data.manga;
+      case "lightnovel":
+        return data.lightnovel;
+      default:
+        notFound()
+    }
+  }
+
+  const result = getDataByType(data.data, type)
+
+  if (!result) {
+    notFound()
+  }
+
   return (
+    result.length > 0 &&
     <div>
       <div className='flex justify-between items-center'>
         <h1 className='uppercase font-semibold text-lg'>{title}</h1>
@@ -22,7 +65,7 @@ const NewlyUpdated: FC<IProps> = ({ title, data }) => {
 
       <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {
-          data.map((item, index) => {
+          result.map((item, index) => {
             return (
               <motion.div
                 key={`${item.type}-newly-${index}`}
