@@ -202,3 +202,48 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
     }
   }
 }
+
+export const getSeasons = async (animeId: string) => {
+  try {
+    const seasons = await db.anime_season.findMany({
+      where: {
+        anime_id: animeId
+      },
+      orderBy: {
+        created_at: "desc"
+      },
+      select: {
+        id: true,
+        name: true
+      }
+    })
+
+    if (!seasons) {
+      await db.$disconnect()
+
+      return {
+        code: 404,
+        message: "Không tìm thấy seasons",
+        data: null
+      }
+    }
+
+    await db.$disconnect()
+
+    return {
+      code: 200,
+      message: "success",
+      data: seasons
+    }
+
+  } catch (error) {
+    await db.$disconnect()
+    console.log(error)
+
+    return {
+      code: 500,
+      message: "Lỗi server",
+      data: null
+    }
+  }
+}

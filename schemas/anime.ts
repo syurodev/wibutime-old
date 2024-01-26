@@ -35,3 +35,16 @@ export const animeSchema = z.object({
     url: z.string().url()
   }).optional(),
 })
+
+export const animeEpisodeSchema = z.object({
+  season_id: z.string().min(1, { message: "Vui lòng chọn season" }),
+  thumbnail: z.object({
+    key: z.string().optional(),
+    url: z.string().url()
+  }).optional(),
+  content: z.object({
+    key: z.string().optional(),
+    url: z.string().url()
+  }).optional(),
+  index: z.string().min(1, { message: "Vui lòng nhập số thứ tự của tập phim" })
+})

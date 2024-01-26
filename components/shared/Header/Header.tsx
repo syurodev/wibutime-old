@@ -19,8 +19,8 @@ const Header: FC = () => {
   const navRef = useRef<HTMLElement>(null)
 
   return (
-    <nav ref={navRef} className={`${styles.header} p-3 z-50 backdrop-blur-lg bg-background/90 transition-all duration-200 ease-in-out`}>
-      <div className={`${styles.bar} ${isActive ? "max-w-[1450px]" : "max-w-[1350px]"} mx-auto transition-all delay-75 duration-500`}>
+    <nav ref={navRef} className={`${styles.header} ${isActive ? "bg-background/80" : ""} backdrop-blur-2xl p-3 z-50  transition-all duration-200 ease-in-out`}>
+      <div className={`${styles.bar} ${isActive ? "max-w-[1450px]" : "max-w-[1350px]"} mx-auto transition-all delay-75 duration-1000`}>
         <Link
           href={"/"}
           className='relative flex items-center justify-start pl-10'

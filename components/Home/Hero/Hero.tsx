@@ -12,6 +12,7 @@ const Hero = async () => {
     queryKey: ["news", "trending"],
     queryFn: getHero
   })
+
   return (
     <section className='grid grid-cols-[1fr] lg:grid-cols-[3fr_1fr] gap-5'>
       <HydrationBoundary state={dehydrate(queryClient)}>

@@ -25,60 +25,57 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import { lightnovelChapterSchema } from '@/schemas/lightnovel'
 import TiptapEditor from '@/components/shared/TextEditor/TiptapEditor'
-import { createLightnovelChapter, getVolumes } from '@/actions/lightnovel'
+import { createLightnovelChapter } from '@/actions/lightnovel'
+import { getSeasons } from '@/actions/anime'
+import { animeEpisodeSchema } from '@/schemas/anime'
 
 type IProps = {
-  novelId: string
+  animeId: string
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
+const FormUploadEpisode: FC<IProps> = ({ animeId, onOpenChange }) => {
   const [isPending, startTransiton] = useTransition()
   const [isPendingUpload, startTransitonUpload] = useTransition()
-  const [volumes, setVolumes] = useState<{
+  const [seasons, setSeasons] = useState<{
     id: string,
     name: string,
-    image?: {
-      key?: string,
-      url: string
-    } | {} | null
   }[] | null>(null)
   const [words, setWords] = useState<number>(0)
 
   useEffect(() => {
-    const fetchVolumes = async (novelId: string) => {
-      const res = await getVolumes(novelId)
+    const fetchSeasons = async (animeId: string) => {
+      const res = await getSeasons(animeId)
 
       if (res.code !== 200) {
         toast.warning(res.message)
         onOpenChange(false)
       } else {
         if (res.data && res.data.length === 0) {
-          toast.warning("Không có volumes")
+          toast.warning("Không có season")
           onOpenChange(false)
         } else {
-          setVolumes(res.data)
+          setSeasons(res.data)
         }
       }
     }
 
     startTransiton(() => {
-      fetchVolumes(novelId)
+      fetchSeasons(animeId)
     })
-  }, [novelId, onOpenChange])
+  }, [animeId, onOpenChange])
 
-  const form = useForm<z.infer<typeof lightnovelChapterSchema>>({
-    resolver: zodResolver(lightnovelChapterSchema),
+  const form = useForm<z.infer<typeof animeEpisodeSchema>>({
+    resolver: zodResolver(animeEpisodeSchema),
     defaultValues: {
-      name: "",
+
     },
   })
 
-  function onSubmit(values: z.infer<typeof lightnovelChapterSchema>) {
+  function onSubmit(values: z.infer<typeof animeEpisodeSchema>) {
     startTransitonUpload(async () => {
-      const res = await createLightnovelChapter(JSON.stringify(values), novelId, words)
+      const res = await createLightnovelChapter(JSON.stringify(values), animeId, words)
 
       if (res?.code !== 200) {
         toast.error(res?.message)
@@ -86,7 +83,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
         toast.success(res?.message, {
           description: res.submess
         })
-        localStorage.removeItem(`editor-new-content-${novelId}`)
+        localStorage.removeItem(`editor-new-content-${animeId}`)
         onOpenChange(false)
       }
     })
@@ -100,12 +97,12 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="name"
+            name="index"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tên chapter</FormLabel>
+                <FormLabel>Số thứ tự</FormLabel>
                 <FormControl>
-                  <Input placeholder="example" {...field} />
+                  <Input placeholder="01" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -114,19 +111,19 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
 
           <FormField
             control={form.control}
-            name="volume_id"
+            name="season_id"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Chọn volume</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn volume" />
+                      <SelectValue placeholder="Chọn season" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {
-                      volumes && volumes.map((item) => {
+                      seasons && seasons.map((item) => {
                         return (
                           <SelectItem
                             key={`volume - ${item.id}`}
@@ -154,7 +151,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
                   <TiptapEditor
                     content={field.name}
                     onChange={field.onChange}
-                    id={novelId}
+                    id={animeId}
                     setWords={setWords}
                   />
                 </FormControl>
@@ -176,4 +173,4 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
   )
 }
 
-export default FormUploadLightnovelChapter
+export default FormUploadEpisode

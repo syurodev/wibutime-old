@@ -14,7 +14,7 @@ const UserInfo: FC<IProps> = ({
   lightnovels,
 }) => {
   return (
-    <div className='w-full lg:order-last'>
+    <div className='w-full'>
       {
         // description && (
         <p className='font-serif text-pretty'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla quo porro aperiam deleniti laboriosam dolorem perspiciatis ab voluptates eaque fugiat in tempore velit, illum pariatur dolor accusamus cum repellendus non.</p>

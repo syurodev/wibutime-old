@@ -244,13 +244,14 @@ model anime_season {
 
 model anime_episode {
   id         String    @id @default(cuid())
-  url        String    @db.Text
+  content    Json      @db.Json
   created_at DateTime  @default(now())
   update_at  DateTime  @updatedAt
   deleted    Boolean   @default(false)
   viewed     Int       @default(0)
   index      String    @db.Text
   viewed_at  DateTime? @db.Date
+  thumbnail  Json?     @db.Json
 
   season_id String    @db.Text
   comments  comment[]

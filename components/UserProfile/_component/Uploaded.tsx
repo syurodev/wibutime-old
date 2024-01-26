@@ -1,4 +1,9 @@
+"use client"
+
 import React, { FC } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { notFound } from 'next/navigation'
+import { motion } from 'framer-motion'
 
 import {
   Tabs,
@@ -7,20 +12,24 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import CardItem from '@/components/shared/Card/CardItem'
-import { getServerSession } from '@/lib/getServerSession'
+import { getUserDetail } from '@/actions/user'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { slideWithoutScale } from '@/lib/motion/slide'
 
 type IProps = {
-  animes: AnimeQuickInformation[],
-  mangas: MangaQuickInformation[],
-  lightnovels: LightnovelQuickInformation[],
+  id: string
 }
 
-const Uploaded: FC<IProps> = async ({
-  animes,
-  mangas,
-  lightnovels,
-}) => {
-  const session = await getServerSession()
+const Uploaded: FC<IProps> = ({ id }) => {
+  const { data, error } = useQuery({
+    queryKey: ["user", id],
+    queryFn: async () => getUserDetail(id)
+  })
+
+  if (error) notFound()
+  if (!data?.data) notFound()
+
+  const session = useCurrentUser()
 
   return (
     <Tabs defaultValue="animes" className="w-full">
@@ -31,20 +40,28 @@ const Uploaded: FC<IProps> = async ({
       </TabsList>
       <TabsContent value="animes" className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {
-          animes && animes.length > 0 ? (
-            animes.map((item, index) => {
+          data.data.animes && data.data.animes.length > 0 ? (
+            data.data.animes.map((item, index) => {
               return (
-                <CardItem
-                  key={`lightnovel - ${item.name}`}
-                  {...item}
-                  image={item.image as {
-                    key?: string;
-                    url: string;
-                  } | null | undefined
-                  }
-                  type='lightnovel'
-                  poster={session && item.user.id === session.id || false}
-                />
+                <motion.div
+                  key={`anime - ${item.name}`}
+                  variants={slideWithoutScale}
+                  custom={0.3 + (index * 0.07)}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <CardItem
+                    {...item}
+                    image={item.image as {
+                      key?: string;
+                      url: string;
+                    } | null | undefined
+                    }
+                    type='anime'
+                    poster={session && item.user.id === session.id || false}
+                  />
+                </motion.div>
               )
             })
           ) : (
@@ -54,20 +71,29 @@ const Uploaded: FC<IProps> = async ({
       </TabsContent>
       <TabsContent value="mangas" className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {
-          mangas && mangas.length > 0 ? (
-            mangas.map((item, index) => {
+          data.data.mangas && data.data.mangas.length > 0 ? (
+            data.data.mangas.map((item, index) => {
               return (
-                <CardItem
-                  key={`lightnovel - ${item.name}`}
-                  {...item}
-                  image={item.image as {
-                    key?: string;
-                    url: string;
-                  } | null | undefined
-                  }
-                  type='lightnovel'
-                  poster={session && item.user.id === session.id || false}
-                />
+                <motion.div
+                  key={`manga - ${item.name}`}
+                  variants={slideWithoutScale}
+                  custom={0.2 + (index * 0.07)}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <CardItem
+                    key={`lightnovel - ${item.name}`}
+                    {...item}
+                    image={item.image as {
+                      key?: string;
+                      url: string;
+                    } | null | undefined
+                    }
+                    type='manga'
+                    poster={session && item.user.id === session.id || false}
+                  />
+                </motion.div>
               )
             })
           ) : (
@@ -77,20 +103,29 @@ const Uploaded: FC<IProps> = async ({
       </TabsContent>
       <TabsContent value="lightnovels" className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {
-          lightnovels && lightnovels.length > 0 ? (
-            lightnovels.map((item, index) => {
+          data.data.lightnovels && data.data.lightnovels.length > 0 ? (
+            data.data.lightnovels.map((item, index) => {
               return (
-                <CardItem
+                <motion.div
                   key={`lightnovel - ${item.name}`}
-                  {...item}
-                  image={item.image as {
-                    key?: string;
-                    url: string;
-                  } | null | undefined
-                  }
-                  type='lightnovel'
-                  poster={session && item.user.id === session.id || false}
-                />
+                  variants={slideWithoutScale}
+                  custom={0.2 + (index * 0.07)}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <CardItem
+                    key={`lightnovel - ${item.name}`}
+                    {...item}
+                    image={item.image as {
+                      key?: string;
+                      url: string;
+                    } | null | undefined
+                    }
+                    type='lightnovel'
+                    poster={session && item.user.id === session.id || false}
+                  />
+                </motion.div>
               )
             })
           ) : (

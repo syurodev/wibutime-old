@@ -50,7 +50,7 @@ const NewVerificationForm = () => {
     <div className='flex justify-center items-center h-dvh w-full'>
       <Card className='flex flex-col items-center'>
         <CardHeader className='text-center text-lg relative space-y-4 z-0'>
-          <div className='relative w-full flex justify-center'>
+          <div className='relative w-full flex justify-center overflow-hidden'>
             <Link
               href={"/"}
               className='relative flex items-center justify-start pl-10'

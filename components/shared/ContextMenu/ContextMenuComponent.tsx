@@ -30,7 +30,6 @@ const ContextMenuComponent: FC<IProps> = ({
   name,
   children,
 }) => {
-
   const [isOpenUploadChapterOrEpisode, setIsOpenUploadChapterOrEpisode] = useState<boolean>(false)
   const [isOpenUploadVolumeOrSeason, setIsOpenUploadVolumeOrSeason] = useState<boolean>(false)
 
@@ -40,7 +39,7 @@ const ContextMenuComponent: FC<IProps> = ({
         <ContextMenuTrigger>
           {children}
         </ContextMenuTrigger>
-        <ContextMenuContent className="w-64">
+        <ContextMenuContent className="w-56">
           <ContextMenuItem inset>
             <a href={`/${type}s/${type}/${id}`} target='_blank'>Mở bằng thẻ mới</a>
           </ContextMenuItem>

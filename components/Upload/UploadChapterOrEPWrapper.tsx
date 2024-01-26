@@ -10,6 +10,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import FormUploadLightnovelChapter from './Lightnovel/FormUploadLightnovelChapter'
+import FormUploadEpisode from './Anime/FormUploadEpisode'
 
 type IProps = {
   isOpen: boolean
@@ -41,6 +42,10 @@ const UploadChapterOrEPWrapper: FC<IProps> = ({
           {
             type === "lightnovel" &&
             <FormUploadLightnovelChapter novelId={id} onOpenChange={onOpenChange} />
+          }
+          {
+            type === "anime" &&
+            <FormUploadEpisode animeId={id} onOpenChange={onOpenChange} />
           }
         </div>
       </DrawerContent>

@@ -1,14 +1,14 @@
 type AnimeQuickInformation = {
   id: string,
   name: string,
-  image: {
-    key?: string
-    url: string
-  } | null,
   createdAt: string,
   user: {
     id: string
   },
+  image?: {
+    key?: string
+    url: string
+  } | null,
   seasons: {
     id: string,
     name: string,
