@@ -35,7 +35,7 @@ export default async function RootLayout({
             defaultTheme="light"
           >
             <Header />
-            <main className='min-h-dvh pt-20 px-4 max-w-[1280px] mx-auto'>
+            <main className='min-h-dvh pt-20 pb-5 px-4 max-w-[1280px] mx-auto'>
               <QueryProvider>
                 {children}
               </QueryProvider>

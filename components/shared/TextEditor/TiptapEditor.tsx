@@ -15,7 +15,7 @@ import { default as TiptapImage } from '@tiptap/extension-image'
 
 import Toolbar from './Toolbar'
 import { toast } from 'sonner'
-import { compressFile } from '@/lib/compressFile'
+import { compressImage } from '@/lib/compressImage'
 import { uploadFiles } from '@/lib/uploadthing'
 
 type IProps = {
@@ -119,7 +119,7 @@ const TiptapEditor: FC<IProps> = ({
                 }
 
                 setImageUpload(true)
-                const result = await compressFile(
+                const result = await compressImage(
                   file, 0.8
                 )
 

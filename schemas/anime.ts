@@ -2,7 +2,8 @@ import * as z from "zod"
 
 import { EditorContentSchema } from "./shared"
 
-export const MusicTypeEnum = z.enum(["Opening Theme", "Ending Theme", "OST"]);
+// export const MusicTypeEnum = z.enum(["Opening Theme", "Ending Theme", "OST"]);
+export const AnimeTypeEnum = z.enum(["LongEpisode", "Movie", "Ova"], { required_error: "Vui lòng chọn loại anime" });
 
 export const animeSchema = z.object({
   name: z.string().trim().min(1, { message: "Tên anime là bắt buộc" }),
@@ -17,10 +18,11 @@ export const animeSchema = z.object({
   broadcast_time: z.date({ required_error: "Vui lòng chọn lịch phát sóng" }),
   aired: z.date({ required_error: "Vui lòng chọn ngày phát sóng" }),
   note: EditorContentSchema.optional(),
+  type: AnimeTypeEnum,
   categories: z.array(z.object({
     id: z.string(),
     name: z.string()
-  })),
+  }), { required_error: "Vui lòng chọn thể loại" }),
   musics: z.array(z.object({
     type: z.string(),
     name: z.string().min(1, { message: "Vui lòng nhập tên bài hát" }),

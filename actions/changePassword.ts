@@ -2,10 +2,12 @@
 import * as z from "zod"
 import bcrypt from "bcryptjs"
 
-import { db } from "@/lib/db"
-import { getUserByEmail } from "@/data/user"
-import { getResetPasswordTokenByToken } from "@/data/resetPasswordToken"
 import { newPasswordSchema } from "@/schemas/auth"
+import { getResetPasswordTokenByToken } from "@/drizzle/queries/token/getResetPasswordTokenByToken"
+import { getUserByEmail } from "@/drizzle/queries/user/getUserByEmail"
+import { client, db } from "@/drizzle/db"
+import { resetPasswordToken, user } from "@/drizzle/schema"
+import { eq } from "drizzle-orm"
 
 export const changePassword = async (token: string | null, values: z.infer<typeof newPasswordSchema>) => {
 
@@ -40,7 +42,6 @@ export const changePassword = async (token: string | null, values: z.infer<typeo
   const existingUser = await getUserByEmail(existingToken.email)
 
   if (!existingUser) {
-    await db.$disconnect()
     return {
       code: 404,
       message: "Không tìm thấy người dùng"
@@ -51,22 +52,15 @@ export const changePassword = async (token: string | null, values: z.infer<typeo
 
   const newHasedPassword = await bcrypt.hash(password, 10)
 
-  await db.user.update({
-    where: {
-      id: existingUser.id
-    },
-    data: {
-      hashed_password: newHasedPassword,
-    }
-  })
+  await db.update(user)
+    .set({ hashedPassword: newHasedPassword })
+    .where(eq(user.id, existingUser.id))
 
-  await db.reset_password_token.delete({
-    where: {
-      id: existingToken.id
-    }
-  })
 
-  await db.$disconnect()
+  await db.delete(resetPasswordToken)
+    .where(eq(resetPasswordToken.id, existingToken.id))
+
+
   return {
     code: 200,
     message: "Đổi mật khẩu thành công"

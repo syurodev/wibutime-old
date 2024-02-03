@@ -10,7 +10,7 @@ export const lightnovelSchema = z.object({
   categories: z.array(z.object({
     id: z.string(),
     name: z.string()
-  })),
+  }), { required_error: "Vui lòng chọn thể loại" }),
   other_names: z.array(
     z.object({
       id: z.string(),

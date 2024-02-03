@@ -6,10 +6,10 @@ import { AuthError } from "next-auth";
 import { loginSchema } from "@/schemas/auth";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { getUserByUsername } from "@/data/user";
-import { generateVerificationToken } from "@/lib/tokens";
 import { isValidEmail } from "@/lib/isEmail";
 import { sendVerificationEmail } from "@/lib/mail";
+import { getUserByUsername } from "@/drizzle/queries/user/getUserByUsername";
+import { generateVerificationToken } from "@/drizzle/queries/token/generateVerificationToken";
 
 export const login = async (
   values: z.infer<typeof loginSchema>,
@@ -45,6 +45,12 @@ export const login = async (
 
     if (!existingUser.emailVerified) {
       const verificationToken = await generateVerificationToken(existingUser.email)
+
+      if (!verificationToken) return {
+        code: 400,
+        message: "Không thể gửi email xác thực, vui lòng thử lại"
+      }
+
       await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
       return {

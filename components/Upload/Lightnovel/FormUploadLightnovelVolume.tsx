@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { lightnovelVolumeSchema } from '@/schemas/lightnovel'
-import { compressFile } from '@/lib/compressFile';
+import { compressImage } from '@/lib/compressImage';
 import { uploadFiles } from '@/lib/uploadthing';
 import { deleteFiles } from '@/actions/uploadthing';
 import { Dropzone } from '../../ui/dropzone';
@@ -70,7 +70,7 @@ const FormUploadLightnovelVolume: FC<IProps> = ({
     if (!e.target.files) return
     setIsUploadSmallImage(true)
 
-    const result = await compressFile(
+    const result = await compressImage(
       e.target.files,
       endpoint === 'smallImage' ? 0.5 : 1
     )

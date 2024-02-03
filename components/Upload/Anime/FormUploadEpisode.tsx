@@ -69,7 +69,14 @@ const FormUploadEpisode: FC<IProps> = ({ animeId, onOpenChange }) => {
   const form = useForm<z.infer<typeof animeEpisodeSchema>>({
     resolver: zodResolver(animeEpisodeSchema),
     defaultValues: {
-
+      thumbnail: {
+        key: "",
+        url: ""
+      },
+      content: {
+        key: "",
+        url: ""
+      },
     },
   })
 
@@ -114,7 +121,7 @@ const FormUploadEpisode: FC<IProps> = ({ animeId, onOpenChange }) => {
             name="season_id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Chọn volume</FormLabel>
+                <FormLabel>Chọn season</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -148,11 +155,8 @@ const FormUploadEpisode: FC<IProps> = ({ animeId, onOpenChange }) => {
               <FormItem>
                 <FormLabel>Nội dung</FormLabel>
                 <FormControl>
-                  <TiptapEditor
-                    content={field.name}
-                    onChange={field.onChange}
-                    id={animeId}
-                    setWords={setWords}
+                  <Input
+                    type='file'
                   />
                 </FormControl>
                 <FormMessage />

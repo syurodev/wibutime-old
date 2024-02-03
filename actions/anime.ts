@@ -60,7 +60,7 @@ export const createAnime = async (
     await db.anime_season.create({
       data: {
         anime_id: anime.id,
-        name: "Season 1",
+        name: validationValues.data.type === "LongEpisode" ? "Season 1" : validationValues.data.type === "Movie" ? "Movie 1" : "Ova 1",
         studio: validationValues.data.studio,
         aired: validationValues.data.aired,
         broadcast_day: validationValues.data.broadcast_day,

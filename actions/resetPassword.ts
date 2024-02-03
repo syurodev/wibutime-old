@@ -3,9 +3,9 @@
 import * as z from "zod"
 
 import { resetSchema } from "@/schemas/auth"
-import { getUserByEmail } from "@/data/user"
-import { generateResetPasswordToken } from "@/lib/tokens"
 import { sendResetPasswordEmail } from "@/lib/mail"
+import { getUserByEmail } from "@/drizzle/queries/user/getUserByEmail"
+import { generateResetPasswordToken } from "@/drizzle/queries/token/generateResetPasswordToken"
 
 export const resetPassword = async (values: z.infer<typeof resetSchema>) => {
   try {
@@ -27,6 +27,10 @@ export const resetPassword = async (values: z.infer<typeof resetSchema>) => {
 
     const resetPasswordToken = await generateResetPasswordToken(email)
 
+    if (!resetPasswordToken) return {
+      code: 400,
+      message: "Lỗi tạo token, vui lòng thử lại"
+    }
     await sendResetPasswordEmail(resetPasswordToken.email, resetPasswordToken.token)
 
     return {

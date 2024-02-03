@@ -15,7 +15,7 @@ import {
 } from "react-icons/lu"
 
 import { Toggle } from "@/components/ui/toggle"
-import { compressFile } from '@/lib/compressFile'
+import { compressImage } from '@/lib/compressImage'
 import { deleteFiles } from '@/actions/uploadthing'
 import { uploadFiles } from '@/lib/uploadthing'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -40,7 +40,7 @@ const Toolbar: FC<IProps> = ({ editor, imageUpload }) => {
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
     setIsLoading(true)
-    const result = await compressFile(
+    const result = await compressImage(
       e.target.files, 0.8
     )
 

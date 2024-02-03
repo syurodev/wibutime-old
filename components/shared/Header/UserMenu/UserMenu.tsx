@@ -139,7 +139,7 @@ const UserMenu = () => {
                           </motion.div>
 
                           {
-                            session && session?.permissions.includes("UPLOAD") && (
+                            session && session?.permissions.length > 0 && session?.permissions.includes("UPLOAD") && (
                               <motion.div
                                 variants={perspective}
                                 animate="enter"
@@ -160,7 +160,7 @@ const UserMenu = () => {
                           }
 
                           {
-                            session && session?.permissions.includes("UPLOAD") && (
+                            session && session?.permissions.length > 0 && session?.permissions.includes("UPLOAD") && (
                               <motion.div
                                 variants={perspective}
                                 animate="enter"

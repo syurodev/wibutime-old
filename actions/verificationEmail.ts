@@ -1,8 +1,11 @@
 "use server"
 
-import { db } from "@/lib/db"
-import { getUserByEmail } from "@/data/user"
-import { getVerificationTokenByToken } from "@/data/verificationToken"
+import { db } from "@/drizzle/db"
+import { getVerificationTokenByToken } from "@/drizzle/queries/token/getVerificationTokenByToken"
+import { getUserByEmail } from "@/drizzle/queries/user/getUserByEmail"
+import { updateEmailVerified } from "@/drizzle/queries/user/updateEmailVerified"
+import { verificationToken } from "@/drizzle/schema"
+import { eq } from "drizzle-orm"
 
 export const newVerification = async (token: string) => {
   const existingToken = await getVerificationTokenByToken(token)
@@ -21,29 +24,15 @@ export const newVerification = async (token: string) => {
 
   const existingUser = await getUserByEmail(existingToken.email)
   if (!existingUser) {
-    await db.$disconnect()
     return {
       code: 404,
       message: "Không tìm thấy người dùng"
     }
   }
 
-  await db.user.update({
-    where: {
-      id: existingUser.id
-    },
-    data: {
-      emailVerified: true,
-      email: existingToken.email
-    }
-  })
+  await updateEmailVerified(existingUser.id)
 
-  await db.verification_token.delete({
-    where: {
-      id: existingToken.id
-    }
-  })
-  await db.$disconnect()
+  await db.delete(verificationToken).where(eq(verificationToken.id, existingToken.id))
 
   return {
     code: 200,

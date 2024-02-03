@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input"
 import { Tag, TagInput } from "@/components/ui/tag-input";
 import { animeSchema } from '@/schemas/anime';
 import MultiSelect from '../../ui/select-multi';
-import { compressFile } from '@/lib/compressFile';
+import { compressImage } from '@/lib/compressImage';
 import { uploadFiles } from '@/lib/uploadthing';
 import { deleteFiles } from '@/actions/uploadthing';
 import { Dropzone } from '../../ui/dropzone';
@@ -42,7 +42,6 @@ type IProps = {
 }
 
 const FormCreateAnime: FC<IProps> = ({ categories }) => {
-
   const [isUploadSmallImage, setIsUploadSmallImage] = useState<boolean>(false)
   const [image, setImage] = useState<{
     key: string,
@@ -64,7 +63,7 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
         name: "",
       }],
       studio: "",
-      number_of_episodes: 0,
+      number_of_episodes: 1,
     },
   })
 
@@ -96,7 +95,7 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
     if (!e.target.files) return
     setIsUploadSmallImage(true)
 
-    const result = await compressFile(
+    const result = await compressImage(
       e.target.files, 1
     )
     if (image.key !== "") {
@@ -177,10 +176,33 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
 
             <FormField
               control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Loại<span className='text-destructive'>*</span></FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Loại anime" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="LongEpisode">Dài tập</SelectItem>
+                      <SelectItem value="Movie">Movie</SelectItem>
+                      <SelectItem value="Ova">Ova</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="number_of_episodes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Số tập</FormLabel>
+                  <FormLabel>Số tập<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <Input {...field} disabled={isPending} type='number' />
                   </FormControl>
@@ -252,6 +274,9 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Lịch phát sóng<span className='text-destructive'>*</span></FormLabel>
+                  <FormDescription>
+                    <span>Lịch phát sóng hằng tuần</span>
+                  </FormDescription>
                   <FormControl>
                     <div className='flex items-end justify-center gap-2 flex-wrap'>
                       <DaysOfTheWeekPick day={field.value as DaysOfTheWeek} setDay={field.onChange} />
@@ -301,7 +326,7 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ảnh tác phẩm</FormLabel>
+                  <FormLabel>Ảnh bìa</FormLabel>
                   <FormControl>
                     <Dropzone
                       type='file'
@@ -384,7 +409,10 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
                           name={`musics.${i}.url`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Url</FormLabel>
+                              <FormLabel>Link</FormLabel>
+                              <FormDescription>
+                                <span>Chỉ chấp nhận liên kết Youtube và Spotify</span>
+                              </FormDescription>
                               <FormControl>
                                 <Input {...field} />
                               </FormControl>

@@ -21,7 +21,7 @@ import { Tag, TagInput } from "@/components/ui/tag-input";
 import { lightnovelSchema } from '@/schemas/lightnovel';
 import MultiSelect from '../../ui/select-multi';
 import { Textarea } from "@/components/ui/textarea"
-import { compressFile } from '@/lib/compressFile';
+import { compressImage } from '@/lib/compressImage';
 import { uploadFiles } from '@/lib/uploadthing';
 import { deleteFiles } from '@/actions/uploadthing';
 import { Dropzone } from '../../ui/dropzone';
@@ -74,7 +74,7 @@ const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
     if (!e.target.files) return
     setIsUploadSmallImage(true)
 
-    const result = await compressFile(
+    const result = await compressImage(
       e.target.files, 1
     )
     if (image.key !== "") {

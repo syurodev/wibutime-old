@@ -1,12 +1,14 @@
 import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
+import { DrizzleAdapter } from "@auth/drizzle-adapter"
 
-import { db } from "@/lib/db"
 import authConfig from "@/auth.config"
 import type { DefaultSession } from 'next-auth';
-import { getRole, getUserById } from "./data/user";
 import { sendVerificationEmail } from "./lib/mail";
-import { generateVerificationToken } from "./lib/tokens";
+import { db } from "./drizzle/db";
+import { updateEmailVerified } from "./drizzle/queries/user/updateEmailVerified";
+import { getUserById } from "./drizzle/queries/user/getUserById";
+import { generateVerificationToken } from "./drizzle/queries/token/generateVerificationToken";
+import { setUserRole } from "./drizzle/queries/user/setUserRole";
 
 declare module 'next-auth' {
   interface Session {
@@ -31,43 +33,29 @@ export const {
   },
   events: {
     async linkAccount({ user }) {
-      await db.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          emailVerified: true
-        }
-      })
+      await updateEmailVerified(user.id)
     }
   },
   callbacks: {
     async signIn({ user, account }) {
-      //Alow OAuth without email verification
-      if (account?.provider !== "credentials") return true
 
       const existingUser = await getUserById(user.id)
 
+      if (existingUser?.roles.length === 0) {
+        await setUserRole(existingUser.id, "USER")
+      }
+
+      //Alow OAuth without email verification
+      if (account?.provider !== "credentials") return true
+
+
       if (!existingUser?.emailVerified) {
         const verificationToken = await generateVerificationToken(user.email!)
+
+        if (!verificationToken) return false
+
         await sendVerificationEmail(verificationToken.email, verificationToken.token)
       }
-
-      if (!existingUser?.role_id) {
-        const role = await getRole("USER")
-
-        if (role) {
-          await db.user.update({
-            where: {
-              id: user.id
-            },
-            data: {
-              role_id: role.id
-            }
-          })
-        }
-      }
-      await db.$disconnect()
       return true
     },
 
@@ -94,35 +82,21 @@ export const {
     async jwt({ token }) {
       if (!token.sub) return token
 
-      const userData = await db.user.findUnique({
-        where: { id: token.sub },
-        include: {
-          role: {
-            select: {
-              name: true,
-              permissions: {
-                select: {
-                  name: true,
-                }
-              },
-            },
-          },
-        },
-      })
-      await db.$disconnect()
+      const userData = await getUserById(token.sub)
 
       if (!userData) return token
 
-      token.role = userData.role ? userData.role.name : "USER";
+      token.role = userData.roles;
       if (userData?.username) {
         token.username = userData.username;
       }
-      token.permissions = userData.role && userData.role.permissions ? userData.role.permissions.map(permission => permission.name) : ["COMMENT", "FAVORITE"]
+
+      token.permissions = userData.permissions
 
       return token
     }
   },
-  adapter: PrismaAdapter(db),
+  adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   ...authConfig,
 })
