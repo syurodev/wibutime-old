@@ -1,12 +1,21 @@
 "use server"
 
 import * as z from "zod"
-
-import { lightnovelChapterSchema, lightnovelSchema, lightnovelVolumeSchema } from "@/schemas/lightnovel"
-import { db } from "@/lib/db"
 import { getServerSession } from "@/lib/getServerSession"
 import { revalidatePath } from "next/cache"
+
+import { lightnovelChapterSchema, lightnovelSchema, lightnovelVolumeSchema } from "@/schemas/lightnovel"
 import { formatNumber } from "@/lib/formatNumber"
+import { insertLightnovel } from "@/drizzle/queries/lightnovel/insertLightnovel"
+import { findLightnovel } from "@/drizzle/queries/lightnovel/findLightnovel"
+import { insertLightnovelVolume } from "@/drizzle/queries/lightnovel/insertLightnovelVolume"
+import { lightnovelUpdatedAt } from "@/drizzle/queries/lightnovel/lightnovelUpdatedAt"
+import { insertLightnovelChapter } from "@/drizzle/queries/lightnovel/insertLightnovelChapter"
+import { lightnovelVolumeUpdatedAt } from "@/drizzle/queries/lightnovel/lightnovelVolumeUpdatedAt"
+import { findVolumes } from "@/drizzle/queries/lightnovel/findVolumes"
+import { findChapter } from "@/drizzle/queries/lightnovel/findChapter"
+import { upViewed } from "@/drizzle/queries/lightnovel/upViewed"
+import { lightnovelDetail } from "@/drizzle/queries/lightnovel/lightnovelDetail"
 
 export const createLightnovel = async (values: string) => {
   try {
@@ -23,8 +32,6 @@ export const createLightnovel = async (values: string) => {
     const session = await getServerSession()
 
     if (!session?.permissions.includes("UPLOAD")) {
-      await db.$disconnect()
-
       return {
         code: 401,
         message: "Bạn không có quyền đăng lightnovel",
@@ -32,19 +39,28 @@ export const createLightnovel = async (values: string) => {
       }
     }
 
-    const result = await db.lightnovel.create({
-      data: {
-        ...validationValues.data,
-        user_id: session.id,
-        other_names: validationValues.data.other_names ? validationValues.data.other_names.map(name => name.text) : [],
-        categories: {
-          connect: validationValues.data.categories.map(category => ({ id: category.id })),
-        },
-      }
-    })
+    const result = await insertLightnovel(
+      {
+        name: validationValues.data.name,
+        artist: validationValues.data.artist,
+        author: validationValues.data.author,
+        image: validationValues.data.image,
+        note: validationValues.data.note,
+        otherNames: validationValues.data.other_names && validationValues.data.other_names.length > 0 ? validationValues.data.other_names.map(item => item.text) : [],
+        summary: validationValues.data.summary,
+        userId: session.id
+      },
+      validationValues.data.categories
+    )
+
+    if (!result) return {
+      code: 400,
+      message: "Lỗi tạo lightnovel, vui lòng thử lại",
+      data: null
+    }
 
     revalidatePath(`/u/${session.id}`)
-    await db.$disconnect()
+
     return {
       code: 200,
       message: "Tạo lightnovel thành công",
@@ -55,7 +71,6 @@ export const createLightnovel = async (values: string) => {
     }
   } catch (error) {
     console.log(error)
-    await db.$disconnect()
     return {
       code: 500,
       message: "Lỗi server vui lòng thử lại",
@@ -79,14 +94,10 @@ export const createLightnovelVolume = async (
 
     const session = await getServerSession()
 
-    const lightnovel = await db.lightnovel.findUnique({
-      where: {
-        id: novelId
-      }
-    })
+    const lightnovel = await findLightnovel(novelId)
 
     if (!lightnovel) {
-      await db.$disconnect()
+
       return {
         code: 404,
         message: "Không tìm thấy lightnovel",
@@ -94,26 +105,28 @@ export const createLightnovelVolume = async (
       }
     }
 
-    if (!session?.permissions.includes("UPLOAD") || session?.id !== lightnovel.user_id) return {
+    if (!session?.permissions.includes("UPLOAD") || session?.id !== lightnovel.userId) return {
       code: 401,
       message: "Bạn không có quyền thêm volume",
       data: null
     }
 
-    const result = await db.lightnovel_volume.create({
-      data: {
-        ...validationValues.data,
-        novel_id: novelId
-      }
+    const result = await insertLightnovelVolume({
+      lightnovelId: lightnovel.id,
+      name: validationValues.data.name,
+      image: validationValues.data.image,
     })
 
-    await db.lightnovel.update({
-      where: { id: novelId },
-      data: { update_at: new Date() },
-    });
+    if (!result) return {
+      code: 400,
+      message: "Lỗi trong quá trình thêm volume, vui lòng thử lại",
+      data: null
+    }
 
-    revalidatePath(`/u/${lightnovel.user_id}`)
-    await db.$disconnect()
+    await lightnovelUpdatedAt(new Date(), lightnovel.id)
+
+    revalidatePath(`/u/${lightnovel.userId}`)
+
 
     return {
       code: 200,
@@ -125,8 +138,6 @@ export const createLightnovelVolume = async (
       }
     }
   } catch (error) {
-    await db.$disconnect()
-
     console.log(error)
     return {
       code: 500,
@@ -148,14 +159,9 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
 
     const session = await getServerSession()
 
-    const lightnovel = await db.lightnovel.findUnique({
-      where: {
-        id: novelId
-      }
-    })
+    const lightnovel = await findLightnovel(novelId)
 
     if (!lightnovel) {
-      await db.$disconnect()
       return {
         code: 404,
         message: "Không tìm thấy lightnovel",
@@ -163,8 +169,7 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
       }
     }
 
-    if (!session?.permissions.includes("UPLOAD") || session?.id !== lightnovel.user_id) {
-      await db.$disconnect()
+    if (!session?.permissions.includes("UPLOAD") || session?.id !== lightnovel.userId) {
       return {
         code: 401,
         message: "Bạn không có quyền thêm chapter",
@@ -172,25 +177,25 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
       }
     }
 
-    const result = await db.lightnovel_chapter.create({
-      data: {
-        ...validationValues.data,
-        words: words
-      }
+    const result = await insertLightnovelChapter({
+      name: validationValues.data.name,
+      content: validationValues.data.content,
+      volumeId: validationValues.data.volume_id,
+      words: words,
+      viewed: 0
     })
 
-    await db.lightnovel.update({
-      where: { id: novelId },
-      data: { update_at: new Date() },
-    });
+    if (!result) return {
+      code: 400,
+      message: "Lỗi trong quá trình thêm chapter, vui lòng thử lại",
+      data: null
+    }
 
-    await db.lightnovel_volume.update({
-      where: { id: result.volume_id },
-      data: { update_at: new Date() },
-    });
+    await lightnovelUpdatedAt(new Date(), novelId)
 
-    revalidatePath(`/u/${lightnovel.user_id}`)
-    await db.$disconnect()
+    await lightnovelVolumeUpdatedAt(new Date(), validationValues.data.volume_id)
+
+    revalidatePath(`/u/${lightnovel.userId}`)
 
     return {
       code: 200,
@@ -213,27 +218,14 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
 
 export const getVolumes = async (novelId: string) => {
   try {
-    const volumes = await db.lightnovel_volume.findMany({
-      where: {
-        novel_id: novelId
-      },
-      orderBy: {
-        created_at: "desc"
-      },
-      select: {
-        id: true,
-        name: true,
-        image: true,
-      }
-    })
-    await db.$disconnect()
+    const volumes = await findVolumes(novelId)
+
     return {
       code: 200,
       message: "success",
-      data: volumes
+      data: volumes || []
     }
   } catch (error) {
-    await db.$disconnect()
     console.log(error)
     return {
       code: 500,
@@ -245,72 +237,9 @@ export const getVolumes = async (novelId: string) => {
 
 export const getLightnovelDetail = async (novelId: string) => {
   try {
-    const lightnovel = await db.lightnovel.findUnique({
-      where: {
-        id: novelId,
-        deleted: false
-      },
-      select: {
-        id: true,
-        artist: true,
-        author: true,
-        categories: {
-          select: {
-            id: true,
-            name: true
-          }
-        },
-        created_at: true,
-        image: true,
-        name: true,
-        other_names: true,
-        summary: true,
-        note: true,
-        update_at: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-            image: true
-          }
-        },
-        translationGroup: {
-          select: {
-            id: true,
-            name: true,
-            image: true
-          }
-        },
-        volumes: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            created_at: true,
-            update_at: true,
-            chapters: {
-              select: {
-                id: true,
-                name: true,
-                content: true,
-                viewed: true,
-                words: true,
-                created_at: true,
-              }
-            }
-          }
-        },
-        favorites: {
-          select: {
-            _count: true
-          }
-        }
-      }
-    })
+    const lightnovel = await lightnovelDetail(novelId)
 
     if (!lightnovel) {
-      await db.$disconnect()
-
       return {
         code: 404,
         message: "Không tìm thấy lightnovel",
@@ -322,11 +251,11 @@ export const getLightnovelDetail = async (novelId: string) => {
       id: lightnovel.id,
       name: lightnovel.name,
       type: "lightnovel",
-      createdAt: lightnovel.created_at.toISOString(),
-      updateAt: lightnovel.update_at.toISOString(),
-      categories: lightnovel.categories,
-      favorites: lightnovel.favorites,
-      otherNames: lightnovel.other_names,
+      createdAt: lightnovel.createdAt ? lightnovel.createdAt.toISOString() : "",
+      updateAt: lightnovel.updatedAt ? lightnovel.updatedAt.toISOString() : "",
+      categories: lightnovel.categories.map(cate => cate.category),
+      favorites: lightnovel.favorite,
+      otherNames: lightnovel.otherNames as string[],
       summary: lightnovel.summary,
       note: lightnovel.note,
       user: lightnovel.user,
@@ -358,8 +287,8 @@ export const getLightnovelDetail = async (novelId: string) => {
         {
           id: item.id,
           name: item.name,
-          createdAt: item.created_at.toISOString(),
-          updateAt: item.update_at.toISOString(),
+          createdAt: item.createdAt ? item.createdAt.toISOString() : "",
+          updateAt: item.createdAt ? item.createdAt.toISOString() : "",
           image: item.image as {
             key?: string,
             url: string
@@ -367,22 +296,22 @@ export const getLightnovelDetail = async (novelId: string) => {
           chapters: item.chapters.map(chapter => ({
             id: chapter.id,
             name: chapter.name,
-            content: chapter.content as any,
-            createdAt: chapter.created_at.toISOString(),
-            viewed: chapter.viewed
+            // content: chapter.content as any,
+            createdAt: chapter.createdAt ? chapter.createdAt.toISOString() : "",
+            viewed: chapter.viewed || 0
           }))
         }
       ))
     }
 
-    await db.$disconnect()
+
     return {
       code: 200,
       message: "success",
       data: result
     }
   } catch (error) {
-    await db.$disconnect()
+
     console.log(error)
     return {
       code: 500,
@@ -398,40 +327,9 @@ export const getChapterContent = async (chapterId: string): Promise<{
   data: LightnovelChapterDetail | null
 }> => {
   try {
-    const content = await db.lightnovel_chapter.findUnique({
-      where: {
-        id: chapterId,
-        deleted: false
-      },
-      select: {
-        id: true,
-        name: true,
-        content: true,
-        created_at: true,
-        update_at: true,
-        viewed: true,
-        words: true,
-        comments: {
-          select: {
-            id: true,
-            user: {
-              select: {
-                id: true,
-                image: true,
-                name: true,
-              }
-            },
-            comment: true,
-            create_at: true,
-            update_at: true
-          }
-        }
-      }
-    })
+    const content = await findChapter(chapterId)
 
     if (!content) {
-      await db.$disconnect()
-
       return {
         code: 404,
         message: "Không tìm thấy chapter",
@@ -444,23 +342,23 @@ export const getChapterContent = async (chapterId: string): Promise<{
       name: content.name,
       content: content.content,
       comments: content.comments.length > 0 ? content.comments.map(comment => ({
-        id: comment.id,
-        createAt: comment.create_at.toISOString(),
-        updateAt: comment.update_at.toISOString(),
-        comment: comment.comment,
+        id: comment.comment.id,
+        createAt: comment.comment.createdAt ? comment.comment.createdAt.toISOString() : "",
+        updateAt: comment.comment.updatedAt ? comment.comment.updatedAt.toISOString() : "",
+        comment: comment.comment.comment as any,
         user: {
-          id: comment.user.id,
-          image: comment.user.image,
-          name: comment.user.name,
+          id: comment.comment.user.id,
+          image: comment.comment.user.image as string,
+          name: comment.comment.user.name,
         }
       })) : [],
-      createdAt: content.created_at.toISOString(),
-      updateAt: content.update_at.toISOString(),
+      createdAt: content.createdAt ? content.createdAt.toISOString() : "",
+      updateAt: content.updatedAt ? content.updatedAt.toISOString() : "",
       viewed: formatNumber(content.viewed || 0),
       words: formatNumber(content.words || 0)
     }
 
-    await db.$disconnect()
+
 
     return {
       code: 200,
@@ -468,7 +366,7 @@ export const getChapterContent = async (chapterId: string): Promise<{
       data: result
     }
   } catch (error) {
-    await db.$disconnect()
+
 
     return {
       code: 500,
@@ -480,18 +378,14 @@ export const getChapterContent = async (chapterId: string): Promise<{
 
 export const updateLightnovelChapterViewed = async (chapterId: string) => {
   try {
-    await db.lightnovel_chapter.update({
-      where: { id: chapterId },
-      data: { viewed: { increment: 1 }, viewed_at: new Date() },
-    });
+    await upViewed(chapterId)
 
-    await db.$disconnect()
     return {
       code: 200,
       message: "success"
     }
   } catch (error) {
-    await db.$disconnect()
+
     console.log(error)
 
     return {

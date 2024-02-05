@@ -2,9 +2,13 @@ import type { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
 import bcrypt from "bcryptjs"
+import { eq } from "drizzle-orm"
+
+import { db } from "@/drizzle/db"
+import { user } from "@/drizzle/schema"
 
 import { loginSchema } from "@/schemas/auth"
-import { getUserByUsername } from "./data/user"
+// import { getUserByUsername } from "./drizzle/queries/user/getUserByUsername"
 
 export default {
   providers: [Google({
@@ -26,13 +30,23 @@ export default {
       if (validatedField.success) {
         const { username, password } = validatedField.data
 
-        const user = await getUserByUsername(username)
+        const res = await fetch(`${process.env.BASE_URL}/api/auth/get-user`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+          }),
+        });
 
-        if (!user || !user.hashed_password) return null
+        const existingUser = await res.json();
 
-        const isPasswordMatch = await bcrypt.compare(password, user.hashed_password)
+        if (!res.ok || !existingUser || !existingUser.hashedPassword) return null
 
-        if (isPasswordMatch) return user
+        const isPasswordMatch = await bcrypt.compare(password, existingUser.hashedPassword)
+
+        if (isPasswordMatch) return existingUser
       }
 
       return null

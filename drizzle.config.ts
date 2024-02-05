@@ -4,7 +4,7 @@ export default {
   out: "./drizzle/migration",
   driver: "pg",
   strict: true,
-  verbose: true,
+  // verbose: true, //auto log
   dbCredentials: {
     connectionString: process.env.NEON_URL!
   }

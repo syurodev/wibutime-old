@@ -10,10 +10,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.5.0",
-    "@auth/prisma-adapter": "^1.0.15",
     "@hookform/resolvers": "^3.3.4",
-    "@prisma/client": "5.9.1",
-    "@prisma/extension-accelerate": "^0.6.2",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-context-menu": "^2.1.5",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -59,7 +56,6 @@
     "drizzle-orm": "^0.29.3",
     "embla-carousel-react": "^8.0.0-rc18",
     "framer-motion": "^10.17.4",
-    "i": "^0.3.7",
     "lottie-react": "^2.4.0",
     "next": "^14.1.0",
     "next-auth": "beta",
@@ -67,7 +63,7 @@
     "nodemailer": "^6.9.8",
     "npm": "^10.4.0",
     "postgres": "^3.4.3",
-    "react": "latest",
+    "react": "^18.2.0",
     "react-day-picker": "^8.10.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.2",
@@ -93,9 +89,7 @@
     "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "eslint-config-next": "^14.1.0",
-    "pg": "^8.11.3",
     "postcss": "^8",
-    "prisma": "5.9.1",
     "tailwindcss": "^3.3.0",
     "typescript": "^5.3.3"
   }

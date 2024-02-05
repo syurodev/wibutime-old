@@ -1,16 +1,10 @@
 "use server"
 
-import { db } from "@/lib/db"
+import { getCategories } from "@/drizzle/queries/category/getAllCategory"
 
 export const getAllCategories = async () => {
   try {
-    const categories = await db.category.findMany({
-      select: {
-        id: true,
-        name: true
-      }
-    })
-    await db.$disconnect()
+    const categories = await getCategories()
 
     return {
       code: 200,

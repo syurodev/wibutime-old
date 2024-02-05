@@ -18,7 +18,7 @@ export const generateResetPasswordToken = async (email: string) => {
     const generatedVerificationToken = await db.insert(resetPasswordToken).values({
       email: email,
       token: token,
-      expires: expires.toDateString()
+      expires: expires
     }).returning()
 
     if (!generatedVerificationToken) return null

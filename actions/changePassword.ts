@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs"
 import { newPasswordSchema } from "@/schemas/auth"
 import { getResetPasswordTokenByToken } from "@/drizzle/queries/token/getResetPasswordTokenByToken"
 import { getUserByEmail } from "@/drizzle/queries/user/getUserByEmail"
-import { client, db } from "@/drizzle/db"
+import { db } from "@/drizzle/db"
 import { resetPasswordToken, user } from "@/drizzle/schema"
 import { eq } from "drizzle-orm"
 

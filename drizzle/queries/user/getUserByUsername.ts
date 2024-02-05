@@ -1,6 +1,7 @@
-import { client, db } from "@/drizzle/db"
-import { user } from "@/drizzle/schema"
 import { eq } from "drizzle-orm"
+
+import { db } from "@/drizzle/db"
+import { user } from "@/drizzle/schema"
 
 export const getUserByUsername = async (username: string) => {
   try {

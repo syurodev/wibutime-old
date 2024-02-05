@@ -1,6 +1,9 @@
 "use server"
 
-import { db } from "@/lib/db"
+import { findLatestAnimes } from "@/drizzle/queries/anime/findLatestAnimes"
+import { findSeasons } from "@/drizzle/queries/anime/findSeasons"
+import { insertAnime } from "@/drizzle/queries/anime/insertAnime"
+import { insertAnimeSeason } from "@/drizzle/queries/anime/insertAnimeSeason"
 import { formatNumber } from "@/lib/formatNumber"
 import { getServerSession } from "@/lib/getServerSession"
 import { animeSchema } from "@/schemas/anime"
@@ -34,22 +37,18 @@ export const createAnime = async (
       }
     }
 
-    const anime = await db.anime.create({
-      data: {
+    const createdAnime = await insertAnime(
+      {
         name: validationValues.data.name,
         summary: validationValues.data.summary,
         note: validationValues.data.note,
-        user_id: session.id,
-        other_names: validationValues.data.other_names ? validationValues.data.other_names.map(name => name.text) : [],
-        categories: {
-          connect: validationValues.data.categories.map(category => ({ id: category.id })),
-        },
-      }
-    })
+        userId: session.id,
+        otherNames: validationValues.data.other_names ? validationValues.data.other_names.map(name => name.text) : [],
+      },
+      validationValues.data.categories
+    )
 
-    if (!anime) {
-      await db.$disconnect()
-
+    if (!createdAnime) {
       return {
         code: 401,
         message: "Lỗi trong quá trình tạo anime, vui lòng thử lại",
@@ -57,33 +56,28 @@ export const createAnime = async (
       }
     }
 
-    await db.anime_season.create({
-      data: {
-        anime_id: anime.id,
-        name: validationValues.data.type === "LongEpisode" ? "Season 1" : validationValues.data.type === "Movie" ? "Movie 1" : "Ova 1",
-        studio: validationValues.data.studio,
-        aired: validationValues.data.aired,
-        broadcast_day: validationValues.data.broadcast_day,
-        broadcast_time: validationValues.data.broadcast_time,
-        image: validationValues.data.image,
-        musics: validationValues.data.musics,
-        number_of_episodes: validationValues.data.number_of_episodes,
-      }
+    await insertAnimeSeason({
+      animeId: createdAnime.id,
+      name: validationValues.data.type === "LongEpisode" ? "Season 1" : validationValues.data.type === "Movie" ? "Movie 1" : "Ova 1",
+      studio: validationValues.data.studio,
+      aired: validationValues.data.aired.toISOString(),
+      broadcastDay: validationValues.data.broadcast_day,
+      broadcastTime: validationValues.data.broadcast_time.toISOString(),
+      image: validationValues.data.image,
+      musics: validationValues.data.musics,
+      numberOfEpisodes: validationValues.data.number_of_episodes,
     })
-
-    await db.$disconnect()
 
     return {
       code: 200,
       message: "Tạo anime thành công",
-      submess: anime.name,
+      submess: createdAnime.name,
       data: {
-        id: anime.id
+        id: createdAnime.id
       }
     }
 
   } catch (error) {
-    await db.$disconnect()
     console.log(error)
 
     return {
@@ -100,63 +94,9 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
   data: AnimeNew[] | null
 }> => {
   try {
-    const latestAnimes = await db.anime.findMany({
-      where: {
-        deleted: false,
-      },
-      orderBy: {
-        update_at: 'desc',
-      },
-      take: limit,
-      select: {
-        id: true,
-        name: true,
-        summary: true,
-        categories: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        seasons: {
-          where: {
-            deleted: false,
-          },
-          orderBy: {
-            update_at: 'desc',
-          },
-          take: 1,
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            _count: true,
-            episodes: {
-              where: {
-                deleted: false,
-              },
-              orderBy: {
-                update_at: 'desc',
-              },
-              take: 1,
-              select: {
-                id: true,
-                index: true,
-              }
-            },
-          }
-        },
-        favorites: {
-          select: {
-            _count: true
-          }
-        }
-      }
-    });
+    const latestAnimes = await findLatestAnimes(limit)
 
     if (!latestAnimes) {
-      await db.$disconnect()
-
       return {
         code: 404,
         message: "Không tìm thấy danh sách anime",
@@ -169,7 +109,7 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
       name: anime.name,
       summary: anime.summary,
       type: "anime" as ContentType,
-      categories: anime.categories,
+      categories: anime.categories.map(cate => cate.category),
       image: !anime.seasons || anime.seasons.length === 0 ? null : anime.seasons[-1].image as {
         key?: string,
         url: string
@@ -177,12 +117,12 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
       seasons: !anime.seasons || anime.seasons.length === 0 ? null : {
         id: anime.seasons[0].id,
         name: anime.seasons[0].name,
-        episodes: anime.seasons[0].episodes.length === 0 ? null : {
-          id: anime.seasons[0].episodes[0].id,
-          index: anime.seasons[0].episodes[0].index
+        episodes: anime.seasons[0].episode.length === 0 ? null : {
+          id: anime.seasons[0].episode[0].id,
+          index: anime.seasons[0].episode[0].index || ""
         }
       },
-      favorites: formatNumber(anime.favorites.length)
+      favorites: formatNumber(anime.favorite.length)
     }))
 
     return {
@@ -192,8 +132,6 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
     }
 
   } catch (error) {
-    await db.$disconnect()
-
     console.log(error)
     return {
       code: 500,
@@ -205,30 +143,15 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
 
 export const getSeasons = async (animeId: string) => {
   try {
-    const seasons = await db.anime_season.findMany({
-      where: {
-        anime_id: animeId
-      },
-      orderBy: {
-        created_at: "desc"
-      },
-      select: {
-        id: true,
-        name: true
-      }
-    })
+    const seasons = await findSeasons(animeId)
 
     if (!seasons) {
-      await db.$disconnect()
-
       return {
         code: 404,
         message: "Không tìm thấy seasons",
         data: null
       }
     }
-
-    await db.$disconnect()
 
     return {
       code: 200,
@@ -237,7 +160,6 @@ export const getSeasons = async (animeId: string) => {
     }
 
   } catch (error) {
-    await db.$disconnect()
     console.log(error)
 
     return {

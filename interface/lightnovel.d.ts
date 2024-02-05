@@ -26,7 +26,8 @@ type LightnovelVolumeQuickInformation = {
 
 type LightnovelChapterQuickInformation = {
   id: string,
-  viewed: number
+  viewed: number,
+  words: number
 }
 
 type LightnovelDetail = {
@@ -82,7 +83,7 @@ type LightnovelVolumeDetail = {
 type LightnovelChapterInfo = {
   id: string,
   name: string,
-  content: any,
+  // content: any,
   createdAt: string,
   viewed: number
 }
@@ -102,7 +103,7 @@ type LightnovelChapterDetail = {
       name: string;
       image: string | null;
     };
-    comment: string;
+    comment: any;
     updateAt: string;
     createAt: string;
   }[];

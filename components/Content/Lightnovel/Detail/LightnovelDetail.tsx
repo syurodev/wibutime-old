@@ -33,7 +33,7 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
       <ResizablePanelGroup direction="horizontal" className='!hidden md:!flex'>
         <ResizablePanel className="min-w-[30%] max-w-[50%] relative shadow-lg">
           <div
-            className='flex flex-col items-center justify-center gap-3 w-full h-full bg-background/60 backdrop-blur-2xl pt-16 pb-2'
+            className='flex flex-col items-center justify-center gap-3 w-full h-full bg-background/60 backdrop-blur-2xl pt-16 pb-2 px-3'
           >
             <div className='w-full flex items-center justify-center gap-10 absolute top-20'>
               {/* user */}
@@ -215,21 +215,31 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel className="pt-20 pb-2 px-7 flex flex-col gap-3 !overflow-y-auto">
-          {/* note */}
-          <motion.div
-            variants={slideWithoutScale}
-            custom={0.25}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className='rounded-lg border p-4 bg-background shadow'
-          >
-            <p className='font-semibold text-sm'>Ghi chú:</p>
-            {
-              data.note &&
-              <RenderEditorContent content={data.note} fontSize='text-sm' />
-            }
-          </motion.div>
+          {/* orther name */}
+          {
+            data.otherNames.length > 0 && (
+              <motion.div
+                variants={slideWithoutScale}
+                custom={0.35}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className='rounded-lg border p-4 bg-background shadow'
+              >
+                <p className='font-semibold text-sm mb-2'>Tên khác:</p>
+                {
+                  data.otherNames.map((name) => (
+                    <p
+                      key={name}
+                      className='text-sm'
+                    >
+                      {name}
+                    </p>
+                  ))
+                }
+              </motion.div>
+            )
+          }
 
           {/* summary */}
           <motion.div
@@ -240,10 +250,26 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
             exit="exit"
             className='rounded-lg border p-4 bg-background shadow'
           >
-            <p className='font-semibold text-sm'>Tóm tắt:</p>
+            <p className='font-semibold text-sm mb-2'>Tóm tắt:</p>
             {
               data.summary &&
               <RenderEditorContent content={data.summary} fontSize='text-sm' />
+            }
+          </motion.div>
+
+          {/* note */}
+          <motion.div
+            variants={slideWithoutScale}
+            custom={0.45}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className='rounded-lg border p-4 bg-background shadow'
+          >
+            <p className='font-semibold text-sm mb-2'>Ghi chú:</p>
+            {
+              data.note &&
+              <RenderEditorContent content={data.note} fontSize='text-sm' />
             }
           </motion.div>
 
@@ -267,14 +293,31 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
                         <CardDescription className='!m-0'>{`${item.chapters.length} Chapters`}</CardDescription>
                       </CardHeader>
                       <CardContent className='flex gap-3 p-4 pt-0'>
-                        <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
-                          <Image
-                            src={item.image ? item.image.url : "images/image2.jpeg"}
-                            alt={item.name}
-                            fill sizes='100%'
-                            priority
-                            className='object-cover'
-                          />
+                        <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative flex items-center justify-center bg-secondary p-3'>
+                          {
+                            item.image && item.image.url !== "" ? (
+                              <Image
+                                src={item.image.url}
+                                alt={item.name}
+                                fill sizes='100%'
+                                priority
+                                className='object-cover'
+                              />
+                            ) : (
+                              <div className='flex flex-col items-center'>
+                                <p
+                                  className='uppercase text-sm font-semibold text-secondary-foreground text-center'
+                                >
+                                  Volume
+                                </p>
+                                <p
+                                  className='uppercase text-3xl font-semibold text-secondary-foreground text-center'
+                                >
+                                  {index + 1}
+                                </p>
+                              </div>
+                            )
+                          }
                         </div>
 
                         <div className='flex flex-col gap-2 w-full'>

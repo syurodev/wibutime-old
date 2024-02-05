@@ -1,10 +1,10 @@
 type MangaQuickInformation = {
   id: string,
   name: string,
-  image?: {
-    key?: string
-    url: string
-  } | null,
+  // image?: {
+  //   key?: string
+  //   url: string
+  // } | null,
   createdAt: string,
   user: {
     id: string

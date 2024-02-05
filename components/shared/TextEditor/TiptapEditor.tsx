@@ -17,6 +17,7 @@ import Toolbar from './Toolbar'
 import { toast } from 'sonner'
 import { compressImage } from '@/lib/compressImage'
 import { uploadFiles } from '@/lib/uploadthing'
+import styles from "./style.module.scss"
 
 type IProps = {
   content: string,
@@ -31,15 +32,8 @@ const TiptapEditor: FC<IProps> = ({
   id,
   setWords
 }) => {
+  const history = localStorage.getItem(`editor-new-content-${id}`)
   const [imageUpload, setImageUpload] = useState<boolean>(false)
-  const [historyData, setHistoryData] = useState<any>("")
-
-  useEffect(() => {
-    if (id) {
-      const history = localStorage.getItem(`editor-new-content-${id}`)
-      setHistoryData(history ? JSON.parse(history) : "")
-    }
-  }, [id])
 
   const editor = useEditor({
     extensions: [
@@ -89,14 +83,14 @@ const TiptapEditor: FC<IProps> = ({
       TiptapImage.configure({
         inline: false,
         HTMLAttributes: {
-          class: "mx-auto rounded-lg object-cover max-w-[70%]"
+          class: `${styles.showScroll} mx-auto rounded-lg object-cover max-w-[70%] showScroll`
         }
       })
     ],
-    content: historyData || content,
+    content: history ? JSON.parse(history) : content,
     editorProps: {
       attributes: {
-        class: "rounded-lg border min-h-[400px] max-h-[700px] overflow-y-auto border-input bg-background p-2"
+        class: "rounded-lg border min-h-[400px] max-h-[700px] overflow-y-auto border-input bg-background p-2 max-h-[75vh]"
       },
       handleDrop: function (view, event, slice, moved) {
         if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {

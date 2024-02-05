@@ -1,4 +1,4 @@
-import { client, db } from "@/drizzle/db"
+import { db } from "@/drizzle/db"
 import { verificationToken } from "@/drizzle/schema"
 import { eq } from "drizzle-orm"
 

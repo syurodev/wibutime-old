@@ -4,13 +4,12 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer"
 import FormUploadLightnovelChapter from './Lightnovel/FormUploadLightnovelChapter'
 import FormUploadEpisode from './Anime/FormUploadEpisode'
+import styles from "./style.module.scss"
 
 type IProps = {
   isOpen: boolean
@@ -33,7 +32,7 @@ const UploadChapterOrEPWrapper: FC<IProps> = ({
       onOpenChange={onOpenChange}
       open={isOpen}
     >
-      <DrawerContent className='max-h-[98%] h-fit overflow-y-hidden'>
+      <DrawerContent className={`${styles.showScroll} max-h-[98%] h-fit overflow-y-hidden`}>
         <DrawerHeader className='max-w-[1300px] mx-auto'>
           <DrawerTitle>{name}</DrawerTitle>
           <DrawerDescription className={`uppercase text-${type} text-xs font-medium text-center`}>{type}</DrawerDescription>

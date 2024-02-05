@@ -49,5 +49,5 @@ type UserProfile = {
   animes: AnimeQuickInformation[],
   mangas: MangaQuickInformation[],
   lightnovels: LightnovelQuickInformation[],
-  favorites: FavoriteData[]
+  favorites: FavoriteData
 }

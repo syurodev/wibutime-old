@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 
-import { client, db } from "@/drizzle/db"
+import { db } from "@/drizzle/db"
 import { user } from "@/drizzle/schema"
 
 export const updateEmailVerified = async (userId: string): Promise<boolean> => {

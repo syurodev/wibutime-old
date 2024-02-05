@@ -1,4 +1,4 @@
-import { client, db } from "@/drizzle/db"
+import { db } from "@/drizzle/db"
 import { getRole } from "@/drizzle/queries/user/getRole"
 import { userOnRole } from "@/drizzle/schema"
 

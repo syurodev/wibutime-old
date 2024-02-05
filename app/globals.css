@@ -74,13 +74,17 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-y: overlay
+}
+
 @layer base {
   * {
     @apply border-border;
   }
 
   body {
-    scrollbar-gutter: stable;
     font-size: 16px;
     @apply bg-background text-foreground transition-colors duration-700 overflow-visible;
   }
@@ -125,31 +129,11 @@ ol {
 
 ::-webkit-scrollbar {
   display: none;
+  width: 7px;
+  height: 7px;
 }
 
-.tiptap::-webkit-scrollbar {
-  display: block;
-}
-
-/* width */
-.tiptap::-webkit-scrollbar {
-  width: 5px;
-  border-radius: 10px;
-}
-
-/* Track */
-.tiptap::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-.tiptap::-webkit-scrollbar-thumb {
-  /* background: #888; */
-  @apply bg-muted transition-all duration-200 rounded-full absolute
-}
-
-/* Handle on hover */
-.tiptap::-webkit-scrollbar-thumb:hover {
-  /* background: #555; */
-  @apply bg-primary
+::-webkit-scrollbar-thumb {
+  border-radius: 50px;
+  @apply bg-secondary
 }
