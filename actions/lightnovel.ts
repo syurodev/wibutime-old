@@ -31,7 +31,7 @@ export const createLightnovel = async (values: string) => {
 
     const session = await getServerSession()
 
-    if (!session?.permissions.includes("UPLOAD")) {
+    if (!session || !session?.permissions.includes("UPLOAD")) {
       return {
         code: 401,
         message: "Bạn không có quyền đăng lightnovel",
@@ -48,7 +48,7 @@ export const createLightnovel = async (values: string) => {
         note: validationValues.data.note,
         otherNames: validationValues.data.other_names && validationValues.data.other_names.length > 0 ? validationValues.data.other_names.map(item => item.text) : [],
         summary: validationValues.data.summary,
-        userId: session.id
+        userId: session.id!
       },
       validationValues.data.categories
     )

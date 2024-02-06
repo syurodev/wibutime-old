@@ -2,13 +2,8 @@ import type { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
 import bcrypt from "bcryptjs"
-import { eq } from "drizzle-orm"
-
-import { db } from "@/drizzle/db"
-import { user } from "@/drizzle/schema"
 
 import { loginSchema } from "@/schemas/auth"
-// import { getUserByUsername } from "./drizzle/queries/user/getUserByUsername"
 
 export default {
   providers: [Google({

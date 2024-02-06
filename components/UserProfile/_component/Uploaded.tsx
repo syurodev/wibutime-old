@@ -85,7 +85,7 @@ const Uploaded: FC<IProps> = ({ id }) => {
                   <CardItem
                     key={`lightnovel - ${item.name}`}
                     {...item}
-                    image={item.image as {
+                    image={item.seasons[item.seasons.length - 1].image as {
                       key?: string;
                       url: string;
                     } | null | undefined

@@ -33,13 +33,15 @@ export const {
   },
   events: {
     async linkAccount({ user }) {
-      await updateEmailVerified(user.id)
+      if (user) {
+        await updateEmailVerified(user.id!)
+      }
     }
   },
   callbacks: {
     async signIn({ user, account }) {
-
-      const existingUser = await getUserById(user.id)
+      if (!user) return false
+      const existingUser = await getUserById(user.id!)
 
       if (existingUser?.roles.length === 0) {
         await setUserRole(existingUser.id, "USER")

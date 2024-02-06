@@ -26,8 +26,12 @@ export function getAllUserImage(userProfile: UserProfile): string[] {
 
   // Lấy ảnh từ MangaQuickInformation
   userProfile.mangas.forEach((manga) => {
-    if (manga.image && manga.image.url && mangaImages.length < 2) {
-      mangaImages.push(manga.image.url);
+    if (manga.seasons.length > 0) {
+      manga.seasons.forEach((season) => {
+        if (season.image && season.image.url && mangaImages.length < 2) {
+          mangaImages.push(season.image.url);
+        }
+      })
     }
   });
 

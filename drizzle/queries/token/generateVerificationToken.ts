@@ -18,7 +18,7 @@ export const generateVerificationToken = async (email: string) => {
     const generatedVerificationToken = await db.insert(verificationToken).values({
       email: email,
       token: token,
-      expires: expires.toDateString()
+      expires: expires
     }).returning()
 
     if (!generatedVerificationToken) return null

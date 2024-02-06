@@ -32,7 +32,7 @@ export const createAnime = async (
 
     const session = await getServerSession()
 
-    if (!session?.permissions.includes("UPLOAD")) {
+    if (!session || !session?.permissions.includes("UPLOAD")) {
       return {
         code: 401,
         message: "Bạn không có quyền đăng lightnovel",
@@ -45,7 +45,7 @@ export const createAnime = async (
         name: validationValues.data.name,
         summary: validationValues.data.summary,
         note: validationValues.data.note,
-        userId: session.id,
+        userId: session.id!,
         otherNames: validationValues.data.other_names ? validationValues.data.other_names.map(name => name.text) : [],
       },
       validationValues.data.categories
