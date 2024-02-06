@@ -11,6 +11,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import FormUploadLightnovelVolume from './Lightnovel/FormUploadLightnovelVolume'
+import FormCreateAnimeSeason from './Anime/FormCreateAnimeSeason'
 
 type IProps = {
   isOpen: boolean
@@ -38,7 +39,17 @@ const UploadSeasonOrVolumeWrapper: FC<IProps> = ({
           <DrawerDescription className={`uppercase text-${type} text-xs font-medium text-center`}>{type}</DrawerDescription>
         </DrawerHeader>
         <div className='h-full w-full max-w-[1300px] overflow-y-auto px-2 mx-auto mb-5'>
-          <FormUploadLightnovelVolume id={id} onOpenChange={onOpenChange} />
+          {
+            type === "lightnovel" && (
+              <FormUploadLightnovelVolume id={id} onOpenChange={onOpenChange} />
+            )
+          }
+          {
+            type === "anime" && (
+              <FormCreateAnimeSeason id={id} onOpenChange={onOpenChange} />
+            )
+          }
+
         </div>
       </DrawerContent>
     </Drawer>

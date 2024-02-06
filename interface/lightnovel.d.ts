@@ -30,6 +30,14 @@ type LightnovelChapterQuickInformation = {
   words: number
 }
 
+type LightnovelChapterInfo = {
+  id: string,
+  name: string,
+  // content: any,
+  createdAt: string,
+  viewed: number
+}
+
 type LightnovelDetail = {
   id: string,
   name: string,
@@ -80,13 +88,7 @@ type LightnovelVolumeDetail = {
   chapters: LightnovelChapterInfo[]
 }
 
-type LightnovelChapterInfo = {
-  id: string,
-  name: string,
-  // content: any,
-  createdAt: string,
-  viewed: number
-}
+
 
 type LightnovelChapterDetail = {
   id: string;

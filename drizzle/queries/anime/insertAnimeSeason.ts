@@ -5,11 +5,12 @@ export const insertAnimeSeason = async (
   data: AnimeSeasonInsert,
 ) => {
   try {
+    console.log(data)
     const createdSeason = await db.insert(animeSeason)
       .values({
         ...data
       })
-      .returning({ id: animeSeason.id })
+      .returning({ id: animeSeason.id, name: animeSeason.name })
 
     if (!createdSeason || createdSeason.length === 0) return null
 

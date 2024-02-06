@@ -1,9 +1,11 @@
 "use client"
 import React, { FC, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
-import { LuCaseSensitive, LuEye, LuHeart, LuMessageCircle } from 'react-icons/lu'
+import { LuCaseSensitive, LuEye, LuMessageCircle } from 'react-icons/lu'
 import { updateLightnovelChapterViewed } from '@/actions/lightnovel'
+import { slideWithoutScale } from '@/lib/motion/slide'
 
 type IProps = {
   data: LightnovelChapterDetail
@@ -24,32 +26,64 @@ const ReadChapter: FC<IProps> = ({ data }) => {
   return (
     <div className='flex flex-col gap-8'>
       <div className='w-full flex flex-col items-center justify-center'>
-        <h3 className='text-center'>{data.name}</h3>
+        <motion.h3
+          className='text-center'
+          variants={slideWithoutScale}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          {data.name}
+        </motion.h3>
         <div
           className='flex gap-5 justify-center'
         >
-          <div
+          <motion.div
+            variants={slideWithoutScale}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            custom={0.1}
             className='flex items-center gap-1'
           >
             <LuCaseSensitive className="text-xl" />
             <span className='text-xs'>{data.words}</span>
-          </div>
-          <div
+          </motion.div>
+          <motion.div
+            variants={slideWithoutScale}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            custom={0.125}
             className='flex items-center gap-1'
           >
             <LuEye />
             <span className='text-xs'>{data.viewed}</span>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
+            variants={slideWithoutScale}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            custom={0.15}
             className='flex items-center gap-1'
           >
             <LuMessageCircle />
             <span className='text-xs'>{data.comments.length}</span>
-          </div>
+          </motion.div>
         </div>
       </div>
-      <RenderEditorContent content={data.content} />
+
+      <motion.div
+        variants={slideWithoutScale}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        custom={0.2}
+      >
+        <RenderEditorContent content={data.content} />
+      </motion.div>
     </div>
   )
 }

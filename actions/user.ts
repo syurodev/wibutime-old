@@ -28,10 +28,10 @@ export const getUserDetail = async (userId: string): Promise<{
       animes: user.animes ? user.animes.map(anime => ({
         id: anime.id,
         name: anime.name,
-        image: anime.seasons[0].image as {
+        image: anime.seasons.length > 0 ? anime.seasons[anime.seasons.length - 1].image as {
           key?: string,
           url: string,
-        } | null,
+        } : null,
         createdAt: anime.createdAt ? anime.createdAt.toISOString() : "",
         user: {
           id: anime.user.id

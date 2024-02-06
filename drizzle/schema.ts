@@ -322,7 +322,7 @@ export const animeSeason = pgTable("anime_season", {
   image: jsonb("image").default({ key: "", url: "" }),
   musics: jsonb("musics").default([]),
   studio: text("studio").notNull(),
-  broadcastTime: time("broadcast_time").notNull(),
+  broadcastTime: timestamp("broadcast_time").notNull(),
   broadcastDay: varchar("broadcast_day", { length: 10 }).notNull(),
   aired: date("aired").notNull(),
   numberOfEpisodes: integer("number_of_episodes"),

@@ -30,7 +30,7 @@ export default {
       if (validatedField.success) {
         const { username, password } = validatedField.data
 
-        const res = await fetch(`${process.env.BASE_URL}/api/auth/get-user`, {
+        const res = await fetch(`${process.env.APP_URL}/api/auth/get-user`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
