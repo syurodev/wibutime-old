@@ -19,16 +19,13 @@ import { useForm } from "react-hook-form"
 import { signIn } from 'next-auth/react'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useSearchParams } from 'next/navigation'
-import dynamic from 'next/dynamic'
 
 import { loginSchema } from '@/schemas/auth'
 import { login } from '@/actions/login'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 import Link from 'next/link'
+import CardWrapper from '../CardWrapper'
 
-const ComponentWithNoSSR = dynamic(() => import('@/components/Auth/CardWrapper'), {
-  ssr: false
-})
 const LoginForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
   const searchParams = useSearchParams()
@@ -68,12 +65,14 @@ const LoginForm: FC = () => {
   }
 
   return (
-    <ComponentWithNoSSR
+    <CardWrapper
       bottomHref='/auth/register'
       bottomHrefLabel='Đăng ký'
       bottomLabel='Chưa có tài khoản?'
+      label='Welcome back'
+      subLabel='Đăng nhập vào tài khoản của bạn'
     >
-      <div className='flex flex-col gap-9 w-full px-4'>
+      <div className='flex flex-col gap-9 w-full'>
         <Button
           variant={"outline"}
           rounded={"full"}
@@ -152,7 +151,7 @@ const LoginForm: FC = () => {
           </form>
         </Form>
       </div>
-    </ComponentWithNoSSR>
+    </CardWrapper>
   )
 }
 

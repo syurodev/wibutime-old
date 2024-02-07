@@ -8,9 +8,7 @@ const RegisterPage: FC = () => {
   return (
     <div className='w-full h-dvh flex justify-center items-center'>
       <PageFadeInOut>
-        <div className='flex items-center justify-center w-full h-full px-2'>
-          <RegisterForm />
-        </div>
+        <RegisterForm />
       </PageFadeInOut>
     </div>
   )

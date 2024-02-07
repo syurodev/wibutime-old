@@ -81,7 +81,6 @@ const FormCreateAnimeSeason: FC<IProps> = ({
         JSON.stringify(values),
         id
       )
-      console.log(res)
       if (res?.code !== 200) {
         toast.error(res?.message)
       } else {

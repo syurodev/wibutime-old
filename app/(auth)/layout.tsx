@@ -22,7 +22,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="light"
         >
-          <main className='min-h-dvh max-w-[1300px] mx-auto'>
+          <main className='min-h-dvh w-screen'>
             {children}
           </main>
           <Toaster />

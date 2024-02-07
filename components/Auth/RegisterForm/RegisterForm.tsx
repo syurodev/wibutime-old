@@ -17,16 +17,12 @@ import {
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { FcGoogle } from "react-icons/fc";
-import dynamic from 'next/dynamic'
 
 import { registerSchema } from '@/schemas/auth'
 import { register } from '@/actions/register'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
-
-const ComponentWithNoSSR = dynamic(() => import('@/components/Auth/CardWrapper'), {
-  ssr: false
-})
+import CardWrapper from '../CardWrapper'
 
 const RegisterForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
@@ -66,12 +62,14 @@ const RegisterForm: FC = () => {
   }
 
   return (
-    <ComponentWithNoSSR
+    <CardWrapper
       bottomHref='/auth/login'
       bottomHrefLabel='Đăng nhập'
       bottomLabel='Đã có tài khoản?'
+      label='Welcome'
+      subLabel='Đăng ký tài khoản mới'
     >
-      <div className='flex flex-col gap-9 w-full px-4'>
+      <div className='flex flex-col gap-9 w-full'>
         <Button variant={"outline"} rounded={"full"} className='flex items-center gap-3' size={"lg"}>
           <FcGoogle className="text-lg" /> Đăng ký với Google
         </Button>
@@ -164,7 +162,7 @@ const RegisterForm: FC = () => {
           </form>
         </Form>
       </div>
-    </ComponentWithNoSSR>
+    </CardWrapper>
   )
 }
 

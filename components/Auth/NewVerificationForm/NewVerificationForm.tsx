@@ -12,6 +12,7 @@ import logoAnimation from '@/lib/logoAnimation.json'
 import { useRouter, useSearchParams } from 'next/navigation';
 import { newVerification } from '@/actions/verificationEmail';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import CardWrapper from '../CardWrapper';
 
 const NewVerificationForm = () => {
   const searchParams = useSearchParams()
@@ -47,37 +48,29 @@ const NewVerificationForm = () => {
   }, [onSubmit])
 
   return (
-    <div className='flex justify-center items-center h-dvh w-full'>
-      <Card className='flex flex-col items-center'>
-        <CardHeader className='text-center text-lg relative space-y-4 z-0'>
-          <div className='relative w-full flex justify-center'>
-            <Link
-              href={"/"}
-              className='relative flex items-center justify-start pl-10'
-              scroll
-            >
-              <Lottie animationData={logoAnimation} loop={false} className='absolute size-60 -left-[110px] -top-[111px]' />
-              <span className='font-semibold'>Wibutime</span>
-            </Link>
-          </div>
-        </CardHeader>
+    <CardWrapper
+      bottomHref='/auth/login'
+      bottomHrefLabel='đăng nhập'
+      bottomLabel='Quay lại'
+      label='Xác thực email'
+      subLabel='Vui lòng đợi hệ thống xác thực'
+    >
 
-        <CardContent className='z-10 py-3'>
-          <Button
-            disabled={isLoading}
-            variant={isLoading ? "default" : isSucess ? "success" : "destructive"}
-            onClick={() => router.push("/auth/login")}
-          >
-            {
-              isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-            }
-            {
-              isLoading ? "Đang xác thực" : "Trở lại đăng nhập"
-            }
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+      <Button
+        disabled={isLoading}
+        variant={isLoading ? "default" : isSucess ? "success" : "destructive"}
+        onClick={() => router.push("/auth/login")}
+        className='w-full'
+      >
+        {
+          isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+        }
+        {
+          isLoading ? "Đang xác thực" : "Trở lại đăng nhập"
+        }
+      </Button>
+
+    </CardWrapper>
   )
 }
 

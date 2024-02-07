@@ -21,10 +21,8 @@ import dynamic from 'next/dynamic'
 
 import { newPasswordSchema } from '@/schemas/auth'
 import { changePassword } from '@/actions/changePassword'
+import CardWrapper from '../CardWrapper'
 
-const ComponentWithNoSSR = dynamic(() => import('@/components/Auth/CardWrapper'), {
-  ssr: false
-})
 const NewPasswordForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
   const searchParams = useSearchParams()
@@ -65,12 +63,14 @@ const NewPasswordForm: FC = () => {
   }
 
   return (
-    <ComponentWithNoSSR
+    <CardWrapper
       bottomHref='/auth/login'
       bottomHrefLabel='đăng nhập'
       bottomLabel='Quay lại'
+      label='Mật khẩu mới'
+      subLabel='Nhập 2 lần mật khẩu mới'
     >
-      <div className='flex flex-col gap-9 w-full px-4'>
+      <div className='flex flex-col gap-9 w-full'>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -126,7 +126,7 @@ const NewPasswordForm: FC = () => {
           </form>
         </Form>
       </div>
-    </ComponentWithNoSSR>
+    </CardWrapper>
   )
 }
 

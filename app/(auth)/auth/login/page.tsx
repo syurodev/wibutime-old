@@ -1,14 +1,15 @@
 import { FC, Suspense } from 'react'
 
 import LoginForm from '@/components/Auth/LoginForm/LoginForm'
+import PageFadeInOut from '@/components/shared/PageAnimatePresence/PageFadeInOut'
 
 const LoginPage: FC = () => {
   return (
     <div className='w-full h-dvh flex justify-center items-center'>
       <Suspense>
-        <div className='flex items-center justify-center w-full h-full px-2'>
+        <PageFadeInOut>
           <LoginForm />
-        </div>
+        </PageFadeInOut>
       </Suspense>
     </div>
   )

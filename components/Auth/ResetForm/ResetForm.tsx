@@ -16,14 +16,11 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { ReloadIcon } from '@radix-ui/react-icons'
-import dynamic from 'next/dynamic'
 
 import { resetSchema } from '@/schemas/auth'
 import { resetPassword } from '@/actions/resetPassword'
+import CardWrapper from '../CardWrapper'
 
-const ComponentWithNoSSR = dynamic(() => import('@/components/Auth/CardWrapper'), {
-  ssr: false
-})
 const ResetForm: FC = () => {
   const [isPending, startTransiton] = useTransition()
 
@@ -47,12 +44,14 @@ const ResetForm: FC = () => {
   }
 
   return (
-    <ComponentWithNoSSR
+    <CardWrapper
       bottomHref='/auth/login'
       bottomHrefLabel='đăng nhập'
       bottomLabel='Quay lại'
+      label='Đặt lại mật khẩu của bạn'
+      subLabel='Nhập email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu của bạn'
     >
-      <div className='flex flex-col gap-9 w-full px-4'>
+      <div className='flex flex-col gap-9 w-full'>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -88,7 +87,7 @@ const ResetForm: FC = () => {
           </form>
         </Form>
       </div>
-    </ComponentWithNoSSR>
+    </CardWrapper>
   )
 }
 
