@@ -8,10 +8,6 @@ import { getAnimeDetail } from '@/actions/anime'
 import ContentDetailHeader from '@/components/Content/Detail/ContentDetailHeader'
 import { slideWithoutScale } from '@/lib/motion/slide'
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import Image from 'next/image'
-import Link from 'next/link'
-import { formatDate } from '@/lib/formatDate'
 import SeasonCard from './_components/SeasonCard'
 
 type IProps = {

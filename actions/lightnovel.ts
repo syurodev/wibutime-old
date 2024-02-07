@@ -16,6 +16,7 @@ import { findVolumes } from "@/drizzle/queries/lightnovel/findVolumes"
 import { findChapter } from "@/drizzle/queries/lightnovel/findChapter"
 import { upViewed } from "@/drizzle/queries/lightnovel/upViewed"
 import { lightnovelDetail } from "@/drizzle/queries/lightnovel/lightnovelDetail"
+import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
 
 export const createLightnovel = async (values: string) => {
   try {
@@ -48,7 +49,7 @@ export const createLightnovel = async (values: string) => {
         note: validationValues.data.note,
         otherNames: validationValues.data.other_names && validationValues.data.other_names.length > 0 ? validationValues.data.other_names.map(item => item.text) : [],
         summary: validationValues.data.summary,
-        userId: session.id!
+        userId: session.id!,
       },
       validationValues.data.categories
     )
@@ -123,7 +124,7 @@ export const createLightnovelVolume = async (
       data: null
     }
 
-    await lightnovelUpdatedAt(new Date(), lightnovel.id)
+    await lightnovelUpdatedAt(convertUtcToGMT7(new Date()), lightnovel.id)
 
     revalidatePath(`/u/${lightnovel.userId}`)
 
@@ -182,7 +183,7 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
       content: validationValues.data.content,
       volumeId: validationValues.data.volume_id,
       words: words,
-      viewed: 0
+      viewed: 0,
     })
 
     if (!result) return {
@@ -378,7 +379,7 @@ export const getChapterContent = async (chapterId: string): Promise<{
 
 export const updateLightnovelChapterViewed = async (chapterId: string) => {
   try {
-    await upViewed(chapterId)
+    await upViewed(chapterId, new Date())
 
     return {
       code: 200,

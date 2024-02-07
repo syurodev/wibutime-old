@@ -96,7 +96,6 @@ const TiptapEditor: FC<IProps> = ({
         if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
           let file = event.dataTransfer.files;
           let filesize = ((file[0].size / 1024) / 1024).toFixed(4);
-          console.log(file[0].type)
           if (file[0].type.startsWith("image/") && +filesize < 5) {
             let _URL = window.URL || window.webkitURL;
             let img: HTMLImageElement = new Image();

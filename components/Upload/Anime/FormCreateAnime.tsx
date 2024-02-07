@@ -78,7 +78,6 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
   function onSubmit(values: z.infer<typeof animeSchema>) {
     startTransiton(async () => {
       const res = await createAnime(JSON.stringify(values))
-      console.log(res)
       if (res?.code !== 200) {
         toast.error(res?.message)
       } else {

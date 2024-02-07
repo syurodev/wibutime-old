@@ -5,7 +5,6 @@ import News from './News/News'
 import Trending from './Trending/Trending'
 import { getHero } from '@/actions/home';
 
-
 const Hero = async () => {
   const queryClient = new QueryClient()
   await queryClient.prefetchQuery({

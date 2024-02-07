@@ -4,8 +4,6 @@ import { findLatestAnimes } from "@/drizzle/queries/anime/findLatestAnimes";
 import { findLatestLightnovels } from "@/drizzle/queries/lightnovel/findLatestLightnovels";
 import { findLatestMangas } from "@/drizzle/queries/manga/findLatestMangas";
 import { formatNumber } from "@/lib/formatNumber";
-import { db } from "@/drizzle/db";
-import { sql } from "drizzle-orm";
 import { findlLightnovelTrending } from "@/drizzle/queries/lightnovel/findlLightnovelTrending";
 import { findlAnimeTrending } from "@/drizzle/queries/anime/findlAnimeTrending";
 import { findlMangaTrending } from "@/drizzle/queries/manga/findlMangaTrending";

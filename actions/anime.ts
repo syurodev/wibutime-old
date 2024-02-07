@@ -10,6 +10,7 @@ import { formatNumber } from "@/lib/formatNumber"
 import { getServerSession } from "@/lib/getServerSession"
 import { animeSchema, animeSeasonSchema } from "@/schemas/anime"
 import { animeDetail } from "@/drizzle/queries/anime/animeDetail"
+import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
 
 export const createAnime = async (
   values: string,
@@ -65,7 +66,7 @@ export const createAnime = async (
       studio: validationValues.data.studio,
       aired: validationValues.data.aired.toISOString(),
       broadcastDay: validationValues.data.broadcast_day,
-      broadcastTime: validationValues.data.broadcast_time,
+      broadcastTime: convertUtcToGMT7(validationValues.data.broadcast_time),
       image: validationValues.data.image,
       musics: validationValues.data.musics,
       numberOfEpisodes: validationValues.data.number_of_episodes,
@@ -183,8 +184,6 @@ export const createAnimeSeason = async (
     const parseData = JSON.parse(values)
     const remake = {
       ...parseData,
-      broadcast_time: new Date(parseData.broadcast_time),
-      aired: new Date(parseData.aired)
     }
 
     const validationValues = animeSeasonSchema.safeParse(remake)

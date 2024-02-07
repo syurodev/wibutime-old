@@ -2,6 +2,9 @@ import React, { FC } from 'react'
 import Image from 'next/image'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { getTime } from '@/lib/getTime'
+import { convertUtcToGMT7 } from '@/lib/convertUtcToGMT7'
+import { convertDayOfWeek } from '@/lib/dayOfWeek'
 
 type IProps = {
   name: string,
@@ -22,10 +25,6 @@ const SeasonCard: FC<IProps> = ({
   broadcastDay,
   aired,
 }) => {
-  const date: Date = new Date(broadcastTime);
-
-  const hour: number = date.getUTCHours();
-  const minute: number = date.getUTCMinutes();
 
   return (
     <Card
@@ -48,7 +47,7 @@ const SeasonCard: FC<IProps> = ({
         <div>
           <p>Studio: {studio}</p>
           <p>Ngày phát sóng: {aired}</p>
-          <p>Lịch chiếu: {broadcastDay} lúc {`${hour}:${minute}`}</p>
+          <p>Lịch chiếu: {convertDayOfWeek(broadcastDay as DaysOfTheWeek)} lúc {getTime(convertUtcToGMT7(new Date(broadcastTime)))}</p>
         </div>
       </CardContent>
     </Card>

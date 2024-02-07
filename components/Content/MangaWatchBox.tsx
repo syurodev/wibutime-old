@@ -31,7 +31,6 @@ const MangaWatchBox: FC<IProps> = ({
   history
 }) => {
   const [chapter, setChapter] = useState<string>(currentChapterId)
-  console.log(content)
   //TODO: Block user download image
 
   return (
