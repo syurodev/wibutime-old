@@ -20,7 +20,7 @@ type IProps = {
 const LightnovelDetail: FC<IProps> = ({ data }) => {
   return (
     <div className='w-screen h-dvh absolute left-0 top-0 md:overflow-hidden'>
-      <div className='w-full flex flex-col md:flex-row gap-4'>
+      <div className='w-full flex flex-col md:flex-row gap-4 md:gap-0'>
 
         <ContentDetailHeader
           categories={data.categories}
@@ -35,7 +35,7 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
           words={data.words}
         />
 
-        <div className='flex flex-col gap-4 h-dvh overflow-y-auto md:mt-20'>
+        <div className='flex flex-col gap-4 md:h-dvh md:overflow-y-auto md:mt-20 pb-4'>
           {/* orther name */}
           {
             data.otherNames.length > 0 && (

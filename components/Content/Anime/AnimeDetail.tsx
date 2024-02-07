@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image'
 import Link from 'next/link'
 import { formatDate } from '@/lib/formatDate'
+import SeasonCard from './_components/SeasonCard'
 
 type IProps = {
   id: string
@@ -27,6 +28,8 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
     notFound()
   }
 
+  console.log(data.data)
+
   return (
     <div className='w-screen h-dvh absolute left-0 top-0 md:overflow-hidden'>
       <div className='w-full flex flex-col md:flex-row gap-4 md:gap-0'>
@@ -40,7 +43,7 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
           image={data.data.image?.url}
         />
 
-        <div className='flex flex-col gap-4 h-dvh overflow-y-scroll md:pt-20 pb-4'>
+        <div className='flex flex-col gap-4 md:h-dvh md:overflow-y-scroll md:pt-20 pb-4'>
           {/* orther name */}
           {
             data.data.otherNames.length > 0 && (
@@ -112,7 +115,7 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
                     animate="animate"
                     exit="exit"
                   >
-                    <Card
+                    {/* <Card
                     >
                       <CardHeader className='flex flex-row gap-4 p-3 items-center'>
                         <CardTitle className='text-lg'>{item.name}</CardTitle>
@@ -175,7 +178,17 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
                           }
                         </div>
                       </CardContent>
-                    </Card>
+                    </Card> */}
+
+                    <SeasonCard
+                      name={item.name}
+                      numberOfEpisode={item.episodes.length}
+                      image={item.image ? item.image.url : undefined}
+                      aired={item.aired}
+                      studio={item.studio}
+                      broadcastDay={item.broadcastDay}
+                      broadcastTime={item.broadcastTime}
+                    />
                   </motion.div>
                 )
               })

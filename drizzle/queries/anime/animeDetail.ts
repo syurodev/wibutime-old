@@ -3,10 +3,10 @@ import { and, desc, eq } from "drizzle-orm";
 import { db } from "@/drizzle/db";
 import { anime, animeSeason } from "@/drizzle/schema";
 
-export const animeDetail = async (novelId: string) => {
+export const animeDetail = async (animeId: string) => {
   try {
-    const existingLightnovel = await db.query.anime.findFirst({
-      where: and(eq(anime.id, novelId), eq(anime.deleted, false)),
+    const existingAnime = await db.query.anime.findFirst({
+      where: and(eq(anime.id, animeId), eq(anime.deleted, false)),
       with: {
         categories: {
           columns: {
@@ -55,9 +55,9 @@ export const animeDetail = async (novelId: string) => {
       },
     })
 
-    if (!existingLightnovel) return null
+    if (!existingAnime) return null
 
-    return existingLightnovel
+    return existingAnime
   } catch (error) {
     console.log(error)
     return null
