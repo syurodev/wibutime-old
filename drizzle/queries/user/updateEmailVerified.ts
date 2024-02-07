@@ -1,14 +1,14 @@
 import { eq } from "drizzle-orm";
 
 import { db } from "@/drizzle/db"
-import { user } from "@/drizzle/schema"
+import { users } from "@/drizzle/schema"
 
 export const updateEmailVerified = async (userId: string): Promise<boolean> => {
   try {
-    const updatedUser: { updatedId: string }[] = await db.update(user)
+    const updatedUser: { updatedId: string }[] = await db.update(users)
       .set({ emailVerified: true })
-      .where(eq(user.id, userId))
-      .returning({ updatedId: user.id })
+      .where(eq(users.id, userId))
+      .returning({ updatedId: users.id })
 
 
     if (!updatedUser) return false

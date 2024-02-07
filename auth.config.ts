@@ -6,9 +6,11 @@ import bcrypt from "bcryptjs"
 import { loginSchema } from "@/schemas/auth"
 
 export default {
+  debug: true,
   providers: [Google({
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    // allowDangerousEmailAccountLinking: true,
     profile(profile) {
       return {
         id: profile.sub,

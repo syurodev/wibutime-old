@@ -1,13 +1,13 @@
 import { db } from "@/drizzle/db";
-import { UserInsert, user } from "@/drizzle/schema";
+import { UserInsert, users } from "@/drizzle/schema";
 
 export const createUser = async (data: UserInsert) => {
   try {
-    const createdUser = await db.insert(user).values({
+    const createdUser = await db.insert(users).values({
       ...data
     }).returning({
-      id: user.id,
-      email: user.email
+      id: users.id,
+      email: users.email
     })
 
     if (createUser.length === 0) return null

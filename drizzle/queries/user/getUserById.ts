@@ -1,5 +1,5 @@
 import { db } from "@/drizzle/db"
-import { user } from "@/drizzle/schema"
+import { users } from "@/drizzle/schema"
 import { eq } from "drizzle-orm"
 
 type OriginalUserData = {
@@ -88,10 +88,27 @@ function transformUserData(inputData: OriginalUserData) {
 }
 
 
-export const getUserById = async (userId: string) => {
+export const getUserById = async (userId: string): Promise<{
+  id: string;
+  name: string;
+  username: string | null;
+  image: string | null;
+  description: string | null;
+  email: string;
+  phone: string;
+  hashedPassword: string | null;
+  emailVerified: boolean;
+  phoneVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  roles: string[];
+  permissions: string[];
+} | null> => {
+  console.log("userId", userId)
+
   try {
-    const existingUser: OriginalUserData | undefined = await db.query.user.findFirst({
-      where: eq(user.id, userId),
+    const existingUser: OriginalUserData | undefined = await db.query.users.findFirst({
+      where: eq(users.id, userId),
       with: {
         roles: {
           columns: {

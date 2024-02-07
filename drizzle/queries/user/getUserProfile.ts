@@ -3,12 +3,12 @@
 import { eq } from "drizzle-orm"
 
 import { db } from "@/drizzle/db"
-import { user } from "@/drizzle/schema"
+import { users } from "@/drizzle/schema"
 
 export const getUserProfile = async (userId: string) => {
   try {
-    const existingUser = await db.query.user.findFirst({
-      where: eq(user.id, userId),
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
       columns: {
         id: true,
         image: true,

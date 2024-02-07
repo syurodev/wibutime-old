@@ -6,7 +6,7 @@ import { newPasswordSchema } from "@/schemas/auth"
 import { getResetPasswordTokenByToken } from "@/drizzle/queries/token/getResetPasswordTokenByToken"
 import { getUserByEmail } from "@/drizzle/queries/user/getUserByEmail"
 import { db } from "@/drizzle/db"
-import { resetPasswordToken, user } from "@/drizzle/schema"
+import { resetPasswordToken, users } from "@/drizzle/schema"
 import { eq } from "drizzle-orm"
 
 export const changePassword = async (token: string | null, values: z.infer<typeof newPasswordSchema>) => {
@@ -52,9 +52,9 @@ export const changePassword = async (token: string | null, values: z.infer<typeo
 
   const newHasedPassword = await bcrypt.hash(password, 10)
 
-  await db.update(user)
+  await db.update(users)
     .set({ hashedPassword: newHasedPassword })
-    .where(eq(user.id, existingUser.id))
+    .where(eq(users.id, existingUser.id))
 
 
   await db.delete(resetPasswordToken)

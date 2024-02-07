@@ -1,5 +1,5 @@
 {
-  "id": "0de2d85e-6940-4f8e-bc3a-e2861304bffb",
+  "id": "87635bf8-91c4-4055-9011-7ae76ede9592",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -121,14 +121,14 @@
         },
         "other_names": {
           "name": "other_names",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'[]'::json"
+          "default": "'[]'::jsonb"
         },
         "summary": {
           "name": "summary",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -161,7 +161,7 @@
         },
         "note": {
           "name": "note",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -237,17 +237,17 @@
         },
         "content": {
           "name": "content",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "thumbnail": {
           "name": "thumbnail",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "created_at": {
           "name": "created_at",
@@ -356,17 +356,17 @@
         },
         "image": {
           "name": "image",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "musics": {
           "name": "musics",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'[]'::json"
+          "default": "'[]'::jsonb"
         },
         "studio": {
           "name": "studio",
@@ -376,7 +376,7 @@
         },
         "broadcast_time": {
           "name": "broadcast_time",
-          "type": "date",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         },
@@ -647,7 +647,7 @@
         },
         "comment": {
           "name": "comment",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true
         },
@@ -1289,10 +1289,10 @@
         },
         "other_names": {
           "name": "other_names",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'[]'::json"
+          "default": "'[]'::jsonb"
         },
         "author": {
           "name": "author",
@@ -1308,14 +1308,14 @@
         },
         "image": {
           "name": "image",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "summary": {
           "name": "summary",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -1348,7 +1348,7 @@
         },
         "note": {
           "name": "note",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -1424,7 +1424,7 @@
         },
         "content": {
           "name": "content",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true
         },
@@ -1432,7 +1432,8 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
@@ -1461,6 +1462,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": 0
+        },
+        "viewed_at": {
+          "name": "viewed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         },
         "volume_id": {
           "name": "volume_id",
@@ -1529,10 +1536,10 @@
         },
         "image": {
           "name": "image",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "deleted": {
           "name": "deleted",
@@ -1594,14 +1601,14 @@
         },
         "other_names": {
           "name": "other_names",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'[]'::json"
+          "default": "'[]'::jsonb"
         },
         "summary": {
           "name": "summary",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -1634,7 +1641,7 @@
         },
         "note": {
           "name": "note",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -1710,17 +1717,17 @@
         },
         "content": {
           "name": "content",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "thumbnail": {
           "name": "thumbnail",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "created_at": {
           "name": "created_at",
@@ -1829,17 +1836,17 @@
         },
         "image": {
           "name": "image",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "musics": {
           "name": "musics",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'[]'::json"
+          "default": "'[]'::jsonb"
         },
         "studio": {
           "name": "studio",
@@ -2088,7 +2095,7 @@
         },
         "expires": {
           "name": "expires",
-          "type": "date",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         }
@@ -2164,7 +2171,7 @@
         },
         "description": {
           "name": "description",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -2176,10 +2183,10 @@
         },
         "image": {
           "name": "image",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{\"key\":\"\",\"url\":\"\"}'::json"
+          "default": "'{\"key\":\"\",\"url\":\"\"}'::jsonb"
         },
         "user_id": {
           "name": "user_id",
@@ -2317,7 +2324,7 @@
         },
         "description": {
           "name": "description",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -2484,7 +2491,7 @@
         },
         "expires": {
           "name": "expires",
-          "type": "date",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         }

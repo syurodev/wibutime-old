@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1707029798109,
-      "tag": "0000_clear_matthew_murdock",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1707035292731,
-      "tag": "0001_dusty_human_fly",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1707037870000,
-      "tag": "0002_bitter_shadowcat",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1707117314973,
-      "tag": "0003_misty_mysterio",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1707135577061,
-      "tag": "0004_tan_the_enforcers",
+      "when": 1707291581004,
+      "tag": "0000_solid_machine_man",
       "breakpoints": true
     }
   ]

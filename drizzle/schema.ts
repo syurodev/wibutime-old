@@ -3,7 +3,7 @@ import { text, timestamp, pgTable, jsonb, boolean, integer, primaryKey, uuid, da
 import type { AdapterAccount } from '@auth/core/adapters'
 
 
-export const user = pgTable("user", {
+export const users = pgTable("user", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
   name: text("name").notNull(),
   username: text("username").unique(),
@@ -20,10 +20,10 @@ export const user = pgTable("user", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export type User = InferSelectModel<typeof user>
-export type UserInsert = InferInsertModel<typeof user>
+export type User = InferSelectModel<typeof users>
+export type UserInsert = InferInsertModel<typeof users>
 
-export const userRelations = relations(user, ({ one, many }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   roles: many(userOnRole),
   lightnovels: many(lightnovel),
   animes: many(anime),
@@ -39,7 +39,7 @@ export const accounts = pgTable(
   {
     userId: uuid("userId")
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
@@ -74,7 +74,7 @@ export const userOnRole = pgTable(
   {
     userId: uuid("user_id")
       .notNull()
-      .references(() => user.id),
+      .references(() => users.id),
     roleId: uuid("role_id")
       .notNull()
       .references(() => role.id),
@@ -85,9 +85,9 @@ export const userOnRole = pgTable(
 );
 
 export const userOnRoleRelations = relations(userOnRole, ({ one }) => ({
-  user: one(user, {
+  user: one(users, {
     fields: [userOnRole.userId],
-    references: [user.id]
+    references: [users.id]
   }),
 
   role: one(role, {
@@ -158,7 +158,7 @@ export const translationGroup = pgTable("translation_group", {
   name: text("name").notNull(),
   image: jsonb("image").default({ key: "", url: "" }),
 
-  admin: uuid("user_id").references(() => user.id, { onDelete: "cascade" })
+  admin: uuid("user_id").references(() => users.id, { onDelete: "cascade" })
 });
 
 export const translationGroupRelations = relations(translationGroup, ({ many }) => ({
@@ -173,7 +173,7 @@ export type TranslationGroupInsert = InferInsertModel<typeof translationGroup>
 export const translationGroupMembers = pgTable("translation_group_members", {
   userId: uuid("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => users.id),
   groupId: uuid("group_id")
     .notNull()
     .references(() => translationGroup.id),
@@ -208,7 +208,7 @@ export const lightnovel = pgTable("lightnovel", {
   status: text("status", { enum: ["Pause", "Complete", "InProcess"] }),
   note: jsonb("note"),
 
-  userId: uuid("user_id").references(() => user.id, { onDelete: "cascade" }).notNull(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   translationGroup: uuid("translation_group_id").references(() => translationGroup.id, { onDelete: "set null" })
 });
 
@@ -218,9 +218,9 @@ export const lightnovelRelations = relations(lightnovel, (({ one, many }) => ({
   comments: many(commentToLightnovel),
   favorite: many(favoriteToLightnovel),
   volumes: many(lightnovelVolume),
-  user: one(user, {
+  user: one(users, {
     fields: [lightnovel.userId],
-    references: [user.id]
+    references: [users.id]
   }),
   translationGroup: one(translationGroup, {
     fields: [lightnovel.translationGroup],
@@ -290,7 +290,7 @@ export const anime = pgTable("anime", {
   status: text("status", { enum: ["Pause", "Complete", "InProcess"] }),
   note: jsonb("note"),
 
-  userId: uuid("user_id").references(() => user.id, { onDelete: "cascade" }).notNull(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   translationGroup: uuid("translation_group_id").references(() => translationGroup.id, { onDelete: "set null" })
 });
 
@@ -300,9 +300,9 @@ export const animeRelations = relations(anime, (({ one, many }) => ({
   comments: many(commentToAnime),
   favorite: many(favoriteToAnime),
   seasons: many(animeSeason),
-  user: one(user, {
+  user: one(users, {
     fields: [anime.userId],
-    references: [user.id]
+    references: [users.id]
   }),
   translationGroup: one(translationGroup, {
     fields: [anime.translationGroup],
@@ -379,7 +379,7 @@ export const manga = pgTable("manga", {
   status: text("status", { enum: ["Pause", "Complete", "InProcess"] }),
   note: jsonb("note"),
 
-  userId: uuid("user_id").references(() => user.id, { onDelete: "cascade" }).notNull(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   translationGroup: uuid("translation_group_id").references(() => translationGroup.id, { onDelete: "set null" })
 });
 
@@ -389,9 +389,9 @@ export const mangaRelations = relations(manga, (({ one, many }) => ({
   comments: many(commentToManga),
   favorite: many(favoriteToManga),
   seasons: many(mangaSeason),
-  user: one(user, {
+  user: one(users, {
     fields: [manga.userId],
-    references: [user.id]
+    references: [users.id]
   }),
   translationGroup: one(translationGroup, {
     fields: [manga.translationGroup],
@@ -551,7 +551,7 @@ export type CategoryToMangaInsert = InferInsertModel<typeof categoryToManga>
 export const rating = pgTable("rating", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
   score: integer("score").default(0).notNull(),
-  userId: uuid("user_id").references(() => user.id, { onDelete: "cascade" }).notNull(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
 
   lightnovelId: uuid("lightnovel_id"),
   animeId: uuid("anime_id"),
@@ -580,7 +580,7 @@ export type RatingInsert = InferInsertModel<typeof rating>
 export const comment = pgTable("comment", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
   comment: jsonb("comment").notNull(),
-  userId: uuid("user_id").references(() => user.id, { onDelete: "cascade" }).notNull(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   deleted: boolean("deleted").default(false),
@@ -589,9 +589,9 @@ export const comment = pgTable("comment", {
 })
 
 export const commentRelations = relations(comment, (({ one, many }) => ({
-  user: one(user, {
+  user: one(users, {
     fields: [comment.userId],
-    references: [user.id]
+    references: [users.id]
   }),
   reply: one(comment, {
     fields: [comment.reply],
@@ -746,13 +746,13 @@ export const commentToMangaChapterRelations = relations(commentToMangaChapter, (
 //* favorite
 export const favorite = pgTable("favorite", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
-  userId: uuid("user_id").references(() => user.id, { onDelete: "cascade" }).notNull(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
 })
 
 export const favoriteRelations = relations(favorite, (({ one, many }) => ({
-  user: one(user, {
+  user: one(users, {
     fields: [favorite.userId],
-    references: [user.id]
+    references: [users.id]
   }),
   lightnovels: many(favoriteToLightnovel),
   animes: many(favoriteToAnime),

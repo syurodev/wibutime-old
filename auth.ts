@@ -27,6 +27,7 @@ export const {
   signIn,
   signOut
 } = NextAuth({
+  adapter: DrizzleAdapter(db),
   pages: {
     signIn: "/auth/login",
     error: "/auth/error"
@@ -35,23 +36,19 @@ export const {
     async linkAccount({ user }) {
       if (user) {
         await updateEmailVerified(user.id!)
+        await setUserRole(user.id!, "USER")
       }
     }
   },
   callbacks: {
     async signIn({ user, account }) {
-      if (!user) return false
-      const existingUser = await getUserById(user.id!)
-
-      if (existingUser?.roles.length === 0) {
-        await setUserRole(existingUser.id, "USER")
-      }
-
       //Alow OAuth without email verification
       if (account?.provider !== "credentials") return true
 
+      if (!user) return false
+      const existingUser = await getUserById(user.id!)
 
-      if (!existingUser?.emailVerified) {
+      if (existingUser && !existingUser?.emailVerified) {
         const verificationToken = await generateVerificationToken(user.email!)
 
         if (!verificationToken) return false
@@ -67,7 +64,7 @@ export const {
       }
 
       if (token.role && session.user) {
-        session.user.role = token.role as "USER" | "ADMIN" | "CREATER"
+        session.user.role = token.role as UserRole
       }
 
       if (token.permissions && session.user) {
@@ -98,7 +95,6 @@ export const {
       return token
     }
   },
-  adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   ...authConfig,
 })
