@@ -343,15 +343,14 @@ export const animeSeasonRelations = relations(animeSeason, (({ one, many }) => (
 
 export const animeEpisode = pgTable("anime_episode", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
-  name: text("name").notNull(),
   content: jsonb("content").default({ key: "", url: "" }).notNull(),
   thumbnail: jsonb("thumbnail").default({ key: "", url: "" }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   deleted: boolean("deleted").default(false),
   viewed: integer("viewed").default(0),
-  index: varchar("index", { length: 6 }),
-  viewed_at: timestamp("created_at"),
+  index: varchar("index", { length: 6 }).notNull(),
+  viewed_at: timestamp("viewed_at"),
 
   seasonId: uuid("season_id").references(() => animeSeason.id, { onDelete: "cascade" }).notNull()
 });

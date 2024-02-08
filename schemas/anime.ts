@@ -47,7 +47,7 @@ export const animeEpisodeSchema = z.object({
   content: z.object({
     key: z.string().optional(),
     url: z.string().url()
-  }).optional(),
+  }),
   index: z.string().min(1, { message: "Vui lòng nhập số thứ tự của tập phim" })
 })
 

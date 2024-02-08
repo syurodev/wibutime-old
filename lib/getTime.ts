@@ -1,3 +1,5 @@
+"use client"
+
 export function getTime(date: Date): string {
   const hours = date.getHours();
   const minutes = date.getMinutes();

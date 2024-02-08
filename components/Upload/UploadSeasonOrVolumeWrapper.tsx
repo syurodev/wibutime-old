@@ -16,7 +16,7 @@ import FormCreateAnimeSeason from './Anime/FormCreateAnimeSeason'
 type IProps = {
   isOpen: boolean
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-  type: ContentType
+  type: ContextMenu
   id: string
   name: string
 }

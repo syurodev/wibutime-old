@@ -35,7 +35,6 @@ export const findLatestMangas = async (take: number) => {
             chapters: {
               where: eq(mangaChapter.deleted, false),
               orderBy: desc(mangaChapter.createdAt),
-              limit: 1,
               columns: {
                 id: true,
                 index: true,
@@ -54,6 +53,11 @@ export const findLatestMangas = async (take: number) => {
                 id: true
               }
             }
+          }
+        },
+        user: {
+          columns: {
+            id: true
           }
         }
       },

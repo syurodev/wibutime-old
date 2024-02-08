@@ -29,6 +29,9 @@ export const getNews = async (limit: number = 12): Promise<{
       name: anime.name,
       summary: anime.summary,
       type: "anime" as ContentType,
+      user: {
+        id: anime.user.id
+      },
       categories: anime.categories.map((cate) => cate.category),
       image: !anime.seasons || anime.seasons.length === 0 ? null : anime.seasons[0].image as {
         key?: string,
@@ -37,10 +40,11 @@ export const getNews = async (limit: number = 12): Promise<{
       seasons: !anime.seasons || anime.seasons.length === 0 ? null : {
         id: anime.seasons[0].id,
         name: anime.seasons[0].name,
-        episodes: anime.seasons[0].episode.length === 0 ? null : {
-          id: anime.seasons[0].episode[0].id,
-          index: anime.seasons[0].episode[0].index || ""
-        }
+        end: anime.seasons[0].numberOfEpisodes || 0,
+        episodes: anime.seasons[0].episode.length === 0 ? null : anime.seasons[0].episode.map(item => ({
+          id: item.id,
+          index: item.index || ""
+        })),
       },
       favorites: formatNumber(anime.favorite.length)
     }))
@@ -49,6 +53,9 @@ export const getNews = async (limit: number = 12): Promise<{
       id: manga.id,
       name: manga.name,
       summary: manga.summary,
+      user: {
+        id: manga.user.id
+      },
       type: "manga" as ContentType,
       categories: manga.categories.map((cate) => cate.category),
       image: manga.seasons[0].image as {
@@ -58,10 +65,10 @@ export const getNews = async (limit: number = 12): Promise<{
       seasons: manga.seasons.length === 0 ? null : {
         id: manga.seasons[0].id,
         name: manga.seasons[0].name,
-        chapters: manga.seasons[0].chapters.length === 0 ? null : {
-          id: manga.seasons[0].chapters[0].id,
-          index: manga.seasons[0].chapters[0].index || ""
-        }
+        chapters: manga.seasons[0].chapters.length === 0 ? null : manga.seasons[0].chapters.map((item) => ({
+          id: item.id,
+          index: item.index || ""
+        })),
       },
       favorites: formatNumber(manga.favorite.length)
     }))
@@ -70,6 +77,9 @@ export const getNews = async (limit: number = 12): Promise<{
       id: novel.id,
       name: novel.name,
       summary: novel.summary,
+      user: {
+        id: novel.user.id
+      },
       categories: novel.categories.map((cate) => cate.category),
       type: "lightnovel" as ContentType,
       image: novel.image as {
@@ -144,19 +154,23 @@ export const getHero = async (): Promise<{
       id: anime.id,
       name: anime.name,
       summary: anime.summary,
+      user: {
+        id: anime.user.id
+      },
       type: "anime" as ContentType,
       categories: anime.categories.map((cate) => cate.category),
       image: anime.seasons && anime.seasons.length > 0 ? anime.seasons[0].image as {
         key?: string,
         url: string
       } | null : null,
-      seasons: anime.seasons.length === 0 ? null : {
+      seasons: !anime.seasons || anime.seasons.length === 0 ? null : {
         id: anime.seasons[0].id,
         name: anime.seasons[0].name,
-        episodes: anime.seasons[0].episode.length === 0 ? null : {
-          id: anime.seasons[0].episode[0].id,
-          index: anime.seasons[0].episode[0].index || ""
-        }
+        end: anime.seasons[0].numberOfEpisodes || 0,
+        episodes: anime.seasons[0].episode.length === 0 ? null : anime.seasons[0].episode.map(item => ({
+          id: item.id,
+          index: item.index || ""
+        })),
       },
       favorites: formatNumber(anime.favorite.length)
     }))
@@ -165,6 +179,9 @@ export const getHero = async (): Promise<{
       id: manga.id,
       name: manga.name,
       summary: manga.summary,
+      user: {
+        id: manga.user.id
+      },
       type: "manga" as ContentType,
       categories: manga.categories.map((cate) => cate.category),
       image: manga.seasons[0].image as {
@@ -174,10 +191,10 @@ export const getHero = async (): Promise<{
       seasons: manga.seasons.length === 0 ? null : {
         id: manga.seasons[0].id,
         name: manga.seasons[0].name,
-        chapters: manga.seasons[0].chapters.length === 0 ? null : {
-          id: manga.seasons[0].chapters[0].id,
-          index: manga.seasons[0].chapters[0].index || ""
-        }
+        chapters: manga.seasons[0].chapters.length === 0 ? null : manga.seasons[0].chapters.map((item) => ({
+          id: item.id,
+          index: item.index || ""
+        })),
       },
       favorites: formatNumber(manga.favorite.length)
     }))
@@ -186,6 +203,9 @@ export const getHero = async (): Promise<{
       id: novel.id,
       name: novel.name,
       summary: novel.summary,
+      user: {
+        id: novel.user.id
+      },
       categories: novel.categories.map((cate) => cate.category),
       type: "lightnovel" as ContentType,
       image: novel.image as {

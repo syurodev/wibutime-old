@@ -26,11 +26,11 @@ type NewsData = {
     chapters?: {
       id: string,
       index: string,
-    } | null,
+    }[] | null,
     episodes?: {
       id: string,
       index: string,
-    } | null,
+    }[] | null,
   } | null,
   favorites: string,
 }[]

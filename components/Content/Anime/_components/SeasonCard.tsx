@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { getTime } from '@/lib/getTime'
 import { convertUtcToGMT7 } from '@/lib/convertUtcToGMT7'
 import { convertDayOfWeek } from '@/lib/dayOfWeek'
+import ContextMenuComponent from '@/components/shared/ContextMenu/ContextMenuComponent'
 
 type IProps = {
   name: string,
@@ -14,6 +15,9 @@ type IProps = {
   broadcastTime: string,
   broadcastDay: string,
   aired: string,
+  episodes: number,
+  id: string,
+  poster?: boolean
 }
 
 const SeasonCard: FC<IProps> = ({
@@ -24,33 +28,44 @@ const SeasonCard: FC<IProps> = ({
   broadcastTime,
   broadcastDay,
   aired,
+  episodes,
+  id,
+  poster
 }) => {
 
   return (
-    <Card
+    <ContextMenuComponent
+      id={id}
+      name={name}
+      type='anime season'
+      poster={poster}
     >
-      <CardHeader className='flex flex-row gap-4 p-3 items-center'>
-        <CardTitle className='text-lg'>{name}</CardTitle>
-        <CardDescription className='!m-0'>{`${numberOfEpisode} Episodes`}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex gap-3 p-4 pt-0'>
-        <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
-          <Image
-            src={image ? image : "images/image2.jpeg"}
-            alt={name}
-            fill sizes='100%'
-            priority
-            className='object-cover'
-          />
-        </div>
+      <Card
+      >
+        <CardHeader className='flex flex-row gap-4 p-3 items-center'>
+          <CardTitle className='text-lg'>{name}</CardTitle>
+          <CardDescription className='!m-0'>{`${episodes} Episodes`}</CardDescription>
+        </CardHeader>
+        <CardContent className='flex gap-3 p-4 pt-0'>
+          <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
+            <Image
+              src={image ? image : "images/image2.jpeg"}
+              alt={name}
+              fill sizes='100%'
+              priority
+              className='object-cover'
+            />
+          </div>
 
-        <div>
-          <p>Studio: {studio}</p>
-          <p>Ngày phát sóng: {aired}</p>
-          <p>Lịch chiếu: {convertDayOfWeek(broadcastDay as DaysOfTheWeek)} lúc {getTime(convertUtcToGMT7(new Date(broadcastTime)))}</p>
-        </div>
-      </CardContent>
-    </Card>
+          <div>
+            <p className='text-sm'><span className='font-medium'>Studio:</span> {studio}</p>
+            <p className='text-sm'><span className='font-medium'>Ngày phát sóng:</span> {aired}</p>
+            <p className='text-sm'><span className='font-medium'>Lịch chiếu:</span> {convertDayOfWeek(broadcastDay as DaysOfTheWeek)} lúc {getTime(new Date(broadcastTime))}</p>
+            <p className='text-sm'><span className='font-medium'>Tiến độ:</span> {episodes}/{numberOfEpisode}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </ContextMenuComponent>
   )
 }
 

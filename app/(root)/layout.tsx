@@ -10,6 +10,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 import QueryProvider from '@/components/providers/QueryProvider';
+import ContextMenuComponent from '@/components/shared/ContextMenu/ContextMenuComponent';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,12 +36,14 @@ export default async function RootLayout({
             defaultTheme="light"
           >
             <Header />
-            <main className='min-h-dvh pt-20 pb-5 px-4 max-w-[1280px] mx-auto'>
-              <QueryProvider>
-                {children}
-              </QueryProvider>
-              <Analytics />
-            </main>
+            <ContextMenuComponent>
+              <main className='min-h-dvh pt-20 pb-5 px-4 max-w-[1280px] mx-auto'>
+                <QueryProvider>
+                  {children}
+                </QueryProvider>
+                <Analytics />
+              </main>
+            </ContextMenuComponent>
             <Toaster />
             {/* <Footer /> */}
           </ThemeProvider>

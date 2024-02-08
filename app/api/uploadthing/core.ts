@@ -34,6 +34,18 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       return { uploadedBy: metadata.userId };
     }),
+  animeVideo: f({ video: { maxFileSize: "1.5GB" } })
+    .middleware(async ({ req }) => {
+      const user = await auth();
+
+      if (!user) throw new Error("Unauthorized");
+
+      return { userId: user.id };
+    })
+
+    .onUploadComplete(async ({ metadata, file }) => {
+      return { uploadedBy: metadata.userId };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

@@ -75,7 +75,6 @@ const FormCreateAnimeSeason: FC<IProps> = ({
   const [isPending, startTransiton] = useTransition()
 
   function onSubmit(values: z.infer<typeof animeSeasonSchema>) {
-    console.log(values)
     startTransiton(async () => {
       const res = await createAnimeSeason(
         JSON.stringify(values),

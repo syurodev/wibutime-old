@@ -6,39 +6,52 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { notFound } from 'next/navigation'
 
 import { slideWithoutScale } from '@/lib/motion/slide'
 import { formatDate } from '@/lib/formatDate'
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
 import ContentDetailHeader from '@/components/Content/Detail/ContentDetailHeader'
+import { useQuery } from '@tanstack/react-query'
+import { getLightnovelDetail } from '@/actions/lightnovel'
 
 
 type IProps = {
-  data: LightnovelDetail
+  id: string
 }
 
-const LightnovelDetail: FC<IProps> = ({ data }) => {
+const LightnovelDetail: FC<IProps> = ({ id }) => {
+  const { data } = useQuery({
+    queryKey: ["lightnovel", id],
+    queryFn: async () => await getLightnovelDetail(id)
+  })
+
+  if (!data?.data) {
+    notFound()
+  }
+
   return (
     <div className='w-screen h-dvh absolute left-0 top-0 md:overflow-hidden'>
       <div className='w-full flex flex-col md:flex-row gap-4 md:gap-0'>
 
         <ContentDetailHeader
-          categories={data.categories}
-          favorites={data.favorites.length}
-          name={data.name}
-          user={data.user}
-          viewed={data.viewed}
-          artist={data.artist}
-          author={data.author}
-          image={data.image?.url}
-          translationGroup={data.translationGroup}
-          words={data.words}
+          categories={data.data.categories}
+          favorites={data.data.favorites.length}
+          name={data.data.name}
+          user={data.data.user}
+          viewed={data.data.viewed}
+          artist={data.data.artist}
+          author={data.data.author}
+          image={data.data.image?.url}
+          translationGroup={data.data.translationGroup}
+          words={data.data.words}
+          id={data.data.id}
         />
 
         <div className='flex flex-col gap-4 md:h-dvh md:overflow-y-auto md:mt-20 pb-4'>
           {/* orther name */}
           {
-            data.otherNames.length > 0 && (
+            data.data.otherNames.length > 0 && (
               <motion.div
                 variants={slideWithoutScale}
                 custom={0.35}
@@ -49,7 +62,7 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
               >
                 <p className='font-semibold text-sm mb-2'>Tên khác:</p>
                 {
-                  data.otherNames.map((name) => (
+                  data.data.otherNames.map((name) => (
                     <p
                       key={name}
                       className='text-sm'
@@ -73,8 +86,8 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
           >
             <p className='font-semibold text-sm'>Tóm tắt:</p>
             {
-              data.summary &&
-              <RenderEditorContent content={data.summary} fontSize='text-sm' />
+              data.data.summary &&
+              <RenderEditorContent content={data.data.summary} fontSize='text-sm' />
             }
           </motion.div>
 
@@ -89,15 +102,15 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
           >
             <p className='font-semibold text-sm'>Ghi chú:</p>
             {
-              data.note &&
-              <RenderEditorContent content={data.note} fontSize='text-sm' />
+              data.data.note &&
+              <RenderEditorContent content={data.data.note} fontSize='text-sm' />
             }
           </motion.div>
 
           {/* Volume */}
           <div className='flex flex-col justify-start gap-3 flex-wrap mx-4'>
             {
-              data.volumes && data.volumes.map((item, index) => {
+              data.data.volumes && data.data.volumes.map((item, index) => {
                 return (
                   <motion.div
                     key={`category-${index}`}
@@ -130,7 +143,7 @@ const LightnovelDetail: FC<IProps> = ({ data }) => {
                               return (
                                 <Link
                                   key={`${item.name}-${chapter.name}`}
-                                  href={`/lightnovels/lightnovel/${data.id}/r/${chapter.id}`}
+                                  href={`/lightnovels/lightnovel/${data.data.id}/r/${chapter.id}`}
                                 >
                                   <div
                                     className='flex items-center justify-between w-full gap-2'

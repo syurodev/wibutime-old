@@ -88,8 +88,6 @@ type LightnovelVolumeDetail = {
   chapters: LightnovelChapterInfo[]
 }
 
-
-
 type LightnovelChapterDetail = {
   id: string;
   name: string;
@@ -115,6 +113,9 @@ type LightnovelNew = {
   id: string,
   name: string,
   type: ContentType,
+  user: {
+    id: string
+  },
   summary: any,
   categories: {
     id: string,
@@ -127,6 +128,7 @@ type LightnovelNew = {
   volumes: {
     id: string,
     name: string,
+    end?: number,
     chapters: {
       id: string,
       name: string,

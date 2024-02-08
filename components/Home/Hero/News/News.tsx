@@ -65,7 +65,7 @@ const News: FC = () => {
                   >
                     {/* Image */}
                     <motion.div
-                      className='min-h-[500px] w-full min-w-[377px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
+                      className='min-h-[500px] min-w-[377px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
                       variants={slide}
                       initial="initial"
                       animate="animate"
@@ -82,7 +82,7 @@ const News: FC = () => {
                     </motion.div>
 
                     <motion.div
-                      className='h-full overflow-hidden absolute top-1/2 bg-background/80 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none md:top-0 md:relative'
+                      className='h-full w-full overflow-hidden absolute top-1/2 bg-background/80 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none md:top-0 md:relative'
                       variants={slideWithoutScale}
                       custom={0.2}
                       initial="initial"

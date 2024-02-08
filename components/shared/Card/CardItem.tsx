@@ -15,22 +15,25 @@ type IProps = {
   } | null | undefined,
   current?: number,
   end?: number,
-  poster?: boolean,
+  authorId?: string,
+  poster?: boolean
 }
 
-const CardItem: FC<IProps> = ({
+const CardItem: FC<IProps> = async ({
   type,
   id,
   name,
   image,
   current,
   end,
-  poster = false
+  authorId,
+  poster
 }) => {
+
   return (
     <ContextMenuComponent
       id={id}
-      poster={poster}
+      poster={poster || false}
       type={type}
       name={name}
     >

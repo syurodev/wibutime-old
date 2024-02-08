@@ -9,6 +9,7 @@ import ContentDetailHeader from '@/components/Content/Detail/ContentDetailHeader
 import { slideWithoutScale } from '@/lib/motion/slide'
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
 import SeasonCard from './_components/SeasonCard'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 
 type IProps = {
   id: string
@@ -24,7 +25,7 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
     notFound()
   }
 
-  console.log(data.data)
+  const session = useCurrentUser()
 
   return (
     <div className='w-screen h-dvh absolute left-0 top-0 md:overflow-hidden'>
@@ -37,6 +38,8 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
           viewed={data.data.viewed}
           translationGroup={data.data.translationGroup}
           image={data.data.image?.url}
+          menuType='anime'
+          id={data.data.id}
         />
 
         <div className='flex flex-col gap-4 md:h-dvh md:overflow-y-scroll md:pt-20 pb-4'>
@@ -111,79 +114,17 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
                     animate="animate"
                     exit="exit"
                   >
-                    {/* <Card
-                    >
-                      <CardHeader className='flex flex-row gap-4 p-3 items-center'>
-                        <CardTitle className='text-lg'>{item.name}</CardTitle>
-                        <CardDescription className='!m-0'>{`${item.episodes.length} Episodes`}</CardDescription>
-                      </CardHeader>
-                      <CardContent className='flex gap-3 p-4 pt-0'>
-                        <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
-                          <Image
-                            src={item.image ? item.image.url : "images/image2.jpeg"}
-                            alt={item.name}
-                            fill sizes='100%'
-                            priority
-                            className='object-cover'
-                          />
-                        </div>
-
-                        <div className='flex flex-col gap-2 w-full'>
-                          {
-                            item.episodes.map((ep, index) => {
-                              return (
-                                <Link
-                                  key={item.id}
-                                  href={`/animes/anime/${data.data.id}/w/${ep.id}`}
-                                >
-                                  <div>
-                                    <div
-                                      className='relative aspect-video min-h-[100px] rounded-lg'
-                                    >
-                                      {
-                                        ep.thumbnail ? (
-                                          <Image
-                                            src={ep.thumbnail?.url}
-                                            alt={`${data.data.name} - ${item.name} - ${ep.index}`}
-                                            fill
-                                            className='object-cover'
-                                            sizes='full'
-                                          />
-                                        ) : (
-                                          <p className='font-semibold uppercase text-secondary-foreground'>{`EP${ep.index}`}</p>
-                                        )
-                                      }
-
-                                    </div>
-
-                                    <div
-                                      className='flex items-center justify-between w-full gap-2'
-                                    >
-                                      <p className='line-clamp-1 text-sm'>
-                                        {ep.index}
-                                      </p>
-
-                                      <span className='text-xs text-secondary-foreground'>
-                                        {formatDate(ep.createdAt)}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </Link>
-                              )
-                            })
-                          }
-                        </div>
-                      </CardContent>
-                    </Card> */}
-
                     <SeasonCard
                       name={item.name}
-                      numberOfEpisode={item.episodes.length}
+                      numberOfEpisode={item.numberOfEpisodes}
                       image={item.image ? item.image.url : undefined}
                       aired={item.aired}
                       studio={item.studio}
                       broadcastDay={item.broadcastDay}
                       broadcastTime={item.broadcastTime}
+                      episodes={item.episodes.length}
+                      id={item.id}
+                      poster={session ? data.data.user.id === session.id : false}
                     />
                   </motion.div>
                 )

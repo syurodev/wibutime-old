@@ -26,6 +26,9 @@ type MangaQuickInformation = {
 type MangaNew = {
   id: string,
   name: string,
+  user: {
+    id: string
+  },
   type: ContentType,
   summary: any,
   categories: {
@@ -39,10 +42,11 @@ type MangaNew = {
   seasons: {
     id: string,
     name: string,
+    end?: number,
     chapters: {
       id: string,
       index: string,
-    } | null,
+    }[] | null,
   } | null,
   favorites: string,
 }

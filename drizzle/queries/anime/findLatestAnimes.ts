@@ -29,13 +29,13 @@ export const findLatestAnimes = async (take: number) => {
           columns: {
             id: true,
             name: true,
-            image: true
+            image: true,
+            numberOfEpisodes: true
           },
           with: {
             episode: {
               where: eq(animeEpisode.deleted, false),
               orderBy: desc(animeEpisode.createdAt),
-              limit: 1,
               columns: {
                 id: true,
                 index: true,
@@ -54,6 +54,11 @@ export const findLatestAnimes = async (take: number) => {
                 id: true
               }
             }
+          }
+        },
+        user: {
+          columns: {
+            id: true
           }
         }
       },

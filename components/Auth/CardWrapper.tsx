@@ -67,12 +67,12 @@ const CardWrapper: React.FC<IProps> = ({
 
       <div className='relative w-full h-dvh hidden lg:block'>
         <Image
-          src="/images/auth.jpg"
+          src="/images/auth.png"
           alt='wibutime login'
           fill
           sizes='full'
           priority
-          className='object-cover hidden lg:block'
+          className='object-cover hidden lg:block right-0'
         />
       </div>
     </div>

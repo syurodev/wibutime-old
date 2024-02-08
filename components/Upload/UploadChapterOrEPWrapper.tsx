@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
@@ -14,7 +13,7 @@ import styles from "./style.module.scss"
 type IProps = {
   isOpen: boolean
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-  type: ContentType
+  type: ContextMenu
   id: string
   name: string
 }
@@ -39,12 +38,12 @@ const UploadChapterOrEPWrapper: FC<IProps> = ({
         </DrawerHeader>
         <div className='h-full w-full max-w-[1300px] overflow-y-auto px-2 mx-auto mb-5'>
           {
-            type === "lightnovel" &&
+            (type === "lightnovel" || type === "lightnovel volume") &&
             <FormUploadLightnovelChapter novelId={id} onOpenChange={onOpenChange} />
           }
           {
-            type === "anime" &&
-            <FormUploadEpisode animeId={id} onOpenChange={onOpenChange} />
+            (type === "anime" || type === "anime season") &&
+            <FormUploadEpisode animeId={id} onOpenChange={onOpenChange} type={type} seasonId={id} />
           }
         </div>
       </DrawerContent>

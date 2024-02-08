@@ -8,9 +8,10 @@ import { insertAnime } from "@/drizzle/queries/anime/insertAnime"
 import { insertAnimeSeason } from "@/drizzle/queries/anime/insertAnimeSeason"
 import { formatNumber } from "@/lib/formatNumber"
 import { getServerSession } from "@/lib/getServerSession"
-import { animeSchema, animeSeasonSchema } from "@/schemas/anime"
+import { animeEpisodeSchema, animeSchema, animeSeasonSchema } from "@/schemas/anime"
 import { animeDetail } from "@/drizzle/queries/anime/animeDetail"
 import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
+import { insertAnimeEpisode } from "@/drizzle/queries/anime/insertAnimeEpisode"
 
 export const createAnime = async (
   values: string,
@@ -36,7 +37,7 @@ export const createAnime = async (
     if (!session || !session?.permissions.includes("UPLOAD")) {
       return {
         code: 401,
-        message: "Bạn không có quyền đăng lightnovel",
+        message: "Bạn không có quyền thêm anime",
         data: null
       }
     }
@@ -114,6 +115,9 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
       id: anime.id,
       name: anime.name,
       summary: anime.summary,
+      user: {
+        id: anime.user.id
+      },
       type: "anime" as ContentType,
       categories: anime.categories.map(cate => cate.category),
       image: !anime.seasons || anime.seasons.length === 0 ? null : anime.seasons[-1].image as {
@@ -123,10 +127,13 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
       seasons: !anime.seasons || anime.seasons.length === 0 ? null : {
         id: anime.seasons[0].id,
         name: anime.seasons[0].name,
-        episodes: anime.seasons[0].episode.length === 0 ? null : {
-          id: anime.seasons[0].episode[0].id,
-          index: anime.seasons[0].episode[0].index || ""
-        }
+        end: anime.seasons[0].numberOfEpisodes || 0,
+        episodes: anime.seasons[0].episode.length === 0 ? null : anime.seasons[0].episode.map((item) => (
+          {
+            id: item.id,
+            index: item.index || ""
+          }
+        ))
       },
       favorites: formatNumber(anime.favorite.length)
     }))
@@ -184,6 +191,8 @@ export const createAnimeSeason = async (
     const parseData = JSON.parse(values)
     const remake = {
       ...parseData,
+      broadcast_time: new Date(parseData.broadcast_time),
+      aired: new Date(parseData.aired),
     }
 
     const validationValues = animeSeasonSchema.safeParse(remake)
@@ -328,6 +337,63 @@ export const getAnimeDetail = async (
     return {
       code: 500,
       message: "Lỗi server vui lòng thử lại",
+      data: null
+    }
+  }
+}
+
+export const createAnimeEpisode = async (values: string, animeId: string) => {
+  try {
+    const data = JSON.parse(values)
+    const validationValues = animeEpisodeSchema.safeParse(data)
+
+    if (!validationValues.success) return {
+      code: 401,
+      message: "Vui lòng kiểm tra lại dữ liệu đã nhập",
+      data: null
+    }
+
+    const session = await getServerSession()
+
+    if (!session || !session?.permissions.includes("UPLOAD")) {
+      return {
+        code: 401,
+        message: "Bạn không có quyền thêm episode",
+        data: null
+      }
+    }
+
+    const createdEpisode = await insertAnimeEpisode({
+      index: validationValues.data.index,
+      seasonId: validationValues.data.season_id,
+      content: validationValues.data.content,
+      thumbnail: validationValues.data.thumbnail,
+    })
+
+    if (!createdEpisode) return {
+      code: 400,
+      message: "Có lỗi trong quá trình thêm episode, vui lòng thử lại",
+      data: null
+    }
+
+    revalidatePath(`/u/${session.id}`)
+    revalidatePath(`/animes/anime/${animeId}`)
+
+    return {
+      code: 200,
+      message: "Thêm episode thành công",
+      submess: createdEpisode.index,
+      data: {
+        id: createdEpisode.id,
+        name: createdEpisode.index
+      }
+    }
+
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server",
       data: null
     }
   }

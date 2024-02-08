@@ -65,3 +65,5 @@ type ContentStatus = "Pause" | "Complete" | "InProcess"
 type DaysOfTheWeek = "Sun" | "Mon" | "Tues" | "Wed" | "Thurs" | "Fri" | "Sat"
 
 type MusicType = "Opening Theme" | "Ending Theme" | "OST"
+
+type ContextMenu = "anime" | "anime season" | "lightnovel" | "lightnovel volume" | "manga" | "manga season"

@@ -26,6 +26,9 @@ type AnimeQuickInformation = {
 type AnimeNew = {
   id: string,
   name: string,
+  user: {
+    id: string
+  }
   type: ContentType,
   categories: {
     id: string,
@@ -39,10 +42,11 @@ type AnimeNew = {
   seasons: {
     id: string,
     name: string,
+    end: number,
     episodes: {
       id: string,
       index: string,
-    } | null,
+    }[] | null,
   } | null,
   favorites: string,
 }

@@ -56,6 +56,11 @@ export const findLatestLightnovels = async (take: number) => {
               }
             }
           }
+        },
+        user: {
+          columns: {
+            id: true
+          }
         }
       },
       limit: take,

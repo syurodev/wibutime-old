@@ -21,25 +21,26 @@ type IDescription = {
     content: any[];
   };
   className?: string
-  fontSize?: "text-sm" | "text-base" | "text-xs"
+  fontSize?: "text-sm" | "text-base" | "text-xs",
+  font?: "font-sans" | "font-serif" | "font-mono"
 };
 
-const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontSize }) => {
+const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontSize, font }) => {
   const output = useMemo(() => {
     return generateHTML(content, [
       Document.configure({
         HTMLAttributes: {
-          class: fontSize ? fontSize : "text-base min-h-[24px] select-none",
+          class: `${fontSize ? fontSize : "text-base min-h-[24px] select-none"} ${font ? font : ""}`,
         }
       }),
       Paragraph.configure({
         HTMLAttributes: {
-          class: fontSize ? fontSize : "text-base min-h-[24px] select-none",
+          class: `${fontSize ? fontSize : "text-base min-h-[24px] select-none"} ${font ? font : ""}`,
         }
       }),
       Text.configure({
         HTMLAttributes: {
-          class: fontSize ? fontSize : "text-base min-h-[24px] select-none",
+          class: `${fontSize ? fontSize : "text-base min-h-[24px] select-none"} ${font ? font : ""}`,
         }
       }),
       Typography,
@@ -83,7 +84,7 @@ const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontS
         }
       })
     ])
-  }, [content, fontSize])
+  }, [content, font, fontSize])
 
   return (
     <div className={`${className ? className : ""} w-full max-w-[1300px] m-auto`} dangerouslySetInnerHTML={{ __html: output || '' }} />

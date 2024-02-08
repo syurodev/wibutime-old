@@ -104,8 +104,6 @@ export const getUserById = async (userId: string): Promise<{
   roles: string[];
   permissions: string[];
 } | null> => {
-  console.log("userId", userId)
-
   try {
     const existingUser: OriginalUserData | undefined = await db.query.users.findFirst({
       where: eq(users.id, userId),
