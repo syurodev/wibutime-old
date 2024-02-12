@@ -119,17 +119,17 @@ const News: FC = () => {
                             >
                               <Link
                                 href={`/${item.type}s/${item.type}/${item.id}/${item.type === "anime" && item.seasons?.episodes
-                                  ? `w/${item.seasons?.id}?ep=${item.seasons?.episodes[item.seasons?.episodes.length - 1]?.index}`
+                                  ? `w/${item.seasons?.id}?ep=${item.seasons?.episodes[0]?.index}`
                                   : item.type === "lightnovel" && item.volumes?.chapters
                                     ? `r/${item.volumes?.chapters?.id}`
                                     : item.type === "manga" && item.seasons?.chapters
-                                      ? `r/${item.seasons?.chapters[item.seasons?.chapters.length - 1]?.id}`
+                                      ? `r/${item.seasons?.chapters[0]?.id}`
                                       : ""
                                   }`}
                                 className={`${buttonVariants({ variant: "default" })} gap-2`}
                                 scroll
                               >
-                                <span>{item.type === "lightnovel" ? "Read now" : "Watch now"}</span>
+                                <span>{item.type === "lightnovel" ? "Đọc ngay" : "Xem ngay"}</span>
                                 <IoArrowForward className="text-lg" />
                               </Link>
                             </motion.div>
