@@ -119,11 +119,11 @@ const News: FC = () => {
                             >
                               <Link
                                 href={`/${item.type}s/${item.type}/${item.id}/${item.type === "anime" && item.seasons?.episodes
-                                  ? `w/${item.seasons?.episodes?.id}`
+                                  ? `w/${item.seasons?.id}?ep=${item.seasons?.episodes[item.seasons?.episodes.length - 1]?.index}`
                                   : item.type === "lightnovel" && item.volumes?.chapters
                                     ? `r/${item.volumes?.chapters?.id}`
                                     : item.type === "manga" && item.seasons?.chapters
-                                      ? `r/${item.seasons?.chapters?.id}`
+                                      ? `r/${item.seasons?.chapters[item.seasons?.chapters.length - 1]?.id}`
                                       : ""
                                   }`}
                                 className={`${buttonVariants({ variant: "default" })} gap-2`}
@@ -159,13 +159,13 @@ const News: FC = () => {
                             <span className='uppercase text-xs'>
                               {item.type === "anime"
                                 ? item.seasons?.episodes
-                                  ? `EP: ${item.seasons?.episodes?.index}`
+                                  ? `EP: ${item.seasons?.episodes[item.seasons?.episodes.length - 1]?.index}`
                                   : item.seasons
                                     ? `Season: ${item.seasons?.name}`
                                     : item.name
                                 : item.type === "manga"
                                   ? item.seasons?.chapters
-                                    ? `CHAP: ${item.seasons?.chapters?.index}`
+                                    ? `CHAP: ${item.seasons?.chapters[item.seasons?.chapters.length - 1]?.index}`
                                     : item.seasons
                                       ? `Season: ${item.seasons?.name}`
                                       : item.name

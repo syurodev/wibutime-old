@@ -30,14 +30,14 @@ CREATE TABLE IF NOT EXISTS "anime" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "anime_episode" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"name" text NOT NULL,
 	"content" jsonb DEFAULT '{"key":"","url":""}'::jsonb NOT NULL,
 	"thumbnail" jsonb DEFAULT '{"key":"","url":""}'::jsonb NOT NULL,
-	"created_at" timestamp,
+	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	"deleted" boolean DEFAULT false,
 	"viewed" integer DEFAULT 0,
-	"index" varchar(6),
+	"index" varchar(6) NOT NULL,
+	"viewed_at" timestamp,
 	"season_id" uuid NOT NULL,
 	CONSTRAINT "anime_episode_id_unique" UNIQUE("id")
 );
@@ -152,6 +152,18 @@ CREATE TABLE IF NOT EXISTS "favorite_manga" (
 	"favorite_id" uuid NOT NULL,
 	"manga_id" uuid NOT NULL,
 	CONSTRAINT "favorite_manga_favorite_id_manga_id_pk" PRIMARY KEY("favorite_id","manga_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "follower_group" (
+	"follower_id" uuid NOT NULL,
+	"followed_id" uuid NOT NULL,
+	CONSTRAINT "follower_group_follower_id_followed_id_pk" PRIMARY KEY("follower_id","followed_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "follower_user" (
+	"followed_by" uuid NOT NULL,
+	"following" uuid NOT NULL,
+	CONSTRAINT "follower_user_followed_by_following_pk" PRIMARY KEY("followed_by","following")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "lightnovel" (
@@ -296,6 +308,12 @@ CREATE TABLE IF NOT EXISTS "translation_group_members" (
 	CONSTRAINT "translation_group_members_user_id_group_id_pk" PRIMARY KEY("user_id","group_id")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "user_roles" (
+	"user_id" uuid NOT NULL,
+	"role_id" uuid NOT NULL,
+	CONSTRAINT "user_roles_user_id_role_id_pk" PRIMARY KEY("user_id","role_id")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
@@ -315,12 +333,6 @@ CREATE TABLE IF NOT EXISTS "user" (
 	CONSTRAINT "user_username_unique" UNIQUE("username"),
 	CONSTRAINT "user_email_unique" UNIQUE("email"),
 	CONSTRAINT "user_phone_unique" UNIQUE("phone")
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "user_roles" (
-	"user_id" uuid NOT NULL,
-	"role_id" uuid NOT NULL,
-	CONSTRAINT "user_roles_user_id_role_id_pk" PRIMARY KEY("user_id","role_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "verification_token" (
@@ -515,6 +527,30 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "favorite_manga" ADD CONSTRAINT "favorite_manga_manga_id_manga_id_fk" FOREIGN KEY ("manga_id") REFERENCES "manga"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "follower_group" ADD CONSTRAINT "follower_group_follower_id_user_id_fk" FOREIGN KEY ("follower_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "follower_group" ADD CONSTRAINT "follower_group_followed_id_translation_group_id_fk" FOREIGN KEY ("followed_id") REFERENCES "translation_group"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "follower_user" ADD CONSTRAINT "follower_user_followed_by_user_id_fk" FOREIGN KEY ("followed_by") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "follower_user" ADD CONSTRAINT "follower_user_following_user_id_fk" FOREIGN KEY ("following") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

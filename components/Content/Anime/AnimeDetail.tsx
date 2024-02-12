@@ -122,8 +122,14 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
                       studio={item.studio}
                       broadcastDay={item.broadcastDay}
                       broadcastTime={item.broadcastTime}
-                      episodes={item.episodes.length}
+                      episodes={item.episodes.length > 0 ? item.episodes.map((ep) => ({
+                        id: ep.id,
+                        content: ep.content,
+                        thumbnail: ep.thumbnail,
+                        index: ep.index,
+                      })) : []}
                       id={item.id}
+                      animeId={id}
                       poster={session ? data.data.user.id === session.id : false}
                     />
                   </motion.div>

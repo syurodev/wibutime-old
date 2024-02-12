@@ -25,6 +25,9 @@ export type UserInsert = InferInsertModel<typeof users>
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   roles: many(userOnRole),
+  followedUsers: many(followerUser, { relationName: "followed_user" }),
+  followerUsers: many(followerUser, { relationName: "follower_user" }),
+  followerGroups: many(followerGroup, { relationName: "follower_groups" }),
   lightnovels: many(lightnovel),
   animes: many(anime),
   mangas: many(manga),
@@ -55,6 +58,58 @@ export const accounts = pgTable(
     compoundKey: primaryKey({ columns: [account.provider, account.providerAccountId] }),
   })
 )
+
+export const followerUser = pgTable("follower_user", {
+  followedBy: uuid("followed_by")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  following: uuid("following")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+},
+  (t) => ({
+    pk: primaryKey(t.followedBy, t.following),
+  }))
+
+export const followerUserRelations = relations(followerUser, ({ one }) => ({
+  followedUser: one(users, {
+    relationName: "followed_user",
+    fields: [followerUser.following],
+    references: [users.id]
+  }),
+
+  followerUser: one(users, {
+    relationName: "follower_user",
+    fields: [followerUser.followedBy],
+    references: [users.id]
+  })
+}));
+
+export const followerGroup = pgTable("follower_group", {
+  followerId: uuid("follower_id")
+    .notNull()
+    .references(() => users.id),
+  followedId: uuid("followed_id")
+    .notNull()
+    .references(() => translationGroup.id),
+},
+  (t) => ({
+    pk: primaryKey(t.followerId, t.followedId),
+  }))
+
+export const followerGroupRelations = relations(followerGroup, ({ one }) => ({
+  followed: one(translationGroup, {
+    relationName: "followed_group",
+    fields: [followerGroup.followedId],
+    references: [translationGroup.id]
+  }),
+
+  follower: one(users, {
+    relationName: "user_to_group",
+    fields: [followerGroup.followerId],
+    references: [users.id]
+  })
+}))
 
 export const role = pgTable("role", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
@@ -164,6 +219,8 @@ export const translationGroup = pgTable("translation_group", {
 export const translationGroupRelations = relations(translationGroup, ({ many }) => ({
   lightnovels: many(lightnovel),
   animes: many(anime),
+  mangas: many(manga),
+  followers: many(followerGroup),
   members: many(translationGroupMembers)
 }))
 
@@ -584,7 +641,7 @@ export const comment = pgTable("comment", {
   updatedAt: timestamp("updated_at").defaultNow(),
   deleted: boolean("deleted").default(false),
 
-  reply: uuid("reply"),
+  reply: uuid("reply")
 })
 
 export const commentRelations = relations(comment, (({ one, many }) => ({
@@ -592,6 +649,7 @@ export const commentRelations = relations(comment, (({ one, many }) => ({
     fields: [comment.userId],
     references: [users.id]
   }),
+
   reply: one(comment, {
     fields: [comment.reply],
     references: [comment.id]
@@ -599,6 +657,10 @@ export const commentRelations = relations(comment, (({ one, many }) => ({
 
   lightnovel: many(commentToLightnovel),
   lightnovelChapter: many(commentToLightnovelChapter),
+  anime: many(commentToAnime),
+  animeEpisode: many(commentToAnimeEpisode),
+  manga: many(commentToManga),
+  mangaChapter: many(commentToMangaChapter),
 })))
 
 export type Comment = InferSelectModel<typeof comment>

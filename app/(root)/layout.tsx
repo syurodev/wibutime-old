@@ -37,7 +37,7 @@ export default async function RootLayout({
           >
             <Header />
             <ContextMenuComponent>
-              <main className='min-h-dvh pt-20 pb-5 px-4 max-w-[1280px] mx-auto'>
+              <main className='min-h-dvh pt-20 pb-5 px-5 max-w-[1400px] mx-auto'>
                 <QueryProvider>
                   {children}
                 </QueryProvider>

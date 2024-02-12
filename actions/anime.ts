@@ -12,6 +12,7 @@ import { animeEpisodeSchema, animeSchema, animeSeasonSchema } from "@/schemas/an
 import { animeDetail } from "@/drizzle/queries/anime/animeDetail"
 import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
 import { insertAnimeEpisode } from "@/drizzle/queries/anime/insertAnimeEpisode"
+import { seasonDetail } from "@/drizzle/queries/anime/seasonDetail"
 
 export const createAnime = async (
   values: string,
@@ -389,6 +390,95 @@ export const createAnimeEpisode = async (values: string, animeId: string) => {
       }
     }
 
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server",
+      data: null
+    }
+  }
+}
+
+export const getSeasonDetail = async (seasonId: string) => {
+  try {
+    const existingSeason = await seasonDetail(seasonId)
+
+    if (!existingSeason) return {
+      code: 404,
+      message: "Không tìm thấy season",
+      data: null
+    }
+
+    const result: {
+      id: string;
+      name: string;
+      episode: {
+        id: string;
+        createdAt: Date | null;
+        updatedAt: Date | null;
+        deleted: boolean | null;
+        content: {
+          url: string
+        };
+        viewed: number | null;
+        viewed_at: Date | null;
+        thumbnail?: {
+          url: string
+        };
+        index: string;
+        seasonId: string;
+      }[];
+      anime: {
+        id: string,
+        name: string,
+        user: {
+          id: string,
+          name: string,
+          image?: string | null,
+          followedUsers: {
+            followedBy: string
+          }[],
+        },
+        translationGroup?: {
+          id: string,
+          name: string,
+          image?: string,
+          followers: {
+            followerId: string
+          }[],
+        } | null,
+        favorite: {
+          favoriteId: string
+        }[]
+      }
+    } = {
+      ...existingSeason,
+      anime: {
+        ...existingSeason.anime,
+        translationGroup: {
+          id: existingSeason.anime.translationGroup?.id || "",
+          name: existingSeason.anime.translationGroup?.name || "",
+          image: existingSeason.anime.translationGroup?.image.url,
+          followers: existingSeason.anime.translationGroup?.followers || []
+        }
+      },
+      episode: existingSeason.episode.map((item) => ({
+        ...item,
+        content: {
+          url: item.content.url!
+        },
+        thumbnail: {
+          url: item.thumbnail.url!
+        }
+      }))
+    }
+
+    return {
+      code: 200,
+      message: "success",
+      data: result
+    }
   } catch (error) {
     console.log(error)
     return {

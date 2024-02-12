@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, memo, useRef, useState } from 'react'
+import { FC, memo, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { background, opacity } from './anim'
@@ -18,12 +18,28 @@ const Header: FC = () => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const navRef = useRef<HTMLElement>(null)
 
+  const handleChangeNavBG = () => {
+    if (window.scrollY >= 1) {
+      navRef.current?.classList.add("backdrop-blur-lg", "bg-background/80", "shadow-sm")
+    } else {
+      navRef.current?.classList.remove("backdrop-blur-lg", "bg-background/80", "shadow-sm")
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleChangeNavBG);
+
+    return () => {
+      window.removeEventListener('scroll', handleChangeNavBG);
+    };
+  }, [])
+
   return (
     <nav ref={navRef}
-      className={`${styles.header} bg-background/80 backdrop-blur-md p-3 z-50  transition-all duration-200 ease-in-out w-screen`}
+      className={`${styles.header} ${isActive ? "bg-background/80" : "bg-background/10"} backdrop-blur-lg p-3 z-50 transition-all duration-200 ease-in-out w-screen`}
     >
       <div
-        className={`${styles.bar} ${isActive ? "max-w-[1450px]" : "max-w-[1350px]"} w-full mx-auto transition-all delay-75 duration-1000`}
+        className={`${styles.bar} ${isActive ? "max-w-[1500px]" : "max-w-[1400px]"} w-full mx-auto transition-all delay-75 duration-1000`}
       // className={`${styles.bar} w-screen`}
       >
         <Link

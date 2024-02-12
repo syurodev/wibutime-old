@@ -1,5 +1,5 @@
 {
-  "id": "87635bf8-91c4-4055-9011-7ae76ede9592",
+  "id": "d0468020-5983-48d4-b0d9-c21ce8dd9de8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -229,12 +229,6 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "content": {
           "name": "content",
           "type": "jsonb",
@@ -253,7 +247,8 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
@@ -279,6 +274,12 @@
         "index": {
           "name": "index",
           "type": "varchar(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "viewed_at": {
+          "name": "viewed_at",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         },
@@ -1265,6 +1266,120 @@
           "columns": [
             "favorite_id",
             "manga_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "follower_group": {
+      "name": "follower_group",
+      "schema": "",
+      "columns": {
+        "follower_id": {
+          "name": "follower_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "followed_id": {
+          "name": "followed_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "follower_group_follower_id_user_id_fk": {
+          "name": "follower_group_follower_id_user_id_fk",
+          "tableFrom": "follower_group",
+          "tableTo": "user",
+          "columnsFrom": [
+            "follower_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "follower_group_followed_id_translation_group_id_fk": {
+          "name": "follower_group_followed_id_translation_group_id_fk",
+          "tableFrom": "follower_group",
+          "tableTo": "translation_group",
+          "columnsFrom": [
+            "followed_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "follower_group_follower_id_followed_id_pk": {
+          "name": "follower_group_follower_id_followed_id_pk",
+          "columns": [
+            "follower_id",
+            "followed_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "follower_user": {
+      "name": "follower_user",
+      "schema": "",
+      "columns": {
+        "followed_by": {
+          "name": "followed_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "following": {
+          "name": "following",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "follower_user_followed_by_user_id_fk": {
+          "name": "follower_user_followed_by_user_id_fk",
+          "tableFrom": "follower_user",
+          "tableTo": "user",
+          "columnsFrom": [
+            "followed_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "follower_user_following_user_id_fk": {
+          "name": "follower_user_following_user_id_fk",
+          "tableFrom": "follower_user",
+          "tableTo": "user",
+          "columnsFrom": [
+            "following"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "follower_user_followed_by_following_pk": {
+          "name": "follower_user_followed_by_following_pk",
+          "columns": [
+            "followed_by",
+            "following"
           ]
         }
       },
@@ -2279,6 +2394,63 @@
       },
       "uniqueConstraints": {}
     },
+    "user_roles": {
+      "name": "user_roles",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_roles_user_id_user_id_fk": {
+          "name": "user_roles_user_id_user_id_fk",
+          "tableFrom": "user_roles",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_roles_role_id_role_id_fk": {
+          "name": "user_roles_role_id_role_id_fk",
+          "tableFrom": "user_roles",
+          "tableTo": "role",
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_roles_user_id_role_id_pk": {
+          "name": "user_roles_user_id_role_id_pk",
+          "columns": [
+            "user_id",
+            "role_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "user": {
       "name": "user",
       "schema": "",
@@ -2408,63 +2580,6 @@
           ]
         }
       }
-    },
-    "user_roles": {
-      "name": "user_roles",
-      "schema": "",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role_id": {
-          "name": "role_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "user_roles_user_id_user_id_fk": {
-          "name": "user_roles_user_id_user_id_fk",
-          "tableFrom": "user_roles",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "user_roles_role_id_role_id_fk": {
-          "name": "user_roles_role_id_role_id_fk",
-          "tableFrom": "user_roles",
-          "tableTo": "role",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "user_roles_user_id_role_id_pk": {
-          "name": "user_roles_user_id_role_id_pk",
-          "columns": [
-            "user_id",
-            "role_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
     },
     "verification_token": {
       "name": "verification_token",
