@@ -19,7 +19,7 @@ type IProps = {
   poster?: boolean
 }
 
-const CardItem: FC<IProps> = async ({
+const CardItem: FC<IProps> = ({
   type,
   id,
   name,
