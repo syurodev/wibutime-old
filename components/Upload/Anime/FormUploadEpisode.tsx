@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { toast } from 'sonner'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { UploadButton, UploadDropzone, uploadFiles } from '@/lib/uploadthing'
+import { UploadButton, uploadFiles } from '@/lib/uploadthing'
 
 import { Button } from "@/components/ui/button"
 import {

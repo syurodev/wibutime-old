@@ -2,13 +2,10 @@ import React, { FC } from 'react'
 
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer"
 import FormUploadLightnovelVolume from './Lightnovel/FormUploadLightnovelVolume'
 import FormCreateAnimeSeason from './Anime/FormCreateAnimeSeason'
@@ -38,7 +35,7 @@ const UploadSeasonOrVolumeWrapper: FC<IProps> = ({
           <DrawerTitle>{name}</DrawerTitle>
           <DrawerDescription className={`uppercase text-${type} text-xs font-medium text-center`}>{type}</DrawerDescription>
         </DrawerHeader>
-        <div className='h-full w-full max-w-[1300px] overflow-y-auto px-2 mx-auto mb-5'>
+        <div className='h-full w-full max-w-[1300px] overflow-y-auto px-2 mx-auto mb-5 showScroll'>
           {
             type === "lightnovel" && (
               <FormUploadLightnovelVolume id={id} onOpenChange={onOpenChange} />

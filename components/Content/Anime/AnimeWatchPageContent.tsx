@@ -37,6 +37,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { slideWithoutScale } from '@/lib/motion/slide';
 import { Button } from '@/components/ui/button';
 import { formatNumber } from '@/lib/formatNumber';
+import EpisodeList from './_components/EpisodeList';
+import Comments from './_components/Comments';
 
 type IProps = {
   seasonId: string;
@@ -78,8 +80,8 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
 
   return (
     <div className='mt-8 w-full flex flex-col gap-3'>
-      <div className='w-full flex flex-col lg:flex-row gap-4 lg:gap-8'>
-        <div className='w-full flex-[3] flex flex-col gap-3'>
+      <div className='w-full flex flex-col lg:flex-row gap-5'>
+        <div className='w-full flex-[4] flex flex-col gap-3'>
           <motion.div
             variants={slideWithoutScale}
             initial="initial"
@@ -217,6 +219,21 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
             }
           </div>
 
+          {/* Episode list - only mobile */}
+          <motion.div
+            className='w-full flex-[2] lg:hidden'
+            variants={slideWithoutScale}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            custom={0.45}
+          >
+            <EpisodeList
+              episodes={data.data.episode}
+              epIndex={epIndex || ""}
+            />
+          </motion.div>
+
           {/* comment */}
           <motion.div
             variants={slideWithoutScale}
@@ -225,89 +242,24 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
             exit="exit"
             custom={0.55}
           >
-            <Accordion
-              type="single"
-              className="w-full border px-4 rounded-xl"
-              defaultValue="episodes"
-              collapsible
-            >
-              <AccordionItem
-                value="episodes"
-              >
-                <AccordionTrigger className='text-sm font-semibold'>
-                  Bình luận
-                </AccordionTrigger>
-                <ScrollArea className="h-full max-h-[500px] w-full rounded-md">
-                  <AccordionContent
-                    className="flex items-start gap-3 mb-2"
-                  >
-                    comment
-                  </AccordionContent>
-                </ScrollArea>
-              </AccordionItem>
-            </Accordion>
+            <Comments episodeId={episode?.id!} />
           </motion.div>
         </div>
 
+
+        {/* only pc */}
         <motion.div
-          className='w-full flex-[1]'
+          className='w-full flex-[2] hidden lg:block'
           variants={slideWithoutScale}
           initial="initial"
           animate="animate"
           exit="exit"
           custom={0.45}
         >
-          <Accordion
-            type="single"
-            className="w-full border px-4 rounded-xl backdrop-blur-md bg-background/30"
-            defaultValue="episodes"
-            collapsible
-          >
-            <AccordionItem
-              value="episodes"
-            >
-              <AccordionTrigger className='text-sm font-semibold'>
-                Episodes ({data.data.episode.length})
-              </AccordionTrigger>
-              <ScrollArea className="h-full max-h-[500px] w-full rounded-md">
-                {
-                  data.data.episode.map((ep, index) => (
-                    <Link
-                      key={ep.id}
-                      href={`?ep=${ep.index}`}
-                    >
-                      <AccordionContent
-                        className={`flex items-start gap-3 ${epIndex === ep.index ? "bg-secondary hover:bg-secondary" : ""} ${index === data.data.episode.length - 1 ? "mb-4" : "mb-2"}`}
-                      >
-                        <div className='relative w-24 rounded-lg overflow-hidden aspect-video'>
-                          {
-                            ep.thumbnail ? (
-                              <Image
-                                src={ep.thumbnail?.url}
-                                alt={ep.index}
-                                className='object-cover'
-                                fill
-                                sizes='full'
-                              />
-                            ) : (
-                              <p>{ep.index}</p>
-                            )
-                          }
-                        </div>
-
-                        <div className='flex flex-col'>
-                          <p className='text-sm font-semibold'>{ep.index}</p>
-                          <p className='text-xs text-secondary-foreground'>{ep.viewed} lượt xem</p>
-                          <p className='text-xs text-secondary-foreground'>{ep.createdAt ? formatDate(ep.createdAt.toISOString()) : ""}</p>
-                        </div>
-                      </AccordionContent>
-                    </Link>
-                  ))
-                }
-
-              </ScrollArea>
-            </AccordionItem>
-          </Accordion>
+          <EpisodeList
+            episodes={data.data.episode}
+            epIndex={epIndex || ""}
+          />
         </motion.div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useEditor, EditorContent, JSONContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Heading from '@tiptap/extension-heading'
@@ -11,13 +11,14 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import Strike from '@tiptap/extension-strike'
 import CharacterCount from '@tiptap/extension-character-count'
 import Typography from '@tiptap/extension-typography'
+import Superscript from '@tiptap/extension-superscript'
+import Subscript from '@tiptap/extension-subscript'
 import { default as TiptapImage } from '@tiptap/extension-image'
 
 import Toolbar from './Toolbar'
 import { toast } from 'sonner'
 import { compressImage } from '@/lib/compressImage'
 import { uploadFiles } from '@/lib/uploadthing'
-import styles from "./style.module.scss"
 
 type IProps = {
   content: string,
@@ -75,6 +76,8 @@ const TiptapEditor: FC<IProps> = ({
       }),
       OrderedList,
       CharacterCount,
+      Superscript,
+      Subscript,
       Strike.configure({
         HTMLAttributes: {
           class: "line-through"
@@ -83,14 +86,14 @@ const TiptapEditor: FC<IProps> = ({
       TiptapImage.configure({
         inline: false,
         HTMLAttributes: {
-          class: `${styles.showScroll} mx-auto rounded-lg object-cover max-w-[70%] showScroll`
+          class: `mx-auto rounded-lg object-cover max-w-[70%]`
         }
       })
     ],
     content: history ? JSON.parse(history) : content,
     editorProps: {
       attributes: {
-        class: "rounded-lg border min-h-[400px] max-h-[700px] overflow-y-auto border-input bg-background p-2 max-h-[75vh]"
+        class: "showScroll rounded-lg border min-h-[270px] max-h-[700px] overflow-y-auto border-input bg-background p-2 max-h-[75vh]"
       },
       handleDrop: function (view, event, slice, moved) {
         if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {

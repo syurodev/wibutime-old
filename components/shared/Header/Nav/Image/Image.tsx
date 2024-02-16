@@ -14,7 +14,8 @@ const ImageComponent: FC<IProps> = ({ src, isActive }) => {
     <motion.div variants={opacity} initial="initial" animate={isActive ? "open" : "closed"} className={styles.imageContainer}>
       <Image
         src={`/images/${src}`}
-        fill={true}
+        fill
+        sizes='full'
         alt="image"
       />
     </motion.div>

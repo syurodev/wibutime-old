@@ -87,7 +87,7 @@ const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontS
   }, [content, font, fontSize])
 
   return (
-    <div className={`${className ? className : ""} w-full max-w-[1300px] m-auto`} dangerouslySetInnerHTML={{ __html: output || '' }} />
+    <div className={`${className ? className : ""} w-full m-auto`} dangerouslySetInnerHTML={{ __html: output || '' }} />
   );
 };
 

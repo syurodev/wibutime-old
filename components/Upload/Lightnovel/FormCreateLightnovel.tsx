@@ -20,7 +20,6 @@ import { Input } from "@/components/ui/input"
 import { Tag, TagInput } from "@/components/ui/tag-input";
 import { lightnovelSchema } from '@/schemas/lightnovel';
 import MultiSelect from '../../ui/select-multi';
-import { Textarea } from "@/components/ui/textarea"
 import { compressImage } from '@/lib/compressImage';
 import { uploadFiles } from '@/lib/uploadthing';
 import { deleteFiles } from '@/actions/uploadthing';

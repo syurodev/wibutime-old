@@ -68,7 +68,7 @@ const VideoPlayer = ({ src }: { src: string }) => {
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className="absolute top-0 left-0 -z-[1] w-full block m-0 opacity-10 scale-150 blur-3xl"
+        className="absolute top-0 left-0 -z-[1] w-full block m-0 opacity-25 scale-150 blur-3xl"
       ></canvas>
     </div>
   )

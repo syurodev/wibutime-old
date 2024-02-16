@@ -11,12 +11,14 @@ import {
   LuList,
   LuListOrdered,
   LuStrikethrough,
-  LuImagePlus
+  LuImagePlus,
+  LuSuperscript,
+  LuSubscript
 } from "react-icons/lu"
 
 import { Toggle } from "@/components/ui/toggle"
 import { compressImage } from '@/lib/compressImage'
-import { deleteFiles } from '@/actions/uploadthing'
+// import { deleteFiles } from '@/actions/uploadthing'
 import { uploadFiles } from '@/lib/uploadthing'
 import { ReloadIcon } from '@radix-ui/react-icons'
 
@@ -130,6 +132,26 @@ const Toolbar: FC<IProps> = ({ editor, imageUpload }) => {
           }}
         >
           <LuStrikethrough />
+        </Toggle>
+
+        <Toggle
+          size={"sm"}
+          pressed={editor.isActive('subscript')}
+          onPressedChange={() => {
+            editor.chain().focus().toggleSubscript().run()
+          }}
+        >
+          <LuSubscript />
+        </Toggle>
+
+        <Toggle
+          size={"sm"}
+          pressed={editor.isActive('superscript')}
+          onPressedChange={() => {
+            editor.chain().focus().toggleSuperscript().run()
+          }}
+        >
+          <LuSuperscript />
         </Toggle>
 
         <label htmlFor='editorAddImage' className='cursor-pointer rounded-md hover:bg-muted'>

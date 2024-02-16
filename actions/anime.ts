@@ -13,6 +13,7 @@ import { animeDetail } from "@/drizzle/queries/anime/animeDetail"
 import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
 import { insertAnimeEpisode } from "@/drizzle/queries/anime/insertAnimeEpisode"
 import { seasonDetail } from "@/drizzle/queries/anime/seasonDetail"
+import { findComments } from "@/drizzle/queries/anime/findComments"
 
 export const createAnime = async (
   values: string,
@@ -479,6 +480,28 @@ export const getSeasonDetail = async (seasonId: string) => {
       message: "success",
       data: result
     }
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server",
+      data: null
+    }
+  }
+}
+
+export const getCommentsAnimeEpisode = async (episodeId: string, page: number = 1, limit: number = 10) => {
+  try {
+    const comments = await findComments(page, limit, episodeId)
+
+    console.log(comments)
+
+    return {
+      code: 200,
+      message: "success",
+      data: comments
+    }
+
   } catch (error) {
     console.log(error)
     return {

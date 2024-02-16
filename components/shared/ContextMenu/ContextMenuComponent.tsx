@@ -48,7 +48,11 @@ const ContextMenuComponent: FC<IProps> = ({
         <ContextMenuTrigger className='w-full h-full'>
           {children}
         </ContextMenuTrigger>
-        <ContextMenuContent className="w-56">
+        <ContextMenuContent
+          className="w-56"
+          sticky='always'
+          forceMount
+        >
           <ContextMenuItem inset onClick={() => router.refresh()}>
             <ReloadIcon /> <span className='ml-2'>Tải lại</span>
           </ContextMenuItem>

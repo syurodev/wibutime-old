@@ -5,7 +5,6 @@ import { Inter } from 'next/font/google'
 import '@/app/globals.css'
 import Header from '@/components/shared/Header/Header'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
-import Footer from '@/components/shared/Footer/Footer'
 import { Toaster } from '@/components/ui/sonner'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
@@ -28,7 +27,7 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="vi" suppressHydrationWarning>
       <body className={`${inter.className} w-screen`}>
         <SessionProvider session={session}>
           <ThemeProvider
@@ -37,7 +36,7 @@ export default async function RootLayout({
           >
             <Header />
             <ContextMenuComponent>
-              <main className='min-h-dvh pt-20 pb-5 px-5 max-w-[1400px] mx-auto'>
+              <main className='min-h-dvh w-screen overflow-hidden'>
                 <QueryProvider>
                   {children}
                 </QueryProvider>

@@ -1,7 +1,7 @@
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
-import { lightnovel, lightnovelVolume } from "@/drizzle/schema";
+import { lightnovel, lightnovelChapter, lightnovelVolume } from "@/drizzle/schema";
 
 export const lightnovelDetail = async (novelId: string) => {
   try {
@@ -21,6 +21,7 @@ export const lightnovelDetail = async (novelId: string) => {
           orderBy: desc(lightnovelVolume.createdAt),
           with: {
             chapters: {
+              orderBy: desc(lightnovelChapter.createdAt),
               columns: {
                 id: true,
                 name: true,

@@ -1,10 +1,11 @@
 import React from 'react'
 import PageFadeInOut from '@/components/shared/PageAnimatePresence/PageFadeInOut'
+import Container from '@/components/shared/Container'
 
 const AnimesPage = () => {
   return (
     <PageFadeInOut>
-      <div>AnimesPage</div>
+      <Container>AnimesPage</Container>
     </PageFadeInOut>
   )
 }

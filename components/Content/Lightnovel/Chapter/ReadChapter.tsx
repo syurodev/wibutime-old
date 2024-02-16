@@ -81,8 +81,11 @@ const ReadChapter: FC<IProps> = ({ data }) => {
         animate="animate"
         exit="exit"
         custom={0.2}
+        className='max-w-[1300px] mx-auto'
       >
-        <RenderEditorContent content={data.content} />
+        <RenderEditorContent
+          content={data.content}
+        />
       </motion.div>
     </div>
   )

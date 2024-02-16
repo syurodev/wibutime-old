@@ -5,6 +5,7 @@ import { getServerSession } from '@/lib/getServerSession'
 import FormCreateLightnovel from '@/components/Upload/Lightnovel/FormCreateLightnovel'
 import { getAllCategories } from '@/actions/categories'
 import { buttonVariants } from '@/components/ui/button'
+import Container from '@/components/shared/Container'
 
 const UploadPage = async () => {
 
@@ -24,9 +25,9 @@ const UploadPage = async () => {
   const categories = await getAllCategories()
 
   return (
-    <div>
+    <Container>
       <FormCreateLightnovel categories={categories.data} />
-    </div>
+    </Container>
   )
 }
 

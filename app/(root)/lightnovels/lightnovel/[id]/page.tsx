@@ -1,9 +1,8 @@
 import { FC } from 'react'
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 
 import { getLightnovelDetail } from '@/actions/lightnovel';
-import { notFound } from 'next/navigation';
 import LightnovelDetail from '@/components/Content/Lightnovel/Detail/LightnovelDetail';
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 
 type IProps = {
   params: { id: string };

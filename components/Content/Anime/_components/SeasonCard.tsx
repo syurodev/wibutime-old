@@ -66,7 +66,8 @@ const SeasonCard: FC<IProps> = ({
             <Image
               src={image ? image : "images/image2.jpeg"}
               alt={name}
-              fill sizes='100%'
+              fill
+              sizes='full'
               priority
               className='object-cover'
             />

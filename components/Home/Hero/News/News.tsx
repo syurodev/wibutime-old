@@ -91,7 +91,7 @@ const News: FC = () => {
                     >
                       <div className='relative overflow-hidden h-full'>
                         <div
-                          className='flex flex-col gap-3 md:gap-5 p-3 h-full overflow-hidden relative w-full md:bg-background/80 md:backdrop-blur-xl'
+                          className='flex flex-col gap-3 md:gap-5 p-4 h-full overflow-hidden relative w-full md:bg-background/80 md:backdrop-blur-xl'
                         >
                           {/* type and watch now btn */}
                           <div className='flex items-center justify-between'>

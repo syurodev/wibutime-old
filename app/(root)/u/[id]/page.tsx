@@ -3,6 +3,7 @@ import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query
 
 import { getUserDetail } from '@/actions/user'
 import UserProfile from '@/components/UserProfile/UserProfile'
+import Container from '@/components/shared/Container'
 
 type IProps = {
   params: {
@@ -19,9 +20,11 @@ const UserPage: FC<IProps> = async ({ params }) => {
 
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <UserProfile id={params.id} />
-    </HydrationBoundary>
+    <Container>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <UserProfile id={params.id} />
+      </HydrationBoundary>
+    </Container>
   )
 }
 

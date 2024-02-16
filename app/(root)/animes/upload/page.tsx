@@ -5,6 +5,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { getServerSession } from '@/lib/getServerSession'
 import { getAllCategories } from '@/actions/categories'
 import FormCreateAnime from '@/components/Upload/Anime/FormCreateAnime'
+import Container from '@/components/shared/Container'
 
 const CreateAnimePage = async () => {
   const session = await getServerSession()
@@ -23,9 +24,9 @@ const CreateAnimePage = async () => {
   const categories = await getAllCategories()
 
   return (
-    <div>
+    <Container>
       <FormCreateAnime categories={categories.data} />
-    </div>
+    </Container>
   )
 }
 

@@ -42,7 +42,7 @@ const CardItem: FC<IProps> = ({
         scroll
       >
         <Card>
-          <CardContent className="flex aspect-[2/3] items-center justify-center p-6 relative overflow-hidden rounded-lg shadow">
+          <CardContent className="relative flex aspect-[2/3] items-center justify-center p-6 overflow-hidden rounded-lg shadow">
             <div className='absolute z-10 w-full bottom-0 p-2 bg-background/60 backdrop-blur-lg'>
               <p className='line-clamp-1 font-medium text-sm'>{name}</p>
 

@@ -3,6 +3,7 @@ import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query
 
 import { getSeasonDetail } from '@/actions/anime';
 import AnimeWatchPageContent from '@/components/Content/Anime/AnimeWatchPageContent';
+import Container from '@/components/shared/Container';
 
 type IProps = {
   params: { season: string };
@@ -17,9 +18,11 @@ const WatchPage: FC<IProps> = async ({ params }) => {
   })
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <AnimeWatchPageContent seasonId={params.season} />
-    </HydrationBoundary>
+    <Container>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <AnimeWatchPageContent seasonId={params.season} />
+      </HydrationBoundary>
+    </Container>
   )
 }
 

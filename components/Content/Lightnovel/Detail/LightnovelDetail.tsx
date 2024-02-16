@@ -31,143 +31,142 @@ const LightnovelDetail: FC<IProps> = ({ id }) => {
   }
 
   return (
-    <div className='w-screen h-dvh absolute left-0 top-0 md:overflow-hidden'>
-      <div className='w-full flex flex-col md:flex-row gap-4 md:gap-0'>
+    <div className='w-full flex flex-col md:flex-row gap-4 md:gap-0'>
 
-        <ContentDetailHeader
-          categories={data.data.categories}
-          favorites={data.data.favorites.length}
-          name={data.data.name}
-          user={data.data.user}
-          viewed={data.data.viewed}
-          artist={data.data.artist}
-          author={data.data.author}
-          image={data.data.image?.url}
-          translationGroup={data.data.translationGroup}
-          words={data.data.words}
-          id={data.data.id}
-        />
+      <ContentDetailHeader
+        categories={data.data.categories}
+        favorites={data.data.favorites.length}
+        name={data.data.name}
+        user={data.data.user}
+        viewed={data.data.viewed}
+        artist={data.data.artist}
+        author={data.data.author}
+        image={data.data.image?.url}
+        translationGroup={data.data.translationGroup}
+        words={data.data.words}
+        id={data.data.id}
+      />
 
-        <div className='flex flex-col gap-4 md:h-dvh md:overflow-y-auto md:mt-20 pb-4'>
-          {/* orther name */}
-          {
-            data.data.otherNames.length > 0 && (
-              <motion.div
-                variants={slideWithoutScale}
-                custom={0.35}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className='rounded-lg border p-4 bg-background shadow mx-4'
-              >
-                <p className='font-semibold text-sm mb-2'>Tên khác:</p>
-                {
-                  data.data.otherNames.map((name) => (
-                    <p
-                      key={name}
-                      className='text-sm'
-                    >
-                      {name}
-                    </p>
-                  ))
-                }
-              </motion.div>
-            )
-          }
-
-          {/* summary */}
-          <motion.div
-            variants={slideWithoutScale}
-            custom={0.45}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className='rounded-lg border p-4 bg-background shadow mx-4'
-          >
-            <p className='font-semibold text-sm'>Tóm tắt:</p>
-            {
-              data.data.summary &&
-              <RenderEditorContent content={data.data.summary} fontSize='text-sm' />
-            }
-          </motion.div>
-
-          {/* note */}
-          <motion.div
-            variants={slideWithoutScale}
-            custom={0.55}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className='rounded-lg border p-4 bg-background shadow mx-4'
-          >
-            <p className='font-semibold text-sm'>Ghi chú:</p>
-            {
-              data.data.note &&
-              <RenderEditorContent content={data.data.note} fontSize='text-sm' />
-            }
-          </motion.div>
-
-          {/* Volume */}
-          <div className='flex flex-col justify-start gap-3 flex-wrap mx-4'>
-            {
-              data.data.volumes && data.data.volumes.map((item, index) => {
-                return (
-                  <motion.div
-                    key={`category-${index}`}
-                    variants={slideWithoutScale}
-                    custom={0.5 + (index * 0.1)}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
+      <div className='flex flex-col gap-4 md:overflow-y-auto md:mt-20 pb-4 w-full'>
+        {/* orther name */}
+        {
+          data.data.otherNames.length > 0 && (
+            <motion.div
+              variants={slideWithoutScale}
+              custom={0.35}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className='rounded-lg border p-4 bg-background shadow mx-4'
+            >
+              <p className='font-semibold text-sm mb-2'>Tên khác:</p>
+              {
+                data.data.otherNames.map((name) => (
+                  <p
+                    key={name}
+                    className='text-sm'
                   >
-                    <Card
-                    >
-                      <CardHeader className='flex flex-row gap-4 p-3 items-center'>
-                        <CardTitle className='text-lg'>{item.name}</CardTitle>
-                        <CardDescription className='!m-0'>{`${item.chapters.length} Chapters`}</CardDescription>
-                      </CardHeader>
-                      <CardContent className='flex gap-3 p-4 pt-0'>
-                        <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
-                          <Image
-                            src={item.image ? item.image.url : "images/image2.jpeg"}
-                            alt={item.name}
-                            fill sizes='100%'
-                            priority
-                            className='object-cover'
-                          />
-                        </div>
+                    {name}
+                  </p>
+                ))
+              }
+            </motion.div>
+          )
+        }
 
-                        <div className='flex flex-col gap-2 w-full'>
-                          {
-                            item.chapters.map((chapter, index) => {
-                              return (
-                                <Link
-                                  key={`${item.name}-${chapter.name}`}
-                                  href={`/lightnovels/lightnovel/${data.data.id}/r/${chapter.id}`}
+        {/* summary */}
+        <motion.div
+          variants={slideWithoutScale}
+          custom={0.45}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          className='rounded-lg border p-4 bg-background shadow mx-4'
+        >
+          <p className='font-semibold text-sm'>Tóm tắt:</p>
+          {
+            data.data.summary &&
+            <RenderEditorContent content={data.data.summary} fontSize='text-sm' />
+          }
+        </motion.div>
+
+        {/* note */}
+        <motion.div
+          variants={slideWithoutScale}
+          custom={0.55}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          className='rounded-lg border p-4 bg-background shadow mx-4'
+        >
+          <p className='font-semibold text-sm'>Ghi chú:</p>
+          {
+            data.data.note &&
+            <RenderEditorContent content={data.data.note} fontSize='text-sm' />
+          }
+        </motion.div>
+
+        {/* Volume */}
+        <div className='flex flex-col justify-start gap-3 flex-wrap mx-4'>
+          {
+            data.data.volumes && data.data.volumes.map((item, index) => {
+              return (
+                <motion.div
+                  key={`category-${index}`}
+                  variants={slideWithoutScale}
+                  custom={0.5 + (index * 0.1)}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <Card
+                  >
+                    <CardHeader className='flex flex-row gap-4 p-3 items-center'>
+                      <CardTitle className='text-lg'>{item.name}</CardTitle>
+                      <CardDescription className='!m-0'>{`${item.chapters.length} Chapters`}</CardDescription>
+                    </CardHeader>
+                    <CardContent className='flex gap-3 p-4 pt-0'>
+                      <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
+                        <Image
+                          src={item.image ? item.image.url : "images/image2.jpeg"}
+                          alt={item.name}
+                          fill
+                          sizes='full'
+                          priority
+                          className='object-cover'
+                        />
+                      </div>
+
+                      <div className='flex flex-col gap-2 w-full'>
+                        {
+                          item.chapters.map((chapter, index) => {
+                            return (
+                              <Link
+                                key={`${item.name}-${chapter.name}`}
+                                href={`/lightnovels/lightnovel/${data.data.id}/r/${chapter.id}`}
+                              >
+                                <div
+                                  className='flex items-center justify-between w-full gap-2'
                                 >
-                                  <div
-                                    className='flex items-center justify-between w-full gap-2'
-                                  >
-                                    <p className='line-clamp-1 text-sm'>
-                                      {chapter.name}
-                                    </p>
+                                  <p className='line-clamp-1 text-sm'>
+                                    {chapter.name}
+                                  </p>
 
-                                    <span className='text-xs text-secondary-foreground'>
-                                      {formatDate(chapter.createdAt)}
-                                    </span>
-                                  </div>
-                                </Link>
-                              )
-                            })
-                          }
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                )
-              })
-            }
-          </div>
+                                  <span className='text-xs text-secondary-foreground'>
+                                    {formatDate(chapter.createdAt)}
+                                  </span>
+                                </div>
+                              </Link>
+                            )
+                          })
+                        }
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })
+          }
         </div>
       </div>
     </div>
