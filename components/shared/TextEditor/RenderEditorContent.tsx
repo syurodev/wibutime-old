@@ -12,6 +12,9 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import Strike from '@tiptap/extension-strike'
 import Typography from '@tiptap/extension-typography'
 import HardBreak from '@tiptap/extension-hard-break'
+import Superscript from '@tiptap/extension-superscript'
+import Subscript from '@tiptap/extension-subscript'
+import Link from '@tiptap/extension-link'
 import { default as TiptapImage } from '@tiptap/extension-image'
 
 type IDescription = {
@@ -76,6 +79,15 @@ const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontS
         HTMLAttributes: {
           class: "line-through"
         }
+      }),
+      Superscript,
+      Subscript,
+      Link.configure({
+        HTMLAttributes: {
+          rel: 'noopener noreferrer',
+          target: '_blank',
+          class: 'text-link'
+        },
       }),
       TiptapImage.configure({
         inline: false,

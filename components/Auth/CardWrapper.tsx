@@ -67,7 +67,7 @@ const CardWrapper: React.FC<IProps> = ({
 
       <div className='relative w-full h-dvh hidden lg:block'>
         <Image
-          src="/images/auth.png"
+          src="/images/auth.webp"
           alt='wibutime login'
           fill
           sizes='full'

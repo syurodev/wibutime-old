@@ -71,7 +71,7 @@ const ContentDetailHeader: FC<IProps> = ({
   const session = useCurrentUser()
 
   return (
-    <div className='w-full h-dvh md:max-w-[50%] lg:max-w-[40%] min-w-[350px] flex flex-col items-center relative'>
+    <div className='w-full h-dvh md:min-w-[40%] flex flex-col items-center relative'>
       <ContextMenuComponent
         id={id}
         type={menuType}
@@ -140,7 +140,7 @@ const ContentDetailHeader: FC<IProps> = ({
               exit="exit"
             >
               <Image
-                src={image ? image : "/images/default-content-image.jpeg"}
+                src={image ? image : "/images/default-content-image.webp"}
                 alt={name}
                 fill
                 sizes='100%'
@@ -298,7 +298,7 @@ const ContentDetailHeader: FC<IProps> = ({
           </div>
 
           <Image
-            src={image ? image : "/images/default-content-image.jpeg"}
+            src={image ? image : "/images/default-content-image.webp"}
             alt={name}
             fill
             sizes='100%'

@@ -13,10 +13,10 @@ export const lightnovelSchema = z.object({
   }), { required_error: "Vui lòng chọn thể loại" }),
   other_names: z.array(
     z.object({
-      id: z.string(),
-      text: z.string(),
-    })
-  ).optional(),
+      id: z.string({ required_error: "Vui lòng nhập ít nhất một tên khác" }),
+      text: z.string({ required_error: "Vui lòng nhập ít nhất một tên khác" }),
+    }), { required_error: "Vui lòng nhập ít nhất một tên khác" }
+  ).nonempty({ message: "Vui lòng nhập ít nhất một tên khác" }),
   summary: EditorContentSchema,
   image: z.object({
     key: z.string().optional(),

@@ -131,7 +131,7 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
               name="other_names"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tên tên khác</FormLabel>
+                  <FormLabel>Tên tên khác<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <TagInput
                       {...field}

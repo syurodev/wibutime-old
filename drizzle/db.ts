@@ -4,7 +4,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import * as schema from "./schema"
 
-const connectionString = process.env.NEON_URL!
+const connectionString = process.env.SUPABASE_URL!
 
 // Fix for "sorry, too many clients already"
 declare global {
@@ -16,6 +16,7 @@ declare global {
 let db: PostgresJsDatabase<typeof schema>;
 if (process.env.NODE_ENV === "production") {
   const client = postgres(connectionString, {
+    prepare: false,
     connect_timeout: 10000,
     idle_timeout: 3000,
     max: 20,
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV === "production") {
 } else {
   if (!global.db) {
     const client = postgres(connectionString, {
+      prepare: false,
       connect_timeout: 10000,
       idle_timeout: 3000,
       max: 20,

@@ -249,7 +249,7 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
 
         {/* only pc */}
         <motion.div
-          className='w-full flex-[2] hidden lg:block'
+          className='w-full flex-[1.5] min-w-[350px] hidden lg:block'
           variants={slideWithoutScale}
           initial="initial"
           animate="animate"

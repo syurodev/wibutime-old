@@ -156,6 +156,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
                     onChange={field.onChange}
                     id={novelId}
                     setWords={setWords}
+                    contentFor='content'
                   />
                 </FormControl>
                 <FormMessage />

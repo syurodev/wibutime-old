@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
-import { text, timestamp, pgTable, jsonb, boolean, integer, primaryKey, uuid, date, varchar, time } from "drizzle-orm/pg-core";
+import { text, timestamp, pgTable, jsonb, boolean, integer, primaryKey, uuid, date, varchar, time, index } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from '@auth/core/adapters'
 
 
@@ -18,7 +18,10 @@ export const users = pgTable("user", {
   phoneVerified: boolean("phoneVerified").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (t) => ({
+  nameIndex: index("user_name_idx").on(t.name),
+  usernameIndex: index("user_username_idx").on(t.username),
+}));
 
 export type User = InferSelectModel<typeof users>
 export type UserInsert = InferInsertModel<typeof users>
@@ -214,7 +217,9 @@ export const translationGroup = pgTable("translation_group", {
   image: jsonb("image").default({ key: "", url: "" }),
 
   admin: uuid("user_id").references(() => users.id, { onDelete: "cascade" })
-});
+}, (t) => ({
+  translationGroupIndex: index("translation_group_name_idx").on(t.name)
+}));
 
 export const translationGroupRelations = relations(translationGroup, ({ many }) => ({
   lightnovels: many(lightnovel),
@@ -254,7 +259,7 @@ export const translationGroupMembersRelations = relations(translationGroupMember
 export const lightnovel = pgTable("lightnovel", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
   name: text("name").notNull(),
-  otherNames: jsonb("other_names").default([]),
+  otherNames: text("other_names").array().notNull(),
   author: varchar("author", { length: 70 }),
   artist: varchar("artist", { length: 70 }),
   image: jsonb("image").default({ key: "", url: "" }),
@@ -267,7 +272,10 @@ export const lightnovel = pgTable("lightnovel", {
 
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   translationGroup: uuid("translation_group_id").references(() => translationGroup.id, { onDelete: "set null" })
-});
+}, (t) => ({
+  lightnovelNameIndex: index("lightnovel_name_idx").on(t.name),
+  lightnovelOtherNameIndex: index("lightnovel_other_name_idx").on(t.otherNames)
+}));
 
 export const lightnovelRelations = relations(lightnovel, (({ one, many }) => ({
   categories: many(categoryToLightnovel),
@@ -339,7 +347,7 @@ export const lightnovelChapterRelations = relations(lightnovelChapter, (({ one, 
 export const anime = pgTable("anime", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
   name: text("name").notNull(),
-  otherNames: jsonb("other_names").default([]),
+  otherNames: text("other_names").array().notNull(),
   summary: jsonb("summary"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -349,7 +357,10 @@ export const anime = pgTable("anime", {
 
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   translationGroup: uuid("translation_group_id").references(() => translationGroup.id, { onDelete: "set null" })
-});
+}, (t) => ({
+  animeNameIndex: index("anime_name_idx").on(t.name),
+  animeOtherNameIndex: index("anime_other_name_idx").on(t.otherNames)
+}));
 
 export const animeRelations = relations(anime, (({ one, many }) => ({
   categories: many(categoryToAnime),
@@ -427,7 +438,7 @@ export const animeEpisodeRelations = relations(animeEpisode, (({ one, many }) =>
 export const manga = pgTable("manga", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
   name: text("name").notNull(),
-  otherNames: jsonb("other_names").default([]),
+  otherNames: text("other_names").array().notNull(),
   summary: jsonb("summary"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -437,7 +448,10 @@ export const manga = pgTable("manga", {
 
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   translationGroup: uuid("translation_group_id").references(() => translationGroup.id, { onDelete: "set null" })
-});
+}, (t) => ({
+  mangaNameIndex: index("manga_name_idx").on(t.name),
+  mangaOtherNameIndex: index("manga_other_name_idx").on(t.otherNames)
+}));
 
 export const mangaRelations = relations(manga, (({ one, many }) => ({
   categories: many(categoryToManga),

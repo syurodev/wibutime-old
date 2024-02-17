@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
-import React, { FC, memo, useState } from 'react'
+import React, { FC, memo, useCallback, useState } from 'react'
 import type { Editor } from '@tiptap/react'
 import {
   LuHeading2,
@@ -13,7 +13,8 @@ import {
   LuStrikethrough,
   LuImagePlus,
   LuSuperscript,
-  LuSubscript
+  LuSubscript,
+  LuLink2
 } from "react-icons/lu"
 
 import { Toggle } from "@/components/ui/toggle"
@@ -21,6 +22,7 @@ import { compressImage } from '@/lib/compressImage'
 // import { deleteFiles } from '@/actions/uploadthing'
 import { uploadFiles } from '@/lib/uploadthing'
 import { ReloadIcon } from '@radix-ui/react-icons'
+import { Button } from '@/components/ui/button'
 
 type IProps = {
   editor: Editor | null,
@@ -60,6 +62,28 @@ const Toolbar: FC<IProps> = ({ editor, imageUpload }) => {
     editor.chain().focus().setImage({ src: res.url }).run()
     setIsLoading(false)
   }
+
+  const setLink = useCallback(() => {
+    const previousUrl = editor.getAttributes('link').href
+    const url = window.prompt('URL', previousUrl)
+
+    // cancelled
+    if (url === null) {
+      return
+    }
+
+    // empty
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink()
+        .run()
+
+      return
+    }
+
+    // update link
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url })
+      .run()
+  }, [editor])
 
   return (
     <div className='flex w-full justify-between'>
@@ -153,6 +177,14 @@ const Toolbar: FC<IProps> = ({ editor, imageUpload }) => {
         >
           <LuSuperscript />
         </Toggle>
+
+        <Button
+          size={"sm"}
+          onClick={setLink}
+          variant={"ghost"}
+        >
+          <LuLink2 />
+        </Button>
 
         <label htmlFor='editorAddImage' className='cursor-pointer rounded-md hover:bg-muted'>
           {

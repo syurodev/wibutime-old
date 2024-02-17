@@ -91,7 +91,7 @@ const News: FC = () => {
                     >
                       <div className='relative overflow-hidden h-full'>
                         <div
-                          className='flex flex-col gap-3 md:gap-5 p-4 h-full overflow-hidden relative w-full md:bg-background/80 md:backdrop-blur-xl'
+                          className='flex flex-col gap-3 md:gap-5 p-5 h-full overflow-hidden relative w-full md:bg-background/90 md:backdrop-blur-md md:supports-[backdrop-filter]:bg-background/90'
                         >
                           {/* type and watch now btn */}
                           <div className='flex items-center justify-between'>
@@ -161,19 +161,19 @@ const News: FC = () => {
                                 ? item.seasons?.episodes
                                   ? `EP: ${item.seasons?.episodes[item.seasons?.episodes.length - 1]?.index}`
                                   : item.seasons
-                                    ? `Season: ${item.seasons?.name}`
+                                    ? `${item.seasons?.name}`
                                     : item.name
                                 : item.type === "manga"
                                   ? item.seasons?.chapters
                                     ? `CHAP: ${item.seasons?.chapters[item.seasons?.chapters.length - 1]?.index}`
                                     : item.seasons
-                                      ? `Season: ${item.seasons?.name}`
+                                      ? `${item.seasons?.name}`
                                       : item.name
                                   : item.type === "lightnovel"
                                     ? item.volumes?.chapters
-                                      ? `CHAP: ${item.volumes?.chapters?.name}`
+                                      ? `${item.volumes?.chapters?.name}`
                                       : item.volumes
-                                        ? `Volume: ${item.volumes?.name}`
+                                        ? `${item.volumes?.name}`
                                         : item.name
                                     : ""}
                             </span>

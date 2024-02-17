@@ -17,7 +17,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter, useSearchParams } from 'next/navigation'
-import dynamic from 'next/dynamic'
 
 import { newPasswordSchema } from '@/schemas/auth'
 import { changePassword } from '@/actions/changePassword'

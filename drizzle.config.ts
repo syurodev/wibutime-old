@@ -6,6 +6,6 @@ export default {
   strict: true,
   // verbose: true, //auto log
   dbCredentials: {
-    connectionString: process.env.NEON_URL!
+    connectionString: process.env.SUPABASE_URL!
   }
 } satisfies Config;

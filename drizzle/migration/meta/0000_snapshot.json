@@ -1,5 +1,5 @@
 {
-  "id": "d0468020-5983-48d4-b0d9-c21ce8dd9de8",
+  "id": "0ff7dd63-977a-4a24-8f36-1de9fcfa9e08",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -121,10 +121,9 @@
         },
         "other_names": {
           "name": "other_names",
-          "type": "jsonb",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": false,
-          "default": "'[]'::jsonb"
+          "notNull": true
         },
         "summary": {
           "name": "summary",
@@ -178,7 +177,22 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "anime_name_idx": {
+          "name": "anime_name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "anime_other_name_idx": {
+          "name": "anime_other_name_idx",
+          "columns": [
+            "other_names"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "anime_user_id_user_id_fk": {
           "name": "anime_user_id_user_id_fk",
@@ -1404,10 +1418,9 @@
         },
         "other_names": {
           "name": "other_names",
-          "type": "jsonb",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": false,
-          "default": "'[]'::jsonb"
+          "notNull": true
         },
         "author": {
           "name": "author",
@@ -1480,7 +1493,22 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "lightnovel_name_idx": {
+          "name": "lightnovel_name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "lightnovel_other_name_idx": {
+          "name": "lightnovel_other_name_idx",
+          "columns": [
+            "other_names"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "lightnovel_user_id_user_id_fk": {
           "name": "lightnovel_user_id_user_id_fk",
@@ -1716,10 +1744,9 @@
         },
         "other_names": {
           "name": "other_names",
-          "type": "jsonb",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": false,
-          "default": "'[]'::jsonb"
+          "notNull": true
         },
         "summary": {
           "name": "summary",
@@ -1773,7 +1800,22 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "manga_name_idx": {
+          "name": "manga_name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "manga_other_name_idx": {
+          "name": "manga_other_name_idx",
+          "columns": [
+            "other_names"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "manga_user_id_user_id_fk": {
           "name": "manga_user_id_user_id_fk",
@@ -2310,7 +2352,15 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "translation_group_name_idx": {
+          "name": "translation_group_name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "translation_group_user_id_user_id_fk": {
           "name": "translation_group_user_id_user_id_fk",
@@ -2547,7 +2597,22 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_name_idx": {
+          "name": "user_name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "user_username_idx": {
+          "name": "user_username_idx",
+          "columns": [
+            "username"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {

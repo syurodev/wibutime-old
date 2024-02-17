@@ -9,10 +9,10 @@ export const animeSchema = z.object({
   name: z.string().trim().min(1, { message: "Tên anime là bắt buộc" }),
   other_names: z.array(
     z.object({
-      id: z.string(),
-      text: z.string(),
-    })
-  ).optional(),
+      id: z.string({ required_error: "Vui lòng nhập ít nhất một tên khác" }),
+      text: z.string({ required_error: "Vui lòng nhập ít nhất một tên khác" }),
+    }), { required_error: "Vui lòng nhập ít nhất một tên khác" }
+  ).nonempty({ message: "Vui lòng nhập ít nhất một tên khác" }),
   studio: z.string().trim().min(1, { message: "Tên studio là bắt buộc" }),
   broadcast_day: z.string({ required_error: "Vui lòng chọn lịch phát sóng" }),
   broadcast_time: z.date({ required_error: "Vui lòng chọn lịch phát sóng" }),

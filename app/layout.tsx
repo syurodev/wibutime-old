@@ -3,13 +3,10 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import '@/app/globals.css'
-import Header from '@/components/shared/Header/Header'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { Toaster } from '@/components/ui/sonner'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
-import QueryProvider from '@/components/providers/QueryProvider';
-import ContextMenuComponent from '@/components/shared/ContextMenu/ContextMenuComponent';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,15 +31,8 @@ export default async function RootLayout({
             attribute="class"
             defaultTheme="light"
           >
-            <Header />
-            <ContextMenuComponent>
-              <main className='min-h-dvh w-screen overflow-hidden'>
-                <QueryProvider>
-                  {children}
-                </QueryProvider>
-                <Analytics />
-              </main>
-            </ContextMenuComponent>
+            {children}
+            <Analytics />
             <Toaster />
             {/* <Footer /> */}
           </ThemeProvider>

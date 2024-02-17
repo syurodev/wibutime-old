@@ -13,6 +13,7 @@ import CharacterCount from '@tiptap/extension-character-count'
 import Typography from '@tiptap/extension-typography'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
+import Link from '@tiptap/extension-link'
 import { default as TiptapImage } from '@tiptap/extension-image'
 
 import Toolbar from './Toolbar'
@@ -25,15 +26,17 @@ type IProps = {
   onChange: (richText: JSONContent) => void
   id?: string
   setWords?: React.Dispatch<React.SetStateAction<number>>
+  contentFor?: "content" | "summary" | "note"
 }
 
 const TiptapEditor: FC<IProps> = ({
   content,
   onChange,
   id,
-  setWords
+  setWords,
+  contentFor = "content"
 }) => {
-  const history = localStorage.getItem(`editor-new-content-${id}`)
+  const history = localStorage.getItem(`editor-new-${contentFor}-${id || ""}`)
   const [imageUpload, setImageUpload] = useState<boolean>(false)
 
   const editor = useEditor({
@@ -82,6 +85,14 @@ const TiptapEditor: FC<IProps> = ({
         HTMLAttributes: {
           class: "line-through"
         }
+      }),
+      Link.configure({
+        validate: href => /^https?:\/\//.test(href),
+        HTMLAttributes: {
+          rel: 'noopener noreferrer',
+          target: '_blank',
+          class: 'text-link'
+        },
       }),
       TiptapImage.configure({
         inline: false,
