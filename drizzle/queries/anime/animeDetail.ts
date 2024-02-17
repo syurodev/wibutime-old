@@ -22,6 +22,7 @@ export const animeDetail = async (animeId: string) => {
           orderBy: desc(animeSeason.createdAt),
           with: {
             episode: {
+              orderBy: desc(animeSeason.createdAt),
               columns: {
                 id: true,
                 viewed: true,
