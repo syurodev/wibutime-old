@@ -130,7 +130,6 @@ const FormUploadEpisode: FC<IProps> = ({ animeId, onOpenChange, type, seasonId }
         toast.success(res?.message, {
           description: res.submess
         })
-        localStorage.removeItem(`editor-new-content-${animeId}`)
         onOpenChange(false)
       }
     })

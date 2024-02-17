@@ -24,19 +24,21 @@ import { uploadFiles } from '@/lib/uploadthing'
 type IProps = {
   content: string,
   onChange: (richText: JSONContent) => void
-  id?: string
+  contentId?: string
   setWords?: React.Dispatch<React.SetStateAction<number>>
   contentFor?: "content" | "summary" | "note"
+  contentType?: ContentType
 }
 
 const TiptapEditor: FC<IProps> = ({
   content,
   onChange,
-  id,
+  contentId = null,
   setWords,
-  contentFor = "content"
+  contentFor = "content",
+  contentType
 }) => {
-  const history = localStorage.getItem(`editor-new-${contentFor}-${id || ""}`)
+  const history = localStorage.getItem(`editor-new-${contentType ?? ""}-${contentFor}-${contentId ?? ""}`)
   const [imageUpload, setImageUpload] = useState<boolean>(false)
 
   const editor = useEditor({
@@ -148,9 +150,7 @@ const TiptapEditor: FC<IProps> = ({
       }
     },
     onUpdate({ editor }) {
-      if (id) {
-        localStorage.setItem(`editor-new-content-${id}`, JSON.stringify(editor.getJSON()))
-      }
+      localStorage.setItem(`editor-new-${contentType ?? ""}-${contentFor}-${contentId ?? ""}`, JSON.stringify(editor.getJSON()))
       setWords && setWords(editor.storage.characterCount.words())
       onChange(editor.getJSON())
     }

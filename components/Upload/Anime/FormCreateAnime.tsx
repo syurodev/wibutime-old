@@ -84,7 +84,8 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
         toast.success(res?.message, {
           description: res.submess
         })
-
+        localStorage.removeItem(`editor-new-anime-summary-}`)
+        localStorage.removeItem(`editor-new-anime-note-}`)
         router.push(`/animes/anime/${res.data?.id}`)
       }
     })
@@ -311,6 +312,8 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
                     <TiptapEditor
                       content={field.name}
                       onChange={field.onChange}
+                      contentFor='summary'
+                      contentType='anime'
                     />
                   </FormControl>
                   <FormMessage />
@@ -455,6 +458,8 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
                     <TiptapEditor
                       content={field.name}
                       onChange={field.onChange}
+                      contentFor='note'
+                      contentType='anime'
                     />
                   </FormControl>
                   <FormMessage />

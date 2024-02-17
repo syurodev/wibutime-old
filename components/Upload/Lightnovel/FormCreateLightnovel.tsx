@@ -63,7 +63,8 @@ const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
         toast.success(res?.message, {
           description: res.submess
         })
-
+        localStorage.removeItem(`editor-new-lightnovel-summary-}`)
+        localStorage.removeItem(`editor-new-lightnovel-note-}`)
         router.push(`/lightnovels/lightnovel/${res.data?.id}`)
       }
     })
@@ -186,6 +187,7 @@ const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
                       content={field.name}
                       onChange={field.onChange}
                       contentFor='summary'
+                      contentType='lightnovel'
                     />
                   </FormControl>
                   <FormMessage />
@@ -241,6 +243,7 @@ const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
                       content={field.name}
                       onChange={field.onChange}
                       contentFor='note'
+                      contentType='lightnovel'
                     />
                   </FormControl>
                   <FormMessage />

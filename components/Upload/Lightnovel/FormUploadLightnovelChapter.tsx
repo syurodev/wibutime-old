@@ -86,7 +86,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
         toast.success(res?.message, {
           description: res.submess
         })
-        localStorage.removeItem(`editor-new-content-${novelId}`)
+        localStorage.removeItem(`editor-new-lightnovel-content-${novelId}}`)
         onOpenChange(false)
       }
     })
@@ -154,9 +154,10 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange }) => {
                   <TiptapEditor
                     content={field.name}
                     onChange={field.onChange}
-                    id={novelId}
+                    contentId={novelId}
                     setWords={setWords}
                     contentFor='content'
+                    contentType='lightnovel'
                   />
                 </FormControl>
                 <FormMessage />
