@@ -16,6 +16,7 @@ declare module 'next-auth' {
       role: UserRole;
       permissions: UserPermissions[];
       name: string;
+      coins: number;
       username?: string;
     };
   }
@@ -75,6 +76,10 @@ export const {
         session.user.username = token.username as string
       }
 
+      if (token.coins && session.user) {
+        session.user.coins = token.coins as number
+      }
+
       return session
     },
 
@@ -91,6 +96,7 @@ export const {
       }
 
       token.permissions = userData.permissions
+      token.coins = userData.coins
 
       return token
     }

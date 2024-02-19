@@ -8,6 +8,20 @@
       "when": 1708154273947,
       "tag": "0000_last_karma",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708347303727,
+      "tag": "0001_numerous_zeigeist",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1708347475708,
+      "tag": "0002_ambiguous_moon_knight",
+      "breakpoints": true
     }
   ]
 }

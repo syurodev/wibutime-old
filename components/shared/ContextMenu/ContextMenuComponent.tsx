@@ -131,7 +131,7 @@ const ContextMenuComponent: FC<IProps> = ({
       </ContextMenu>
 
       {
-        isOpenUploadVolumeOrSeason && id && type && name && (
+        id && type && name && (
           <UploadSeasonOrVolumeWrapper
             isOpen={isOpenUploadVolumeOrSeason}
             onOpenChange={setIsOpenUploadVolumeOrSeason}
@@ -143,7 +143,7 @@ const ContextMenuComponent: FC<IProps> = ({
       }
 
       {
-        isOpenUploadChapterOrEpisode && id && type && name && (
+        id && type && name && (
           <UploadChapterOrEPWrapper
             isOpen={isOpenUploadChapterOrEpisode}
             onOpenChange={setIsOpenUploadChapterOrEpisode}

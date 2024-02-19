@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { background, opacity } from './anim'
 import Lottie from "lottie-react";
 import { Button, buttonVariants } from "@/components/ui/button"
-import { LuSearch } from "react-icons/lu";
+import { LuSearch, LuCoins } from "react-icons/lu";
 import dynamic from 'next/dynamic'
 
 import logoAnimation from '@/lib/logoAnimation.json'
@@ -14,8 +14,12 @@ import styles from './styles.module.scss'
 import Nav from './Nav/Nav'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import UserMenu from './UserMenu/UserMenu'
+import { coinsFormat } from '@/lib/coinsFormat'
 
 const SearchCommand = dynamic(() => import('@/components/shared/SearchCommand/SearchCommand'), {
+  ssr: true,
+});
+const CoinsMenu = dynamic(() => import('@/components/shared/CoinsMenu/CoinsMenu'), {
   ssr: true,
 });
 
@@ -23,6 +27,7 @@ const Header: FC = () => {
   const session = useCurrentUser()
   const [isActive, setIsActive] = useState<boolean>(false)
   const [openSearch, setOpenSearch] = useState<boolean>(false)
+  const [openCoinsMenu, setOpenCoinsMenu] = useState<boolean>(false)
   const navRef = useRef<HTMLElement>(null)
 
   const handleChangeNavBG = () => {
@@ -82,7 +87,17 @@ const Header: FC = () => {
             <div className={styles.user}>
               {
                 session ? (
-                  <UserMenu />
+                  <div className='flex gap-3 items-center'>
+                    <Button
+                      rounded={"full"}
+                      variant={"outline"}
+                      onClick={() => setOpenCoinsMenu(true)}
+                    >
+                      <span className='text-sm'>{coinsFormat(session.coins)}</span>
+                      <LuCoins className="ml-1 text-lg" />
+                    </Button>
+                    <UserMenu />
+                  </div>
                 ) : (
                   <Link
                     href={"/auth/login"}
@@ -108,14 +123,24 @@ const Header: FC = () => {
         </AnimatePresence>
       </nav>
 
-      {
-        openSearch && (
-          <SearchCommand
-            open={openSearch}
-            setOpen={setOpenSearch}
-          />
-        )
-      }
+      {/* {
+          openSearch && (
+            )
+          } */}
+      <SearchCommand
+        open={openSearch}
+        setOpen={setOpenSearch}
+      />
+
+      {/* {
+          openCoinsMenu && (
+            )
+          } */}
+      <CoinsMenu
+        coins={session?.coins ?? 0}
+        open={openCoinsMenu}
+        setOpen={setOpenCoinsMenu}
+      />
     </>
   )
 }

@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm"
 type OriginalUserData = {
   id: string;
   name: string;
+  coins: number | null;
   username: null | string;
   image: null | string;
   description: null | string | any;
@@ -31,6 +32,7 @@ function transformUserData(inputData: OriginalUserData) {
   const transformedData: {
     id: string;
     name: string;
+    coins: number;
     username: string | null;
     image: string | null;
     description: string | null;
@@ -46,6 +48,7 @@ function transformUserData(inputData: OriginalUserData) {
   } = {
     id: inputData.id,
     name: inputData.name,
+    coins: inputData.coins ?? 0,
     username: inputData.username,
     image: inputData.image,
     description: inputData.description,
@@ -91,6 +94,7 @@ function transformUserData(inputData: OriginalUserData) {
 export const getUserById = async (userId: string): Promise<{
   id: string;
   name: string;
+  coins: number;
   username: string | null;
   image: string | null;
   description: string | null;

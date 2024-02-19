@@ -32,6 +32,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   followerUsers: many(followerUser, { relationName: "follower_user" }),
   followerGroups: many(followerGroup, { relationName: "follower_groups" }),
   lightnovels: many(lightnovel),
+  payments: many(payments),
   animes: many(anime),
   mangas: many(manga),
   adminGroups: many(translationGroup),
@@ -905,3 +906,27 @@ export const favoriteToMangaRelations = relations(favoriteToManga, (({ one }) =>
     references: [manga.id]
   }),
 })))
+
+//*payment
+export const payments = pgTable("payments", {
+  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  code: text("code").notNull(),
+  service: text("service", { enum: ["vnp"] }).notNull(),
+  amount: integer("amount"),
+  payDate: timestamp("pay_date"),
+  bankCode: text("bank_code"),
+  bankTransactionCode: text("bank_transaction_code"),
+  cardType: text("card_type"),
+  status: text("status", { enum: ["success", "pending", "reject"] }).default("pending"),
+})
+
+export const paymentsRelations = relations(payments, (({ one }) => ({
+  user: one(users, {
+    fields: [payments.userId],
+    references: [users.id]
+  }),
+})))
+
+export type Payments = InferSelectModel<typeof payments>
+export type PaymentsInsert = InferInsertModel<typeof payments>
