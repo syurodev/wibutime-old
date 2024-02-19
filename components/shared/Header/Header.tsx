@@ -93,7 +93,7 @@ const Header: FC = () => {
                       variant={"outline"}
                       onClick={() => setOpenCoinsMenu(true)}
                     >
-                      <span className='text-sm'>{coinsFormat(session.coins)}</span>
+                      <span className='text-sm'>{session.coins ? coinsFormat(session.coins) : 0}</span>
                       <LuCoins className="ml-1 text-lg" />
                     </Button>
                     <UserMenu />
@@ -132,15 +132,15 @@ const Header: FC = () => {
         setOpen={setOpenSearch}
       />
 
-      {/* {
-          openCoinsMenu && (
-            )
-          } */}
-      <CoinsMenu
-        coins={session?.coins ?? 0}
-        open={openCoinsMenu}
-        setOpen={setOpenCoinsMenu}
-      />
+      {
+        session && (
+          <CoinsMenu
+            coins={session?.coins ?? 0}
+            open={openCoinsMenu}
+            setOpen={setOpenCoinsMenu}
+          />
+        )
+      }
     </>
   )
 }
