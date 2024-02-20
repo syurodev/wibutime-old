@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { useTheme } from "next-themes"
+import { LuMoon, LuSun } from "react-icons/lu"
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -14,13 +14,13 @@ export function ThemeToggle() {
     >
       {
         theme === "dark" ? (
-          <MoonIcon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 right-0" />
+          <LuMoon className="text-base rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 right-0" />
         ) : (
-          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <LuSun className="text-base rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
         )
       }
 
-      <p>{theme === "dark" ? "DARK MODE" : "LIGHT MODE"}</p>
+      <p className="text-sm">{theme === "dark" ? "Dark mode" : "Light mode"}</p>
     </div>
   )
 }

@@ -2,13 +2,21 @@
 
 import { memo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { signOut } from 'next-auth/react'
-import { IoIosLogOut } from "react-icons/io";
+import { LuCoins, LuLogOut } from 'react-icons/lu'
+import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 import style from './navbar.module.scss'
 import { useCurrentUser } from '@/hooks/useCurrentUser';
-import Link from 'next/link'
+import { coinsFormat } from '@/lib/coinsFormat'
+
+const CoinsMenu = dynamic(() => import('@/components/shared/CoinsMenu/CoinsMenu'), {
+  ssr: true,
+});
 
 const perspective = {
   initial: {
@@ -70,6 +78,8 @@ const slideIn = {
 const UserMenu = () => {
   const menuBtnRef = useRef<HTMLDivElement>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [openCoinsMenu, setOpenCoinsMenu] = useState<boolean>(false)
+
   const session = useCurrentUser()
 
   const variants = {
@@ -201,24 +211,51 @@ const UserMenu = () => {
 
                       {/* footer */}
                       <div className='flex justify-between w-full'>
-                        <div
-                          className={`${style.linkContainer} w-1/2 text-destructive cursor-pointer select-none`}
-                          onClick={() => signOut()}
+                        <motion.div
+                          variants={slideIn}
+                          animate="enter"
+                          exit="exit"
+                          initial="initial"
+                          custom={1}
+                          className='flex items-center gap-1'
                         >
-                          <motion.div
-                            variants={slideIn}
-                            animate="enter"
-                            exit="exit"
-                            initial="initial"
-                            custom={1}
-                            className='flex items-center gap-1'
+                          <Button
+                            size={"sm"}
+                            variant={"ghost"}
+                            rounded={"full"}
+                            onClick={() => signOut()}
                           >
-                            <IoIosLogOut className="text-lg" />
-                            <span>
+                            <span
+                              className='text-destructive font-semibold'
+                            >
                               Đăng xuất
                             </span>
-                          </motion.div>
-                        </div>
+                            <LuLogOut className="text-lg ml-2 text-destructive" />
+                          </Button>
+                        </motion.div>
+                        <motion.div
+                          variants={slideIn}
+                          animate="enter"
+                          exit="exit"
+                          initial="initial"
+                          custom={1.1}
+                          className='flex items-center gap-1 w-1/2'
+                        >
+                          <Button
+                            rounded={"full"}
+                            variant={"ghost"}
+                            size={"sm"}
+                            onClick={() => {
+                              setIsMenuOpen(false)
+                              setOpenCoinsMenu(true)
+                            }}
+                          >
+                            <span className='font-semibold'>
+                              {session.coins ? coinsFormat(session.coins) : 0}
+                            </span>
+                            <LuCoins className="ml-1 text-lg" />
+                          </Button>
+                        </motion.div>
                       </div>
                     </div>
                   )
@@ -226,6 +263,16 @@ const UserMenu = () => {
               </AnimatePresence>
             </motion.div>
           </>
+        )
+      }
+
+      {
+        session && (
+          <CoinsMenu
+            coins={session?.coins ?? 0}
+            open={openCoinsMenu}
+            setOpen={setOpenCoinsMenu}
+          />
         )
       }
     </>

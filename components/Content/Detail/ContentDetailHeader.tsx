@@ -80,7 +80,7 @@ const ContentDetailHeader: FC<IProps> = ({
       >
         <>
           <div
-            className='flex flex-col items-center justify-center gap-3 w-full px-3 h-full bg-background/60 backdrop-blur-2xl pt-[120px] pb-16'
+            className='flex flex-col items-center justify-center gap-3 w-full px-3 h-full bg-background/75 supports-[backdrop-filter]:bg-background/75 dark:bg-background/90 dark:supports-[backdrop-filter]:bg-background/90 backdrop-blur-xl pt-[120px] pb-16'
           >
             <div className='w-full flex items-center justify-center gap-10 absolute top-20'>
               {/* user */}

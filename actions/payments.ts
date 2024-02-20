@@ -9,6 +9,8 @@ import { sortVNPayObject } from "@/lib/sortVNPayObject"
 import { getServerSession } from "@/lib/getServerSession";
 import { updatePayment } from "@/drizzle/queries/payments/updatePayment";
 import { updateCoins } from "@/drizzle/queries/user/updateCoins";
+import { paymentsHistory } from "@/drizzle/queries/payments/paymentsHistory";
+import { Payments } from "@/drizzle/schema";
 
 export const createVNPayUrl = async (
   amount: number,
@@ -168,6 +170,21 @@ export const verificationVNPayPayment = async (data: VnpParams) => {
       message: "Lỗi server vui lòng thử lại",
       data: null
     }
+  }
+}
+
+export const getPaymentsHistory = async (limit?: number): Promise<Payments[]> => {
+  try {
+    const session = await getServerSession()
+
+    if (!session || !session.id) return []
+
+    const history: Payments[] = await paymentsHistory(session.id, limit)
+
+    return history
+  } catch (error) {
+    console.log(error)
+    return []
   }
 }
 

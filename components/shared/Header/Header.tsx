@@ -32,9 +32,9 @@ const Header: FC = () => {
 
   const handleChangeNavBG = () => {
     if (window.scrollY >= 1) {
-      navRef.current?.classList.add("backdrop-blur-lg", "bg-background/80", "shadow-sm")
+      navRef.current?.classList.add("shadow-sm")
     } else {
-      navRef.current?.classList.remove("backdrop-blur-lg", "bg-background/80", "shadow-sm")
+      navRef.current?.classList.remove("shadow-sm")
     }
   }
 
@@ -49,7 +49,7 @@ const Header: FC = () => {
   return (
     <>
       <nav ref={navRef}
-        className={`${styles.header} ${isActive ? "bg-background/80 supports-[backdrop-filter]:bg-background/80 dark:bg-background/90 dark:supports-[backdrop-filter]:bg-background/90" : "bg-background/95 supports-[backdrop-filter]:bg-background/70"} backdrop-blur-md p-3 z-50 transition-all duration-200 ease-in-out w-screen`}
+        className={`${styles.header} ${isActive ? "bg-background supports-[backdrop-filter]:bg-background" : "bg-background/40 supports-[backdrop-filter]:bg-background/40"} backdrop-blur-lg p-3 z-50 transition-all duration-200 ease-in-out w-screen`}
       >
         <div
           className={`${styles.bar} ${isActive ? "max-w-[1500px]" : "max-w-[1400px]"} w-full mx-auto transition-all delay-75 duration-1000`}
@@ -91,9 +91,10 @@ const Header: FC = () => {
                     <Button
                       rounded={"full"}
                       variant={"outline"}
+                      className='bg-background/50 dark:bg-background/30'
                       onClick={() => setOpenCoinsMenu(true)}
                     >
-                      <span className='text-sm'>{session.coins ? coinsFormat(session.coins) : 0}</span>
+                      <span className='text-sm font-semibold'>{session.coins ? coinsFormat(session.coins) : 0}</span>
                       <LuCoins className="ml-1 text-lg" />
                     </Button>
                     <UserMenu />

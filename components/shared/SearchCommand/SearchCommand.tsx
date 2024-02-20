@@ -121,7 +121,7 @@ const SearchCommand: FC<IProps> = ({
                         />
                       </div>
                       <div className='flex flex-col'>
-                        <span className='text-sm whitespace-nowrap line-clamp-1'>{item.name}</span>
+                        <span className='text-sm whitespace-nowrap line-clamp-1 font-semibold'>{item.name}</span>
 
                         <Badge
                           variant={item.type as "lightnovel" | "anime" | "manga" | "default" | "secondary" | "destructive" | "outline" | null | undefined}

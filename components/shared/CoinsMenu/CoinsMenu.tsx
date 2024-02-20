@@ -1,7 +1,7 @@
 "use client"
 
-import React, { Dispatch, FC, SetStateAction, useState } from 'react'
-import { LuCoins } from "react-icons/lu";
+import React, { Dispatch, FC, SetStateAction, useState, useEffect, useTransition } from 'react'
+import { LuCoins, LuInfo } from "react-icons/lu";
 
 import {
   Sheet,
@@ -19,6 +19,12 @@ import {
 import { Button } from '@/components/ui/button'
 import CoinsRecharge from './CoinsRecharge';
 import CoinsRechargeResult from './CoinsRechargeResult';
+import { Payments } from '@/drizzle/schema';
+import { getPaymentsHistory } from '@/actions/payments';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { formatDate } from '@/lib/formatDate';
+import { paymentServicesName } from '@/lib/paymentServicesName';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 type IProps = {
   coins: number,
@@ -32,6 +38,21 @@ const CoinsMenu: FC<IProps> = ({
   setOpen,
 }) => {
   const [openCoinsRecharge, setOpenCoinsRecharge] = useState<boolean>(false)
+  const [paymentsHistory, setPaymentsHistory] = useState<Payments[]>([])
+
+  const [isFetchPaymentHistoryPending, startFetchPaymentHistory] = useTransition()
+
+  useEffect(() => {
+    const fetchPaymentsHistory = () => {
+      startFetchPaymentHistory(async () => {
+        const res = await getPaymentsHistory()
+        setPaymentsHistory(res)
+      })
+    }
+    if (open) {
+      fetchPaymentsHistory()
+    }
+  }, [open])
 
   return (
     <>
@@ -46,7 +67,7 @@ const CoinsMenu: FC<IProps> = ({
               {coins}
               Coins
             </SheetTitle>
-            <SheetDescription>
+            <SheetDescription className='text-left'>
               được sử dụng để thanh toán các chapter lightnovel, manga hoặc các tập phim
             </SheetDescription>
           </SheetHeader>
@@ -68,9 +89,72 @@ const CoinsMenu: FC<IProps> = ({
             defaultValue='paid'
           >
             <AccordionItem value="recharge">
-              <AccordionTrigger>Lịch sử nạp</AccordionTrigger>
+              <AccordionTrigger>
+                <div className='w-full flex items-center justify-between'>
+                  <p className='text-sm'>Lịch sử nạp</p>
+                  {
+                    isFetchPaymentHistoryPending && (
+                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                    )
+                  }
+                </div>
+              </AccordionTrigger>
               <AccordionContent>
-                Yes. It adheres to the WAI-ARIA design pattern.
+                {
+                  isFetchPaymentHistoryPending ? (
+                    <ReloadIcon className="h-4 w-4 animate-spin" />
+                  ) :
+                    paymentsHistory.length === 0 ? (
+                      <p
+                        className='text-sm text-secondary-foreground select-none text-center'
+                      >
+                        Không có lịch sử thanh toán
+                      </p>
+                    ) : (
+                      paymentsHistory.map((item, index) => (
+                        <Card
+                          key={item.id}
+                        >
+                          <CardHeader className='p-3'>
+                            <div className='w-full flex justify-between items-center'>
+                              <div className='flex gap-1 items-baseline'>
+                                <p className='font-semibold text-sm'>{item.amount}</p>
+                                <p
+                                  className='text-xs'
+                                >
+                                  {formatDate(item.payDate ? item.payDate.toISOString() : "")}
+                                </p>
+                              </div>
+
+                              <Button
+                                size={"icon"}
+                                variant={"ghost"}
+                                rounded={"full"}
+                              >
+                                <LuInfo className="text-lg" />
+                              </Button>
+                            </div>
+                          </CardHeader>
+                          <CardContent className='px-3 pb-3'>
+                            <p
+                              className='text-sm'
+                            >
+                              Mã giao dịch: {item.code}
+                            </p>
+                            <p
+                              className='text-sm'
+                            >
+                              Dịch vụ: {paymentServicesName(item.service)}
+                            </p>
+                            <p className='text-sm'
+                            >
+                              Mã giao dịch ({paymentServicesName(item.service)}): {item.bankTransactionCode}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      ))
+                    )
+                }
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="paid">

@@ -83,15 +83,15 @@ const CoinsRecharge: FC<IProps> = ({
             onValueChange={(value) => setPaymentMethods(value as "VNPAYQR" | "VNBANK" | "INTCARD")}
           >
             <div
-              className={`flex flex-col items-center space-x-2 rounded-lg border-[1.5px] cursor-pointer select-none transition-all duration-150 w-full ${paymentMethods === "VNPAYQR" ? "border-primary" : "border-transparent"} pointer-events-none bg-secondary`}
+              className={`flex flex-col items-center space-x-2 rounded-lg border-[1.5px] cursor-pointer select-none transition-all duration-150 w-full ${paymentMethods === "VNPAYQR" ? "border-primary" : "border-secondary"} pointer-events-none bg-secondary/50`}
             >
               <RadioGroupItem value="VNPAYQR" id="VNPAYQR" className='hidden' />
               <Label
                 htmlFor="VNPAYQR"
                 className='w-full h-28 px-2 rounded-md flex flex-col justify-center items-center cursor-pointer !m-0 py-1'
               >
-                <LuQrCode className="text-3xl h-full" />
-                <p className='text-sm text-center h-full'
+                <LuQrCode className="text-3xl h-full opacity-50" />
+                <p className='text-sm text-center h-full opacity-50'
                 >
                   Thanh toán quét mã QR
                 </p>
@@ -99,7 +99,7 @@ const CoinsRecharge: FC<IProps> = ({
             </div>
 
             <div
-              className={`flex flex-col items-center space-x-2 rounded-lg border-[1.5px] cursor-pointer select-none transition-all duration-150 w-full ${paymentMethods === "VNBANK" ? "border-primary" : "border-transparent"}`}
+              className={`flex flex-col items-center space-x-2 rounded-lg border-[1.5px] cursor-pointer select-none transition-all duration-150 w-full ${paymentMethods === "VNBANK" ? "border-primary" : "border-secondary"}`}
             >
               <RadioGroupItem value="VNBANK" id="VNBANK" className='hidden' />
               <Label
@@ -115,7 +115,7 @@ const CoinsRecharge: FC<IProps> = ({
             </div>
 
             <div
-              className={`flex flex-col items-center space-x-2 rounded-lg border-[1.5px] cursor-pointer select-none transition-all duration-150 w-full ${paymentMethods === "INTCARD" ? "border-primary" : "border-transparent"}`}
+              className={`flex flex-col items-center space-x-2 rounded-lg border-[1.5px] cursor-pointer select-none transition-all duration-150 w-full ${paymentMethods === "INTCARD" ? "border-primary" : "border-secondary"}`}
             >
               <RadioGroupItem value="INTCARD" id="INTCARD" className='hidden' />
               <Label
