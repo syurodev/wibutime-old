@@ -17,7 +17,6 @@ export const createVNPayUrl = async (
 ): Promise<string | null> => {
   try {
     const session = await getServerSession()
-    console.log({ session })
 
     if (!session || !session.id) return null
 
@@ -41,8 +40,6 @@ export const createVNPayUrl = async (
       }),
       body: JSON.stringify(bodyData)
     })
-
-    console.log(res)
 
     if (res.ok) {
       const data: {
