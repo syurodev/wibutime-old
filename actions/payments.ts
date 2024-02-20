@@ -13,7 +13,7 @@ import { updateCoins } from "@/drizzle/queries/user/updateCoins";
 export const createVNPayUrl = async (
   amount: number,
   callbackUrl: string,
-  bankCode?: string,
+  bankCode: string,
 ): Promise<string | null> => {
   try {
     const session = await getServerSession()
@@ -29,7 +29,7 @@ export const createVNPayUrl = async (
       amount,
       userId: session.id,
       callbackUrl,
-      bankCode: "VNBANK"
+      bankCode
     }
 
     const res = await fetch(`${process.env.APP_URL}/api/payments/vnpay`, {
