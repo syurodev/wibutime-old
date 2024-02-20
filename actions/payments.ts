@@ -110,7 +110,7 @@ export const verificationVNPayPayment = async (data: VnpParams) => {
 
       const updatedPayment = await updatePayment(
         "success",
-        data.vnp_Amount!,
+        data.vnp_Amount! / 100,
         data.vnp_BankCode!,
         data.vnp_BankTranNo!,
         data.vnp_CardType!,
@@ -127,7 +127,7 @@ export const verificationVNPayPayment = async (data: VnpParams) => {
 
       const updatedCoins = await updateCoins(
         session.id!,
-        data.vnp_Amount!,
+        data.vnp_Amount! / 100,
         "plus"
       )
 
@@ -148,7 +148,7 @@ export const verificationVNPayPayment = async (data: VnpParams) => {
 
       await updatePayment(
         "reject",
-        data.vnp_Amount ?? null,
+        data.vnp_Amount ? data.vnp_Amount / 100 : null,
         data.vnp_BankCode ?? null,
         data.vnp_BankTranNo ?? null,
         data.vnp_CardType ?? null,
