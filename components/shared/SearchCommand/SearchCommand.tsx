@@ -123,7 +123,7 @@ const SearchCommand: FC<IProps> = ({
                       </div>
                       <div className='flex flex-col w-full overflow-hidden'>
                         <p
-                          className='text-sm whitespace-nowrap line-clamp-1 font-semibold'
+                          className='text-sm line-clamp-1 font-semibold'
                         >
                           {item.name}
                         </p>

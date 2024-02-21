@@ -3,15 +3,17 @@
 import { FC, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { buttonVariants } from "@/components/ui/button"
+import { notFound } from 'next/navigation'
 import { IoArrowForward } from "react-icons/io5";
-import { Badge } from '@/components/ui/badge';
 import { LuCaseSensitive, LuDot } from "react-icons/lu";
 import { AnimatePresence, motion } from 'framer-motion'
-import { slide, slideWithoutScale } from '@/lib/motion/slide'
 import { useQuery } from '@tanstack/react-query'
+
+import { buttonVariants } from "@/components/ui/button"
+import { Badge } from '@/components/ui/badge';
+import { slide, slideWithoutScale } from '@/lib/motion/slide'
 import { getHero } from '@/actions/home';
-import { notFound } from 'next/navigation'
+
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
 
 const News: FC = () => {
@@ -224,7 +226,7 @@ const News: FC = () => {
 
                           {/* description */}
                           <motion.div
-                            className='overflow-hidden w-full hidden md:block'
+                            className='overflow-hidden w-full'
                             variants={slide}
                             custom={0.7}
                             initial="initial"
@@ -234,7 +236,7 @@ const News: FC = () => {
                             <RenderEditorContent
                               content={item.summary}
                               fontSize='text-sm'
-                              className='line-clamp-5'
+                              className='line-clamp-1 md:line-clamp-5 lg:line-clamp-[10]'
                             />
                           </motion.div>
                         </div>

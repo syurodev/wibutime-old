@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button'
 import { badgeVariants } from '@/components/ui/badge'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import ContextMenuComponent from '@/components/shared/ContextMenu/ContextMenuComponent'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
 
 type IProps = {
   user: {
@@ -133,20 +134,22 @@ const ContentDetailHeader: FC<IProps> = ({
 
             {/* Image */}
             <motion.div
-              className='aspect-[2/3] w-full max-w-[54%] max-h-[81%] lg:max-w-[46%] lg:max-h-[69%] relative rounded-lg overflow-hidden shadow-xl'
+              className='aspect-[2/3] w-full max-w-[54%] h-fit max-h-[81%] lg:max-w-[46%] lg:max-h-[69%] relative rounded-lg overflow-hidden shadow-xl'
               variants={slide}
               initial="initial"
               animate="animate"
               exit="exit"
             >
-              <Image
-                src={image ? image : "/images/default-content-image.webp"}
-                alt={name}
-                fill
-                sizes='100%'
-                priority
-                className='object-cover'
-              />
+              <AspectRatio ratio={2 / 3}>
+                <Image
+                  src={image ? image : "/images/default-content-image.webp"}
+                  alt={name}
+                  fill
+                  sizes='100%'
+                  priority
+                  className='object-cover'
+                />
+              </AspectRatio>
             </motion.div>
 
             <motion.p

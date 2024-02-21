@@ -41,7 +41,7 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
         id={data.data.id}
       />
 
-      <div className='flex flex-col gap-4 md:h-dvh md:overflow-y-scroll md:pt-20 pb-4'>
+      <div className='flex flex-col gap-4 md:mt-20 pb-4 w-full md:sticky md:h-[calc(100dvh-80px)] md:overflow-y-scroll'>
         {/* orther name */}
         {
           data.data.otherNames.length > 0 && (

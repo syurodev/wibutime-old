@@ -67,7 +67,7 @@ const LightnovelDetail: FC<IProps> = ({ id }) => {
           id={data.data.id}
         />
 
-        <div className='flex flex-col gap-4 md:overflow-y-auto md:mt-20 pb-4 w-full'>
+        <div className='flex flex-col gap-4 md:mt-20 pb-4 w-full md:sticky md:h-[calc(100dvh-80px)] md:overflow-y-scroll'>
           {/* orther name */}
           {
             data.data.otherNames.length > 0 && (
@@ -177,7 +177,7 @@ const LightnovelDetail: FC<IProps> = ({ id }) => {
                                     }}
                                   >
                                     <div className='flex items-center gap-1'>
-                                      <LuCoins className="!text-base w-7" />
+                                      <LuCoins className="!text-base min-w-4 w-4" />
                                       <p className='line-clamp-1 text-sm font-semibold'>
                                         {chapter.name}
                                       </p>
