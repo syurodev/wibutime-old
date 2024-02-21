@@ -88,16 +88,17 @@ const Header: FC = () => {
             <div className={styles.user}>
               {
                 session ? (
-                  <div className='gap-3 items-center hidden md:flex'>
+                  <div className='gap-3 items-center flex'>
                     <Button
                       rounded={"full"}
                       variant={"outline"}
-                      className='bg-background/50 dark:bg-background/30'
+                      className='bg-background/50 dark:bg-background/30 hidden md:flex'
                       onClick={() => setOpenCoinsMenu(true)}
                     >
                       <span className='text-sm font-semibold'>{session.coins ? coinsFormat(session.coins) : 0}</span>
                       <LuCoins className="ml-1 text-lg" />
                     </Button>
+
                     <UserMenu />
                   </div>
                 ) : (

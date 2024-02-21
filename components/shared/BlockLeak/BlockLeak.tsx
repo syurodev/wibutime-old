@@ -29,7 +29,7 @@ const BlockLeak = () => {
     isTabFocused ? (
       <></>
     ) : (
-      <div className='absolute w-screen h-dvh bg-background z-[100]'>
+      <div className='sticky top-0 w-screen h-dvh bg-background z-[100]'>
 
       </div>
     )
