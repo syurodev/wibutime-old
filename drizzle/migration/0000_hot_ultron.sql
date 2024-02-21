@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS "anime_episode" (
 	"viewed" integer DEFAULT 0,
 	"index" varchar(6) NOT NULL,
 	"viewed_at" timestamp,
+	"charge" boolean DEFAULT false,
 	"season_id" uuid NOT NULL,
 	CONSTRAINT "anime_episode_id_unique" UNIQUE("id")
 );
@@ -194,6 +195,7 @@ CREATE TABLE IF NOT EXISTS "lightnovel_chapter" (
 	"viewed" integer DEFAULT 0,
 	"words" integer DEFAULT 0,
 	"viewed_at" timestamp,
+	"charge" boolean DEFAULT false,
 	"volume_id" uuid NOT NULL,
 	CONSTRAINT "lightnovel_chapter_id_unique" UNIQUE("id")
 );
@@ -234,6 +236,7 @@ CREATE TABLE IF NOT EXISTS "manga_chapter" (
 	"deleted" boolean DEFAULT false,
 	"viewed" integer DEFAULT 0,
 	"index" varchar(6),
+	"charge" boolean DEFAULT false,
 	"season_id" uuid NOT NULL,
 	CONSTRAINT "manga_chapter_id_unique" UNIQUE("id")
 );
@@ -255,6 +258,21 @@ CREATE TABLE IF NOT EXISTS "manga_season" (
 	CONSTRAINT "manga_season_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "payments" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"code" text NOT NULL,
+	"service" text NOT NULL,
+	"amount" integer,
+	"pay_date" timestamp,
+	"bank_code" text,
+	"bank_transaction_code" text,
+	"card_type" text,
+	"status" text DEFAULT 'pending',
+	"created_at" timestamp DEFAULT now(),
+	CONSTRAINT "payments_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "permission" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
@@ -265,6 +283,30 @@ CREATE TABLE IF NOT EXISTS "permission_role" (
 	"role_id" uuid NOT NULL,
 	"permission_id" uuid NOT NULL,
 	CONSTRAINT "permission_role_role_id_permission_id_pk" PRIMARY KEY("role_id","permission_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "purchase_anime_episode" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"episode_id" uuid NOT NULL,
+	"created_at" timestamp DEFAULT now(),
+	CONSTRAINT "purchase_anime_episode_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "purchase_lightnovel_chapter" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"chapter_id" uuid NOT NULL,
+	"created_at" timestamp DEFAULT now(),
+	CONSTRAINT "purchase_lightnovel_chapter_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "purchase_manga_chapter" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"chapter_id" uuid NOT NULL,
+	"created_at" timestamp DEFAULT now(),
+	CONSTRAINT "purchase_manga_chapter_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "rating" (
@@ -291,6 +333,27 @@ CREATE TABLE IF NOT EXISTS "role" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	CONSTRAINT "role_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "transaction_fee_anime" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"transaction" uuid NOT NULL,
+	"amount" integer NOT NULL,
+	CONSTRAINT "transaction_fee_anime_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "transaction_fee_lightnovel" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"transaction" uuid NOT NULL,
+	"amount" integer NOT NULL,
+	CONSTRAINT "transaction_fee_lightnovel_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "transaction_fee_manga" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"transaction" uuid NOT NULL,
+	"amount" integer NOT NULL,
+	CONSTRAINT "transaction_fee_manga_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "translation_group" (
@@ -351,6 +414,15 @@ CREATE INDEX IF NOT EXISTS "lightnovel_name_idx" ON "lightnovel" ("name");--> st
 CREATE INDEX IF NOT EXISTS "lightnovel_other_name_idx" ON "lightnovel" ("other_names");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "manga_name_idx" ON "manga" ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "manga_other_name_idx" ON "manga" ("other_names");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "user_purchase_anime_ep_idx" ON "purchase_anime_episode" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "anime_ep_purchased_idx" ON "purchase_anime_episode" ("episode_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "user_purchase_lightnovel_chapter_idx" ON "purchase_lightnovel_chapter" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "lightnovel_chapter_purchased_idx" ON "purchase_lightnovel_chapter" ("chapter_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "user_purchase_manga_chapter_idx" ON "purchase_manga_chapter" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "manga_chapter_purchased_idx" ON "purchase_manga_chapter" ("chapter_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "transaction_fee_anime_idx" ON "transaction_fee_anime" ("transaction");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "transaction_fee_lightnovel_idx" ON "transaction_fee_lightnovel" ("transaction");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "transaction_fee_manga_idx" ON "transaction_fee_manga" ("transaction");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "translation_group_name_idx" ON "translation_group" ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "user_name_idx" ON "user" ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "user_username_idx" ON "user" ("username");--> statement-breakpoint
@@ -613,6 +685,12 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "payments" ADD CONSTRAINT "payments_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "permission_role" ADD CONSTRAINT "permission_role_role_id_role_id_fk" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -625,7 +703,61 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "purchase_anime_episode" ADD CONSTRAINT "purchase_anime_episode_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "purchase_anime_episode" ADD CONSTRAINT "purchase_anime_episode_episode_id_anime_episode_id_fk" FOREIGN KEY ("episode_id") REFERENCES "anime_episode"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "purchase_lightnovel_chapter" ADD CONSTRAINT "purchase_lightnovel_chapter_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "purchase_lightnovel_chapter" ADD CONSTRAINT "purchase_lightnovel_chapter_chapter_id_lightnovel_chapter_id_fk" FOREIGN KEY ("chapter_id") REFERENCES "lightnovel_chapter"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "purchase_manga_chapter" ADD CONSTRAINT "purchase_manga_chapter_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "purchase_manga_chapter" ADD CONSTRAINT "purchase_manga_chapter_chapter_id_manga_chapter_id_fk" FOREIGN KEY ("chapter_id") REFERENCES "manga_chapter"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "rating" ADD CONSTRAINT "rating_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "transaction_fee_anime" ADD CONSTRAINT "transaction_fee_anime_transaction_purchase_anime_episode_id_fk" FOREIGN KEY ("transaction") REFERENCES "purchase_anime_episode"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "transaction_fee_lightnovel" ADD CONSTRAINT "transaction_fee_lightnovel_transaction_purchase_lightnovel_chapter_id_fk" FOREIGN KEY ("transaction") REFERENCES "purchase_lightnovel_chapter"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "transaction_fee_manga" ADD CONSTRAINT "transaction_fee_manga_transaction_purchase_manga_chapter_id_fk" FOREIGN KEY ("transaction") REFERENCES "purchase_manga_chapter"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

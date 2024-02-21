@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -31,6 +32,7 @@ import { animeEpisodeSchema } from '@/schemas/anime'
 import { deleteFiles } from '@/actions/uploadthing'
 import { Dropzone } from '@/components/ui/dropzone'
 import { compressImage } from '@/lib/compressImage'
+import { Switch } from '@/components/ui/switch'
 
 type IProps = {
   animeId: string
@@ -91,6 +93,7 @@ const FormUploadEpisode: FC<IProps> = ({ animeId, onOpenChange, type, seasonId }
   const form = useForm<z.infer<typeof animeEpisodeSchema>>({
     resolver: zodResolver(animeEpisodeSchema),
     defaultValues: {
+      charge: false,
       thumbnail: {
         key: "",
         url: ""
@@ -193,6 +196,27 @@ const FormUploadEpisode: FC<IProps> = ({ animeId, onOpenChange, type, seasonId }
 
           <FormField
             control={form.control}
+            name="charge"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                <div className="space-y-0.5">
+                  <FormLabel>Tính phí</FormLabel>
+                  <FormDescription>
+                    Phí mặc định cho mỗi người mua là 200 Coins. Hệ thống sẽ thu 50 Coins và phần còn lại sẽ được cộng vào số Coins của bạn.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="content"
             render={({ field }) => (
               <FormItem>
@@ -229,7 +253,12 @@ const FormUploadEpisode: FC<IProps> = ({ animeId, onOpenChange, type, seasonId }
                         }
                         return file
                       }}
-                      onClientUploadComplete={(res) => {
+                      onClientUploadComplete={(res: {
+                        name: string;
+                        size: number;
+                        key: string;
+                        url: string;
+                      }[]) => {
                         if (res) {
                           field.onChange({
                             key: res[0].key,

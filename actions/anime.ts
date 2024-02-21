@@ -370,6 +370,7 @@ export const createAnimeEpisode = async (values: string, animeId: string) => {
       seasonId: validationValues.data.season_id,
       content: validationValues.data.content,
       thumbnail: validationValues.data.thumbnail,
+      charge: validationValues.data.charge
     })
 
     if (!createdEpisode) return {

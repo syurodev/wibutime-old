@@ -33,7 +33,7 @@ type LightnovelChapterQuickInformation = {
 type LightnovelChapterInfo = {
   id: string,
   name: string,
-  // content: any,
+  charge: boolean,
   createdAt: string,
   viewed: number
 }
@@ -91,8 +91,11 @@ type LightnovelVolumeDetail = {
 type LightnovelChapterDetail = {
   id: string;
   name: string;
+  novelId: string;
+  authorId: string;
   content: any;
   createdAt: string;
+  charge: boolean;
   updateAt: string;
   viewed: string;
   words: string;

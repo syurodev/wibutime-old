@@ -1,9 +1,9 @@
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
-import { lightnovel, lightnovelChapter, lightnovelVolume } from "@/drizzle/schema";
+import { lightnovel, lightnovelChapter, lightnovelVolume, purchaseLightnovelChapter } from "@/drizzle/schema";
 
-export const lightnovelDetail = async (novelId: string) => {
+export const lightnovelDetail = async (novelId: string, userId?: string) => {
   try {
     const existingLightnovel = await db.query.lightnovel.findFirst({
       where: and(eq(lightnovel.id, novelId), eq(lightnovel.deleted, false)),
@@ -28,7 +28,8 @@ export const lightnovelDetail = async (novelId: string) => {
                 viewed: true,
                 words: true,
                 createdAt: true,
-              }
+                charge: true
+              },
             }
           }
         },

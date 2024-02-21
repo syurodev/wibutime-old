@@ -1,5 +1,5 @@
 {
-  "id": "0ff7dd63-977a-4a24-8f36-1de9fcfa9e08",
+  "id": "0fac7474-1bdc-4244-9589-3fa8bbf7628e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -296,6 +296,13 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
+        },
+        "charge": {
+          "name": "charge",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
         },
         "season_id": {
           "name": "season_id",
@@ -1612,6 +1619,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "charge": {
+          "name": "charge",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
         "volume_id": {
           "name": "volume_id",
           "type": "uuid",
@@ -1919,6 +1933,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "charge": {
+          "name": "charge",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
         "season_id": {
           "name": "season_id",
           "type": "uuid",
@@ -2069,6 +2090,107 @@
         }
       }
     },
+    "payments": {
+      "name": "payments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "service": {
+          "name": "service",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pay_date": {
+          "name": "pay_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bank_code": {
+          "name": "bank_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bank_transaction_code": {
+          "name": "bank_transaction_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "card_type": {
+          "name": "card_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "payments_user_id_user_id_fk": {
+          "name": "payments_user_id_user_id_fk",
+          "tableFrom": "payments",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "payments_id_unique": {
+          "name": "payments_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    },
     "permission": {
       "name": "permission",
       "schema": "",
@@ -2156,6 +2278,264 @@
         }
       },
       "uniqueConstraints": {}
+    },
+    "purchase_anime_episode": {
+      "name": "purchase_anime_episode",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "episode_id": {
+          "name": "episode_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "user_purchase_anime_ep_idx": {
+          "name": "user_purchase_anime_ep_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "anime_ep_purchased_idx": {
+          "name": "anime_ep_purchased_idx",
+          "columns": [
+            "episode_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "purchase_anime_episode_user_id_user_id_fk": {
+          "name": "purchase_anime_episode_user_id_user_id_fk",
+          "tableFrom": "purchase_anime_episode",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "purchase_anime_episode_episode_id_anime_episode_id_fk": {
+          "name": "purchase_anime_episode_episode_id_anime_episode_id_fk",
+          "tableFrom": "purchase_anime_episode",
+          "tableTo": "anime_episode",
+          "columnsFrom": [
+            "episode_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "purchase_anime_episode_id_unique": {
+          "name": "purchase_anime_episode_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    },
+    "purchase_lightnovel_chapter": {
+      "name": "purchase_lightnovel_chapter",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chapter_id": {
+          "name": "chapter_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "user_purchase_lightnovel_chapter_idx": {
+          "name": "user_purchase_lightnovel_chapter_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "lightnovel_chapter_purchased_idx": {
+          "name": "lightnovel_chapter_purchased_idx",
+          "columns": [
+            "chapter_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "purchase_lightnovel_chapter_user_id_user_id_fk": {
+          "name": "purchase_lightnovel_chapter_user_id_user_id_fk",
+          "tableFrom": "purchase_lightnovel_chapter",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "purchase_lightnovel_chapter_chapter_id_lightnovel_chapter_id_fk": {
+          "name": "purchase_lightnovel_chapter_chapter_id_lightnovel_chapter_id_fk",
+          "tableFrom": "purchase_lightnovel_chapter",
+          "tableTo": "lightnovel_chapter",
+          "columnsFrom": [
+            "chapter_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "purchase_lightnovel_chapter_id_unique": {
+          "name": "purchase_lightnovel_chapter_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    },
+    "purchase_manga_chapter": {
+      "name": "purchase_manga_chapter",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chapter_id": {
+          "name": "chapter_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "user_purchase_manga_chapter_idx": {
+          "name": "user_purchase_manga_chapter_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "manga_chapter_purchased_idx": {
+          "name": "manga_chapter_purchased_idx",
+          "columns": [
+            "chapter_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "purchase_manga_chapter_user_id_user_id_fk": {
+          "name": "purchase_manga_chapter_user_id_user_id_fk",
+          "tableFrom": "purchase_manga_chapter",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "purchase_manga_chapter_chapter_id_manga_chapter_id_fk": {
+          "name": "purchase_manga_chapter_chapter_id_manga_chapter_id_fk",
+          "tableFrom": "purchase_manga_chapter",
+          "tableTo": "manga_chapter",
+          "columnsFrom": [
+            "chapter_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "purchase_manga_chapter_id_unique": {
+          "name": "purchase_manga_chapter_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
     },
     "rating": {
       "name": "rating",
@@ -2308,6 +2688,183 @@
       "uniqueConstraints": {
         "role_id_unique": {
           "name": "role_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    },
+    "transaction_fee_anime": {
+      "name": "transaction_fee_anime",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "transaction": {
+          "name": "transaction",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "transaction_fee_anime_idx": {
+          "name": "transaction_fee_anime_idx",
+          "columns": [
+            "transaction"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "transaction_fee_anime_transaction_purchase_anime_episode_id_fk": {
+          "name": "transaction_fee_anime_transaction_purchase_anime_episode_id_fk",
+          "tableFrom": "transaction_fee_anime",
+          "tableTo": "purchase_anime_episode",
+          "columnsFrom": [
+            "transaction"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "transaction_fee_anime_id_unique": {
+          "name": "transaction_fee_anime_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    },
+    "transaction_fee_lightnovel": {
+      "name": "transaction_fee_lightnovel",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "transaction": {
+          "name": "transaction",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "transaction_fee_lightnovel_idx": {
+          "name": "transaction_fee_lightnovel_idx",
+          "columns": [
+            "transaction"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "transaction_fee_lightnovel_transaction_purchase_lightnovel_chapter_id_fk": {
+          "name": "transaction_fee_lightnovel_transaction_purchase_lightnovel_chapter_id_fk",
+          "tableFrom": "transaction_fee_lightnovel",
+          "tableTo": "purchase_lightnovel_chapter",
+          "columnsFrom": [
+            "transaction"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "transaction_fee_lightnovel_id_unique": {
+          "name": "transaction_fee_lightnovel_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    },
+    "transaction_fee_manga": {
+      "name": "transaction_fee_manga",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "transaction": {
+          "name": "transaction",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "transaction_fee_manga_idx": {
+          "name": "transaction_fee_manga_idx",
+          "columns": [
+            "transaction"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "transaction_fee_manga_transaction_purchase_manga_chapter_id_fk": {
+          "name": "transaction_fee_manga_transaction_purchase_manga_chapter_id_fk",
+          "tableFrom": "transaction_fee_manga",
+          "tableTo": "purchase_manga_chapter",
+          "columnsFrom": [
+            "transaction"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "transaction_fee_manga_id_unique": {
+          "name": "transaction_fee_manga_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "id"

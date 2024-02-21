@@ -63,8 +63,8 @@ const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
         toast.success(res?.message, {
           description: res.submess
         })
-        localStorage.removeItem(`editor-new-lightnovel-summary-}`)
-        localStorage.removeItem(`editor-new-lightnovel-note-}`)
+        // localStorage.removeItem(`editor-new-lightnovel-summary-}`)
+        // localStorage.removeItem(`editor-new-lightnovel-note-}`)
         router.push(`/lightnovels/lightnovel/${res.data?.id}`)
       }
     })

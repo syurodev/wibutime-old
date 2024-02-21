@@ -34,6 +34,7 @@ export const lightnovelVolumeSchema = z.object({
 
 export const lightnovelChapterSchema = z.object({
   name: z.string().min(1, { message: "Vui lòng nhập tên chapter" }),
+  charge: z.boolean(),
   volume_id: z.string().min(1, { message: "Vui lòng chọn volume" }),
   content: EditorContentSchema
 })

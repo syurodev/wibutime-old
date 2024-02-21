@@ -40,6 +40,7 @@ export const animeSchema = z.object({
 
 export const animeEpisodeSchema = z.object({
   season_id: z.string().min(1, { message: "Vui lòng chọn season" }),
+  charge: z.boolean(),
   thumbnail: z.object({
     key: z.string().optional(),
     url: z.string().url()

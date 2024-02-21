@@ -38,7 +38,10 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   adminGroups: many(translationGroup),
   groups: many(translationGroupMembers),
   comments: many(comment),
-  favorite: one(favorite)
+  favorite: one(favorite),
+  purchaseLightnovelChapters: one(purchaseLightnovelChapter),
+  purchaseMangaChapters: one(purchaseMangaChapter),
+  purchaseAnimeEpisodes: one(purchaseAnimeEpisode),
 }));
 
 export const accounts = pgTable(
@@ -329,6 +332,7 @@ export const lightnovelChapter = pgTable("lightnovel_chapter", {
   viewed: integer("viewed").default(0),
   words: integer("words").default(0),
   viewed_at: timestamp("viewed_at"),
+  charge: boolean("charge").default(false),
 
   volumeId: uuid("volume_id").references(() => lightnovelVolume.id, { onDelete: "cascade" }).notNull()
 });
@@ -342,6 +346,7 @@ export const lightnovelChapterRelations = relations(lightnovelChapter, (({ one, 
     references: [lightnovelVolume.id]
   }),
   comments: many(commentToLightnovelChapter),
+  purchases: many(purchaseLightnovelChapter),
 })))
 
 //* Anime
@@ -420,6 +425,7 @@ export const animeEpisode = pgTable("anime_episode", {
   viewed: integer("viewed").default(0),
   index: varchar("index", { length: 6 }).notNull(),
   viewed_at: timestamp("viewed_at"),
+  charge: boolean("charge").default(false),
 
   seasonId: uuid("season_id").references(() => animeSeason.id, { onDelete: "cascade" }).notNull()
 });
@@ -433,6 +439,7 @@ export const animeEpisodeRelations = relations(animeEpisode, (({ one, many }) =>
     references: [animeSeason.id]
   }),
   comment: many(commentToAnimeEpisode),
+  purchases: many(purchaseAnimeEpisode),
 })))
 
 //* Manga
@@ -512,6 +519,7 @@ export const mangaChapter = pgTable("manga_chapter", {
   viewed: integer("viewed").default(0),
   index: varchar("index", { length: 6 }),
   viewed_at: timestamp("created_at"),
+  charge: boolean("charge").default(false),
 
   seasonId: uuid("season_id").references(() => mangaSeason.id, { onDelete: "cascade" }).notNull()
 });
@@ -525,6 +533,7 @@ export const mangaChapterRelations = relations(mangaChapter, (({ one, many }) =>
     references: [mangaSeason.id]
   }),
   comment: many(commentToMangaChapter),
+  purchases: many(purchaseMangaChapter),
 })))
 
 //* Categories
@@ -534,7 +543,9 @@ export const category = pgTable("category", {
 })
 
 export const categoryRelations = relations(category, (({ many }) => ({
-  lightnovels: many(categoryToLightnovel)
+  lightnovels: many(categoryToLightnovel),
+  animes: many(categoryToAnime),
+  mangas: many(categoryToManga),
 })))
 
 export type Category = InferSelectModel<typeof category>
@@ -919,6 +930,7 @@ export const payments = pgTable("payments", {
   bankTransactionCode: text("bank_transaction_code"),
   cardType: text("card_type"),
   status: text("status", { enum: ["success", "pending", "reject"] }).default("pending"),
+  createdAt: timestamp("created_at").defaultNow(),
 })
 
 export const paymentsRelations = relations(payments, (({ one }) => ({
@@ -930,3 +942,134 @@ export const paymentsRelations = relations(payments, (({ one }) => ({
 
 export type Payments = InferSelectModel<typeof payments>
 export type PaymentsInsert = InferInsertModel<typeof payments>
+
+//*purchase
+export const purchaseLightnovelChapter = pgTable("purchase_lightnovel_chapter", {
+  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  chapterId: uuid("chapter_id").references(() => lightnovelChapter.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (t) => ({
+  userPurchaseLightnovelChapter: index("user_purchase_lightnovel_chapter_idx").on(t.userId),
+  lightnovelChapterPurchased: index("lightnovel_chapter_purchased_idx").on(t.chapterId)
+}))
+
+export const purchaseLightnovelChapterRelations = relations(purchaseLightnovelChapter, (({ one }) => ({
+  user: one(users, {
+    fields: [purchaseLightnovelChapter.userId],
+    references: [users.id]
+  }),
+  chapter: one(lightnovelChapter, {
+    fields: [purchaseLightnovelChapter.chapterId],
+    references: [lightnovelChapter.id]
+  }),
+  fee: one(transactionFeeLightnovel),
+})))
+
+export type PurchaseLightnovelChapter = InferSelectModel<typeof purchaseLightnovelChapter>
+export type PurchaseLightnovelChapterInsert = InferInsertModel<typeof purchaseLightnovelChapter>
+
+export const purchaseMangaChapter = pgTable("purchase_manga_chapter", {
+  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  chapterId: uuid("chapter_id").references(() => mangaChapter.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (t) => ({
+  userPurchaseMangaChapter: index("user_purchase_manga_chapter_idx").on(t.userId),
+  mangaChapterPurchased: index("manga_chapter_purchased_idx").on(t.chapterId)
+}))
+
+export const purchaseMangaChapterRelations = relations(purchaseMangaChapter, (({ one }) => ({
+  user: one(users, {
+    fields: [purchaseMangaChapter.userId],
+    references: [users.id]
+  }),
+  chapter: one(mangaChapter, {
+    fields: [purchaseMangaChapter.chapterId],
+    references: [mangaChapter.id]
+  }),
+  fee: one(transactionFeeManga),
+})))
+
+export type PurchaseMangaChapter = InferSelectModel<typeof purchaseMangaChapter>
+export type PurchaseMangaChapterInsert = InferInsertModel<typeof purchaseMangaChapter>
+
+export const purchaseAnimeEpisode = pgTable("purchase_anime_episode", {
+  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  episodeId: uuid("episode_id").references(() => animeEpisode.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (t) => ({
+  userPurchaseAnimeEpisode: index("user_purchase_anime_ep_idx").on(t.userId),
+  animeEpisodePurchased: index("anime_ep_purchased_idx").on(t.episodeId)
+}))
+
+export const purchaseAnimeEpisodeRelations = relations(purchaseAnimeEpisode, (({ one }) => ({
+  user: one(users, {
+    fields: [purchaseAnimeEpisode.userId],
+    references: [users.id]
+  }),
+  episode: one(animeEpisode, {
+    fields: [purchaseAnimeEpisode.episodeId],
+    references: [animeEpisode.id]
+  }),
+  fee: one(transactionFeeAnime),
+})))
+
+export type PurchaseAnimeEpisode = InferSelectModel<typeof purchaseAnimeEpisode>
+export type PurchaseAnimeEpisodeInsert = InferInsertModel<typeof purchaseAnimeEpisode>
+
+//*fee
+export const transactionFeeLightnovel = pgTable("transaction_fee_lightnovel", {
+  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  transaction: uuid("transaction").references(() => purchaseLightnovelChapter.id, { onDelete: "cascade" }).notNull(),
+  amount: integer("amount").notNull(),
+}, (t) => ({
+  transactionFeeLightnovelIndex: index("transaction_fee_lightnovel_idx").on(t.transaction)
+}))
+
+export type TransactionFeeLightnovel = InferSelectModel<typeof transactionFeeLightnovel>
+export type TransactionFeeLightnovelInsert = InferInsertModel<typeof transactionFeeLightnovel>
+
+export const transactionFeeLightnovelRelations = relations(transactionFeeLightnovel, (({ one }) => ({
+  transaction: one(purchaseLightnovelChapter, {
+    fields: [transactionFeeLightnovel.transaction],
+    references: [purchaseLightnovelChapter.id]
+  }),
+})))
+
+export const transactionFeeManga = pgTable("transaction_fee_manga", {
+  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  transaction: uuid("transaction").references(() => purchaseMangaChapter.id, { onDelete: "cascade" }).notNull(),
+  amount: integer("amount").notNull(),
+}, (t) => ({
+  transactionFeeMangaIndex: index("transaction_fee_manga_idx").on(t.transaction)
+}))
+
+export type TransactionFeeManga = InferSelectModel<typeof transactionFeeManga>
+export type TransactionFeeMangaInsert = InferInsertModel<typeof transactionFeeManga>
+
+export const transactionFeeMangaRelations = relations(transactionFeeManga, (({ one }) => ({
+  transaction: one(purchaseMangaChapter, {
+    fields: [transactionFeeManga.transaction],
+    references: [purchaseMangaChapter.id]
+  }),
+})))
+
+export const transactionFeeAnime = pgTable("transaction_fee_anime", {
+  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  transaction: uuid("transaction").references(() => purchaseAnimeEpisode.id, { onDelete: "cascade" }).notNull(),
+  amount: integer("amount").notNull(),
+}, (t) => ({
+  transactionFeeAnimeIndex: index("transaction_fee_anime_idx").on(t.transaction)
+}))
+
+export type TransactionFeeAnime = InferSelectModel<typeof transactionFeeAnime>
+export type TransactionFeeAnimeInsert = InferInsertModel<typeof transactionFeeAnime>
+
+export const transactionFeeAnimeRelations = relations(transactionFeeAnime, (({ one }) => ({
+  transaction: one(purchaseAnimeEpisode, {
+    fields: [transactionFeeAnime.transaction],
+    references: [purchaseAnimeEpisode.id]
+  }),
+})))

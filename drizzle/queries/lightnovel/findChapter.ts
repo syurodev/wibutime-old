@@ -29,6 +29,19 @@ export const findChapter = async (chapterId: string) => {
               },
             }
           }
+        },
+        volume: {
+          columns: {
+            id: true
+          },
+          with: {
+            lightnovel: {
+              columns: {
+                id: true,
+                userId: true
+              }
+            }
+          }
         }
       }
     })

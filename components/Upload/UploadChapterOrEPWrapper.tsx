@@ -38,7 +38,7 @@ const UploadChapterOrEPWrapper: FC<IProps> = ({
         <div className='h-full w-full max-w-[1300px] overflow-y-auto px-2 mx-auto mb-5 showScroll'>
           {
             (type === "lightnovel" || type === "lightnovel volume") &&
-            <FormUploadLightnovelChapter novelId={id} onOpenChange={onOpenChange} />
+            <FormUploadLightnovelChapter novelId={id} onOpenChange={onOpenChange} open={isOpen} />
           }
           {
             (type === "anime" || type === "anime season") &&

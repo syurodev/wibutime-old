@@ -81,7 +81,7 @@ const ReadChapter: FC<IProps> = ({ data }) => {
         animate="animate"
         exit="exit"
         custom={0.2}
-        className='max-w-[1300px] mx-auto'
+        className='max-w-[1200px] mx-auto px-4'
       >
         <RenderEditorContent
           content={data.content}

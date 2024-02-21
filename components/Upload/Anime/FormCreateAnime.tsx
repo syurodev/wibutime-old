@@ -84,8 +84,8 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
         toast.success(res?.message, {
           description: res.submess
         })
-        localStorage.removeItem(`editor-new-anime-summary-}`)
-        localStorage.removeItem(`editor-new-anime-note-}`)
+        // localStorage.removeItem(`editor-new-anime-summary-}`)
+        // localStorage.removeItem(`editor-new-anime-note-}`)
         router.push(`/animes/anime/${res.data?.id}`)
       }
     })

@@ -17,6 +17,8 @@ import { findChapter } from "@/drizzle/queries/lightnovel/findChapter"
 import { upViewed } from "@/drizzle/queries/lightnovel/upViewed"
 import { lightnovelDetail } from "@/drizzle/queries/lightnovel/lightnovelDetail"
 import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
+import { purchaseLightnovelChap } from "@/drizzle/queries/lightnovel/purchaseLightnovelChap"
+import { findChapterPurchased } from "@/drizzle/queries/lightnovel/findChapterPurchased"
 
 export const createLightnovel = async (values: string) => {
   try {
@@ -182,6 +184,7 @@ export const createLightnovelChapter = async (values: string, novelId: string, w
       name: validationValues.data.name,
       content: validationValues.data.content,
       volumeId: validationValues.data.volume_id,
+      charge: validationValues.data.charge,
       words: words,
       viewed: 0,
     })
@@ -238,7 +241,9 @@ export const getVolumes = async (novelId: string) => {
 
 export const getLightnovelDetail = async (novelId: string) => {
   try {
-    const lightnovel = await lightnovelDetail(novelId)
+    const session = await getServerSession()
+
+    const lightnovel = await lightnovelDetail(novelId, session?.id ?? undefined)
 
     if (!lightnovel) {
       return {
@@ -284,8 +289,33 @@ export const getLightnovelDetail = async (novelId: string) => {
       } | undefined,
       artist: lightnovel.artist,
       author: lightnovel.author,
-      volumes: lightnovel.volumes.map(item => (
-        {
+      volumes: await Promise.all(lightnovel.volumes.map(async (item) => {
+        const chapters = await Promise.all(item.chapters.map(async (chapter) => {
+          let purchasesId = "";
+          if (session && session.id !== lightnovel.user.id) {
+            const res = await findChapterPurchased(chapter.id, session.id!);
+            if (res) {
+              purchasesId = res.id;
+            }
+          }
+          return {
+            id: chapter.id,
+            name: chapter.name,
+            charge: (() => {
+              if (!session) {
+                return chapter.charge ?? false;
+              } else if (session.id === lightnovel.user.id) {
+                return false
+              }
+              else {
+                return purchasesId !== "" ? false : (chapter.charge ?? false);
+              }
+            })(),
+            createdAt: chapter.createdAt ? chapter.createdAt.toISOString() : "",
+            viewed: chapter.viewed || 0
+          };
+        }));
+        return {
           id: item.id,
           name: item.name,
           createdAt: item.createdAt ? item.createdAt.toISOString() : "",
@@ -294,15 +324,9 @@ export const getLightnovelDetail = async (novelId: string) => {
             key?: string,
             url: string
           } | null,
-          chapters: item.chapters.map(chapter => ({
-            id: chapter.id,
-            name: chapter.name,
-            // content: chapter.content as any,
-            createdAt: chapter.createdAt ? chapter.createdAt.toISOString() : "",
-            viewed: chapter.viewed || 0
-          }))
-        }
-      ))
+          chapters: chapters // Assign the resolved chapters array
+        };
+      }))
     }
 
 
@@ -330,6 +354,8 @@ export const getChapterContent = async (chapterId: string): Promise<{
   try {
     const content = await findChapter(chapterId)
 
+    const session = await getServerSession()
+
     if (!content) {
       return {
         code: 404,
@@ -338,9 +364,23 @@ export const getChapterContent = async (chapterId: string): Promise<{
       }
     }
 
+    let charge: boolean;
+
+    if (!session) {
+      charge = content.charge ?? true;
+    } else if (session.id === content.volume.lightnovel.userId) {
+      charge = false;
+    } else {
+      const res = await findChapterPurchased(chapterId, session.id!);
+      charge = res ? false : content.charge ?? true;
+    }
+
     const result: LightnovelChapterDetail = {
       id: content.id,
       name: content.name,
+      authorId: content.volume.lightnovel.userId,
+      novelId: content.volume.lightnovel.id!,
+      charge: charge,
       content: content.content,
       comments: content.comments.length > 0 ? content.comments.map(comment => ({
         id: comment.comment.id,
@@ -392,6 +432,52 @@ export const updateLightnovelChapterViewed = async (chapterId: string) => {
     return {
       code: 500,
       message: "Lỗi server"
+    }
+  }
+}
+
+export const purchaseChapter = async (
+  chapterId: string,
+  novelId: string,
+  authorId: string
+) => {
+  try {
+    const session = await getServerSession()
+
+    if (!session || !session.id) return {
+      code: 401,
+      message: "Không tìm thấy phiên đăng nhập, vui lòng đăng nhập và thử lại"
+    }
+
+    if (session.coins < 200) return {
+      code: 401,
+      message: "Số coins còn lại không đủ"
+    }
+
+    const res = await purchaseLightnovelChap(
+      chapterId,
+      session.id,
+      authorId,
+    )
+
+    if (res) {
+      revalidatePath(`/lightnovels/lightnovel/${novelId}`)
+      return {
+        code: 200,
+        message: "Thanh toán thành công"
+      }
+    } else {
+      return {
+        code: 400,
+        message: "Thanh toán thất bại, vui lòng thử lại"
+      }
+    }
+
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server vui lòng thử lại"
     }
   }
 }

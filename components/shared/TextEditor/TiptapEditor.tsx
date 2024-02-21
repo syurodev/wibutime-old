@@ -38,7 +38,7 @@ const TiptapEditor: FC<IProps> = ({
   contentFor = "content",
   contentType
 }) => {
-  const history = localStorage.getItem(`editor-new-${contentType ?? ""}-${contentFor}-${contentId ?? ""}`)
+  // const history = localStorage.getItem(`editor-new-${contentType ?? ""}-${contentFor}-${contentId ?? ""}`)
   const [imageUpload, setImageUpload] = useState<boolean>(false)
 
   const editor = useEditor({
@@ -103,7 +103,7 @@ const TiptapEditor: FC<IProps> = ({
         }
       })
     ],
-    content: history ? JSON.parse(history) : content,
+    content: content ?? "",
     editorProps: {
       attributes: {
         class: "showScroll rounded-lg border min-h-[270px] max-h-[700px] overflow-y-auto border-input bg-background p-2 max-h-[75vh]"
@@ -150,7 +150,7 @@ const TiptapEditor: FC<IProps> = ({
       }
     },
     onUpdate({ editor }) {
-      localStorage.setItem(`editor-new-${contentType ?? ""}-${contentFor}-${contentId ?? ""}`, JSON.stringify(editor.getJSON()))
+      // localStorage.setItem(`editor-new-${contentType ?? ""}-${contentFor}-${contentId ?? ""}`, JSON.stringify(editor.getJSON()))
       setWords && setWords(editor.storage.characterCount.words())
       onChange(editor.getJSON())
     }
