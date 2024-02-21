@@ -15,6 +15,7 @@ import Nav from './Nav/Nav'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import UserMenu from './UserMenu/UserMenu'
 import { coinsFormat } from '@/lib/coinsFormat'
+import BlockLeak from '../BlockLeak/BlockLeak'
 
 const SearchCommand = dynamic(() => import('@/components/shared/SearchCommand/SearchCommand'), {
   ssr: true,
@@ -68,7 +69,7 @@ const Header: FC = () => {
             <div onClick={() => { setIsActive(!isActive) }} className={styles.el}>
               <div className={`${styles.burger} ${isActive ? styles.burgerActive : ""} before:bg-black dark:before:bg-white after:bg-black 
           dark:after:bg-white`}></div>
-              <div className={styles.label}>
+              <div className={`${styles.label} hidden md:flex`}>
                 <motion.p variants={opacity} animate={!isActive ? "open" : "closed"}>Menu</motion.p>
                 <motion.p variants={opacity} animate={isActive ? "open" : "closed"}>Close</motion.p>
               </div>
@@ -87,7 +88,7 @@ const Header: FC = () => {
             <div className={styles.user}>
               {
                 session ? (
-                  <div className='flex gap-3 items-center'>
+                  <div className='gap-3 items-center hidden md:flex'>
                     <Button
                       rounded={"full"}
                       variant={"outline"}
@@ -142,6 +143,8 @@ const Header: FC = () => {
           />
         )
       }
+
+      <BlockLeak />
     </>
   )
 }

@@ -65,7 +65,7 @@ const News: FC = () => {
                   >
                     {/* Image */}
                     <motion.div
-                      className='min-h-[500px] min-w-[377px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
+                      className='min-h-[500px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
                       variants={slide}
                       initial="initial"
                       animate="animate"
@@ -91,7 +91,7 @@ const News: FC = () => {
                     >
                       <div className='relative overflow-hidden h-full'>
                         <div
-                          className='flex flex-col gap-3 md:gap-5 p-5 h-full overflow-hidden relative w-full md:bg-background/90 md:backdrop-blur-md md:supports-[backdrop-filter]:bg-background/90'
+                          className='flex flex-col gap-2 md:gap-5 p-5 h-full overflow-hidden relative w-full md:bg-background/90 md:backdrop-blur-md md:supports-[backdrop-filter]:bg-background/90'
                         >
                           {/* type and watch now btn */}
                           <div className='flex items-center justify-between'>
@@ -136,8 +136,8 @@ const News: FC = () => {
                           </div>
 
                           {/* title */}
-                          <motion.h2
-                            className='font-semibold text-xl text-pretty line-clamp-3'
+                          <motion.p
+                            className='font-semibold text-base md:text-xl text-pretty line-clamp-3'
                             variants={slide}
                             custom={0.4}
                             initial="initial"
@@ -145,7 +145,7 @@ const News: FC = () => {
                             exit="exit"
                           >
                             {item.name}
-                          </motion.h2>
+                          </motion.p>
 
                           {/* ep and duration */}
                           <motion.div
@@ -194,7 +194,7 @@ const News: FC = () => {
                           </motion.div>
 
                           {/* categories */}
-                          <div className='flex gap-3 items-center flex-wrap'>
+                          <div className='flex gap-2 items-center flex-wrap'>
                             {
                               item?.categories.map((cate, index) => {
                                 return (
@@ -211,7 +211,7 @@ const News: FC = () => {
                                     >
                                       <Badge
                                         variant="default"
-                                        className='cursor-pointer select-none text-nowrap'
+                                        className='cursor-pointer select-none text-nowrap text-xs'
                                       >
                                         {cate.name}
                                       </Badge>
@@ -224,14 +224,18 @@ const News: FC = () => {
 
                           {/* description */}
                           <motion.div
-                            className='line-clamp-5 text-xs'
+                            className='overflow-hidden w-full hidden md:block'
                             variants={slide}
                             custom={0.7}
                             initial="initial"
                             animate="animate"
                             exit="exit"
                           >
-                            <RenderEditorContent content={item.summary} fontSize='text-sm' />
+                            <RenderEditorContent
+                              content={item.summary}
+                              fontSize='text-sm'
+                              className='line-clamp-5'
+                            />
                           </motion.div>
                         </div>
 

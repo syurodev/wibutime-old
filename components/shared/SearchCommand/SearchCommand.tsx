@@ -81,7 +81,7 @@ const SearchCommand: FC<IProps> = ({
           <Separator />
         </DialogHeader>
         <AnimatePresence mode='wait'>
-          <div className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-2 relative w-full'>
             {
               searchItems.length === 0 ? (
                 <motion.p
@@ -100,11 +100,12 @@ const SearchCommand: FC<IProps> = ({
                 searchItems.map((item, index) => (
                   <Link
                     key={`search-item-${item.id}`}
+                    className='p-3 relative w-full'
                     href={`/${item.type}s/${item.type}/${item.id}`}
                     onClick={() => setOpen(false)}
                   >
                     <motion.div
-                      className='flex items-center gap-3 p-3 hover:bg-secondary'
+                      className='flex items-center gap-3 hover:bg-secondary relative w-full overflow-hidden'
                       variants={slideWithoutScale}
                       initial="initial"
                       animate="animate"
@@ -120,8 +121,12 @@ const SearchCommand: FC<IProps> = ({
                           className='object-cover'
                         />
                       </div>
-                      <div className='flex flex-col'>
-                        <span className='text-sm whitespace-nowrap line-clamp-1 font-semibold'>{item.name}</span>
+                      <div className='flex flex-col w-full overflow-hidden'>
+                        <p
+                          className='text-sm whitespace-nowrap line-clamp-1 font-semibold'
+                        >
+                          {item.name}
+                        </p>
 
                         <Badge
                           variant={item.type as "lightnovel" | "anime" | "manga" | "default" | "secondary" | "destructive" | "outline" | null | undefined}
