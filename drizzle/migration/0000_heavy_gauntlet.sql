@@ -131,28 +131,22 @@ CREATE TABLE IF NOT EXISTS "comment_manga_chapter" (
 	CONSTRAINT "comment_manga_chapter_comment_id_chapter_id_pk" PRIMARY KEY("comment_id","chapter_id")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "favorite" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid NOT NULL,
-	CONSTRAINT "favorite_id_unique" UNIQUE("id")
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "favorite_anime" (
-	"favorite_id" uuid NOT NULL,
+	"user_id" uuid NOT NULL,
 	"anime_id" uuid NOT NULL,
-	CONSTRAINT "favorite_anime_favorite_id_anime_id_pk" PRIMARY KEY("favorite_id","anime_id")
+	CONSTRAINT "favorite_anime_user_id_anime_id_pk" PRIMARY KEY("user_id","anime_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "favorite_lightnovel" (
-	"favorite_id" uuid NOT NULL,
+	"user_id" uuid NOT NULL,
 	"lightnovel_id" uuid NOT NULL,
-	CONSTRAINT "favorite_lightnovel_favorite_id_lightnovel_id_pk" PRIMARY KEY("favorite_id","lightnovel_id")
+	CONSTRAINT "favorite_lightnovel_user_id_lightnovel_id_pk" PRIMARY KEY("user_id","lightnovel_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "favorite_manga" (
-	"favorite_id" uuid NOT NULL,
+	"user_id" uuid NOT NULL,
 	"manga_id" uuid NOT NULL,
-	CONSTRAINT "favorite_manga_favorite_id_manga_id_pk" PRIMARY KEY("favorite_id","manga_id")
+	CONSTRAINT "favorite_manga_user_id_manga_id_pk" PRIMARY KEY("user_id","manga_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "follower_group" (
@@ -410,6 +404,9 @@ CREATE TABLE IF NOT EXISTS "verification_token" (
 --> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "anime_name_idx" ON "anime" ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "anime_other_name_idx" ON "anime" ("other_names");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "user_anime_fav_idx" ON "favorite_anime" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "user_lightnovel_fav_idx" ON "favorite_lightnovel" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "user_manga_fav_idx" ON "favorite_manga" ("user_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "lightnovel_name_idx" ON "lightnovel" ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "lightnovel_other_name_idx" ON "lightnovel" ("other_names");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "manga_name_idx" ON "manga" ("name");--> statement-breakpoint
@@ -571,13 +568,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "favorite" ADD CONSTRAINT "favorite_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "favorite_anime" ADD CONSTRAINT "favorite_anime_favorite_id_favorite_id_fk" FOREIGN KEY ("favorite_id") REFERENCES "favorite"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "favorite_anime" ADD CONSTRAINT "favorite_anime_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -589,7 +580,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "favorite_lightnovel" ADD CONSTRAINT "favorite_lightnovel_favorite_id_favorite_id_fk" FOREIGN KEY ("favorite_id") REFERENCES "favorite"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "favorite_lightnovel" ADD CONSTRAINT "favorite_lightnovel_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -601,7 +592,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "favorite_manga" ADD CONSTRAINT "favorite_manga_favorite_id_favorite_id_fk" FOREIGN KEY ("favorite_id") REFERENCES "favorite"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "favorite_manga" ADD CONSTRAINT "favorite_manga_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

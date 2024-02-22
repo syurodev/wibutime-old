@@ -14,7 +14,7 @@ export const findlAnimeTrending = async (limit: number, startDay: Date, endDay: 
         a.id,
         a.name,
         as1.image AS image,
-        COUNT(DISTINCT fav.favorite_id) AS numFavorites,
+        COUNT(DISTINCT fav.user_id) AS numFavorites,
         SUM(ae.viewed) AS totalViews
       FROM
         anime a

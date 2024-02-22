@@ -46,7 +46,7 @@ export const getNews = async (limit: number = 12): Promise<{
           index: item.index || ""
         })),
       },
-      favorites: formatNumber(anime.favorite.length)
+      favorites: formatNumber(anime.favorites.length)
     }))
 
     const formatMangas: MangaNew[] | null = latestMangas.length === 0 ? null : latestMangas.map((manga) => ({
@@ -70,7 +70,7 @@ export const getNews = async (limit: number = 12): Promise<{
           index: item.index || ""
         })),
       },
-      favorites: formatNumber(manga.favorite.length)
+      favorites: formatNumber(manga.favorites.length)
     }))
 
     const formatLightnovels: LightnovelNew[] | null = latestNovels.length === 0 ? null : latestNovels.map((novel) => ({
@@ -95,7 +95,7 @@ export const getNews = async (limit: number = 12): Promise<{
           words: formatNumber(novel.volumes[0].chapters[0].words || 0),
         }
       },
-      favorites: formatNumber(novel.favorite.length)
+      favorites: formatNumber(novel.favorites.length)
     }))
 
     return {
@@ -172,7 +172,7 @@ export const getHero = async (): Promise<{
           index: item.index || ""
         })),
       },
-      favorites: formatNumber(anime.favorite.length)
+      favorites: formatNumber(anime.favorites.length)
     }))
 
     const formatMangas: MangaNew[] | null = latestMangas.length === 0 ? null : latestMangas.map((manga) => ({
@@ -196,7 +196,7 @@ export const getHero = async (): Promise<{
           index: item.index || ""
         })),
       },
-      favorites: formatNumber(manga.favorite.length)
+      favorites: formatNumber(manga.favorites.length)
     }))
 
     const formatLightnovels: LightnovelNew[] | null = latestNovels.length === 0 ? null : latestNovels.map((novel) => ({
@@ -221,7 +221,7 @@ export const getHero = async (): Promise<{
           words: formatNumber(novel.volumes[0].chapters[0].words || 0),
         }
       },
-      favorites: formatNumber(novel.favorite.length)
+      favorites: formatNumber(novel.favorites.length)
     }))
 
     let news: NewsData = []

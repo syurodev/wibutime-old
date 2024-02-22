@@ -260,7 +260,7 @@ export const getLightnovelDetail = async (novelId: string) => {
       createdAt: lightnovel.createdAt ? lightnovel.createdAt.toISOString() : "",
       updateAt: lightnovel.updatedAt ? lightnovel.updatedAt.toISOString() : "",
       categories: lightnovel.categories.map(cate => cate.category),
-      favorites: lightnovel.favorite,
+      favorites: lightnovel.favorites,
       otherNames: lightnovel.otherNames as string[],
       summary: lightnovel.summary,
       note: lightnovel.note,

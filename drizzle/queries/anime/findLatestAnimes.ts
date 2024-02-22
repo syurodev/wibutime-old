@@ -43,18 +43,11 @@ export const findLatestAnimes = async (take: number) => {
             }
           }
         },
-        favorite: {
+        favorites: {
           columns: {
-            favoriteId: false,
+            userId: true,
             animeId: false
           },
-          with: {
-            favorite: {
-              columns: {
-                id: true
-              }
-            }
-          }
         },
         user: {
           columns: {

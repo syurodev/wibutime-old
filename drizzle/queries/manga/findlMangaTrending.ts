@@ -14,7 +14,7 @@ export const findlMangaTrending = async (limit: number, startDay: Date, endDay: 
         m.id,
         m.name,
         ms.image AS image,
-        COUNT(DISTINCT fav.favorite_id) AS numFavorites,
+        COUNT(DISTINCT fav.user_id) AS numFavorites,
         SUM(mc.viewed) AS totalViews
       FROM
         manga m

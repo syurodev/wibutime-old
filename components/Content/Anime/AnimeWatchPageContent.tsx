@@ -136,7 +136,7 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
                 <span
                   className='text-sm font-semibold'
                 >
-                  {formatNumber(data.data.anime.favorite.length)}
+                  {formatNumber(data.data.anime.favorites.length)}
                 </span>
               </Button>
             </motion.div>

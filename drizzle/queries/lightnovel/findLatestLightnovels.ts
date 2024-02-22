@@ -44,18 +44,11 @@ export const findLatestLightnovels = async (take: number) => {
             }
           }
         },
-        favorite: {
+        favorites: {
           columns: {
-            favoriteId: false,
+            userId: true,
             lightnovelId: false
           },
-          with: {
-            favorite: {
-              columns: {
-                id: true
-              }
-            }
-          }
         },
         user: {
           columns: {

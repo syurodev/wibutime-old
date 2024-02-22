@@ -36,9 +36,9 @@ export const seasonDetail = async (seasonId: string): Promise<{
         followerId: string
       }[],
     } | null,
-    favorite: {
-      favoriteId: string
-    }[]
+    // favorite: {
+    //   userId: string
+    // }[]
   }
 } | null> => {
   try {
@@ -104,9 +104,9 @@ export const seasonDetail = async (seasonId: string): Promise<{
                 }
               }
             },
-            favorite: {
+            favorites: {
               columns: {
-                favoriteId: true
+                userId: true
               }
             }
           }

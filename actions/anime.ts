@@ -137,7 +137,7 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
           }
         ))
       },
-      favorites: formatNumber(anime.favorite.length)
+      favorites: formatNumber(anime.favorites.length)
     }))
 
     return {
@@ -274,7 +274,7 @@ export const getAnimeDetail = async (
       createdAt: existingAnime.createdAt ? existingAnime.createdAt.toISOString() : "",
       updateAt: existingAnime.updatedAt ? existingAnime.updatedAt.toISOString() : "",
       categories: existingAnime.categories.map(cate => cate.category),
-      favorites: existingAnime.favorite,
+      favorites: existingAnime.favorites,
       otherNames: existingAnime.otherNames as string[],
       summary: existingAnime.summary,
       note: existingAnime.note,
@@ -450,14 +450,15 @@ export const getSeasonDetail = async (seasonId: string) => {
             followerId: string
           }[],
         } | null,
-        favorite: {
-          favoriteId: string
+        favorites: {
+          userId: string
         }[]
       }
     } = {
       ...existingSeason,
       anime: {
         ...existingSeason.anime,
+        favorites: [],
         translationGroup: {
           id: existingSeason.anime.translationGroup?.id || "",
           name: existingSeason.anime.translationGroup?.name || "",

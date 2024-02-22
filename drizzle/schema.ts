@@ -38,7 +38,9 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   adminGroups: many(translationGroup),
   groups: many(translationGroupMembers),
   comments: many(comment),
-  favorite: one(favorite),
+  favoriteLightnovels: many(favoriteToLightnovel),
+  favoriteAnimes: many(favoriteToAnime),
+  favoriteMangas: many(favoriteToManga),
   purchaseLightnovelChapters: one(purchaseLightnovelChapter),
   purchaseMangaChapters: one(purchaseMangaChapter),
   purchaseAnimeEpisodes: one(purchaseAnimeEpisode),
@@ -285,7 +287,7 @@ export const lightnovelRelations = relations(lightnovel, (({ one, many }) => ({
   categories: many(categoryToLightnovel),
   rating: many(rating),
   comments: many(commentToLightnovel),
-  favorite: many(favoriteToLightnovel),
+  favorites: many(favoriteToLightnovel),
   volumes: many(lightnovelVolume),
   user: one(users, {
     fields: [lightnovel.userId],
@@ -372,7 +374,7 @@ export const animeRelations = relations(anime, (({ one, many }) => ({
   categories: many(categoryToAnime),
   rating: many(rating),
   comments: many(commentToAnime),
-  favorite: many(favoriteToAnime),
+  favorites: many(favoriteToAnime),
   seasons: many(animeSeason),
   user: one(users, {
     fields: [anime.userId],
@@ -465,7 +467,7 @@ export const mangaRelations = relations(manga, (({ one, many }) => ({
   categories: many(categoryToManga),
   rating: many(rating),
   comments: many(commentToManga),
-  favorite: many(favoriteToManga),
+  favorites: many(favoriteToManga),
   seasons: many(mangaSeason),
   user: one(users, {
     fields: [manga.userId],
@@ -830,41 +832,23 @@ export const commentToMangaChapterRelations = relations(commentToMangaChapter, (
   }),
 })))
 
-//* favorite
-export const favorite = pgTable("favorite", {
-  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
-  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
-})
-
-export const favoriteRelations = relations(favorite, (({ one, many }) => ({
-  user: one(users, {
-    fields: [favorite.userId],
-    references: [users.id]
-  }),
-  lightnovels: many(favoriteToLightnovel),
-  animes: many(favoriteToAnime),
-  mangas: many(favoriteToManga),
-})))
-
-export type Favorite = InferSelectModel<typeof favorite>
-export type FavoriteInsert = InferInsertModel<typeof favorite>
-
 //* favorite to lightnovel
 export const favoriteToLightnovel = pgTable("favorite_lightnovel", {
-  favoriteId: uuid("favorite_id")
+  userId: uuid("user_id")
     .notNull()
-    .references(() => favorite.id),
+    .references(() => users.id),
   lightnovelId: uuid("lightnovel_id")
     .notNull()
     .references(() => lightnovel.id),
 }, (t) => ({
-  pk: primaryKey(t.favoriteId, t.lightnovelId),
+  pk: primaryKey(t.userId, t.lightnovelId),
+  userFavoriteLightnovelIndex: index("user_lightnovel_fav_idx").on(t.userId)
 }))
 
 export const favoriteToLightnovelRelations = relations(favoriteToLightnovel, (({ one }) => ({
-  favorite: one(favorite, {
-    fields: [favoriteToLightnovel.favoriteId],
-    references: [favorite.id]
+  user: one(users, {
+    fields: [favoriteToLightnovel.userId],
+    references: [users.id]
   }),
   lightnovel: one(lightnovel, {
     fields: [favoriteToLightnovel.lightnovelId],
@@ -874,20 +858,21 @@ export const favoriteToLightnovelRelations = relations(favoriteToLightnovel, (({
 
 //* favorite to anime
 export const favoriteToAnime = pgTable("favorite_anime", {
-  favoriteId: uuid("favorite_id")
+  userId: uuid("user_id")
     .notNull()
-    .references(() => favorite.id),
+    .references(() => users.id),
   animeId: uuid("anime_id")
     .notNull()
     .references(() => anime.id),
 }, (t) => ({
-  pk: primaryKey(t.favoriteId, t.animeId),
+  pk: primaryKey(t.userId, t.animeId),
+  userFavoriteAnimeIndex: index("user_anime_fav_idx").on(t.userId)
 }))
 
 export const favoriteToAnimeRelations = relations(favoriteToAnime, (({ one }) => ({
-  favorite: one(favorite, {
-    fields: [favoriteToAnime.favoriteId],
-    references: [favorite.id]
+  user: one(users, {
+    fields: [favoriteToAnime.userId],
+    references: [users.id]
   }),
   anime: one(anime, {
     fields: [favoriteToAnime.animeId],
@@ -897,20 +882,21 @@ export const favoriteToAnimeRelations = relations(favoriteToAnime, (({ one }) =>
 
 //* favorite to manga
 export const favoriteToManga = pgTable("favorite_manga", {
-  favoriteId: uuid("favorite_id")
+  userId: uuid("user_id")
     .notNull()
-    .references(() => favorite.id),
+    .references(() => users.id),
   mangaId: uuid("manga_id")
     .notNull()
     .references(() => manga.id),
 }, (t) => ({
-  pk: primaryKey(t.favoriteId, t.mangaId),
+  pk: primaryKey(t.userId, t.mangaId),
+  userFavoriteMangaIndex: index("user_manga_fav_idx").on(t.userId)
 }))
 
 export const favoriteToMangaRelations = relations(favoriteToManga, (({ one }) => ({
-  favorite: one(favorite, {
-    fields: [favoriteToManga.favoriteId],
-    references: [favorite.id]
+  user: one(users, {
+    fields: [favoriteToManga.userId],
+    references: [users.id]
   }),
   manga: one(manga, {
     fields: [favoriteToManga.mangaId],

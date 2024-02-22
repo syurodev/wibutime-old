@@ -1,5 +1,5 @@
 {
-  "id": "0fac7474-1bdc-4244-9589-3fa8bbf7628e",
+  "id": "427a09d2-6dd7-4002-a1bb-3311caf7e9af",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -1076,57 +1076,12 @@
       },
       "uniqueConstraints": {}
     },
-    "favorite": {
-      "name": "favorite",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "favorite_user_id_user_id_fk": {
-          "name": "favorite_user_id_user_id_fk",
-          "tableFrom": "favorite",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "favorite_id_unique": {
-          "name": "favorite_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
-        }
-      }
-    },
     "favorite_anime": {
       "name": "favorite_anime",
       "schema": "",
       "columns": {
-        "favorite_id": {
-          "name": "favorite_id",
+        "user_id": {
+          "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -1138,14 +1093,22 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_anime_fav_idx": {
+          "name": "user_anime_fav_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "favorite_anime_favorite_id_favorite_id_fk": {
-          "name": "favorite_anime_favorite_id_favorite_id_fk",
+        "favorite_anime_user_id_user_id_fk": {
+          "name": "favorite_anime_user_id_user_id_fk",
           "tableFrom": "favorite_anime",
-          "tableTo": "favorite",
+          "tableTo": "user",
           "columnsFrom": [
-            "favorite_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -1168,10 +1131,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "favorite_anime_favorite_id_anime_id_pk": {
-          "name": "favorite_anime_favorite_id_anime_id_pk",
+        "favorite_anime_user_id_anime_id_pk": {
+          "name": "favorite_anime_user_id_anime_id_pk",
           "columns": [
-            "favorite_id",
+            "user_id",
             "anime_id"
           ]
         }
@@ -1182,8 +1145,8 @@
       "name": "favorite_lightnovel",
       "schema": "",
       "columns": {
-        "favorite_id": {
-          "name": "favorite_id",
+        "user_id": {
+          "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -1195,14 +1158,22 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_lightnovel_fav_idx": {
+          "name": "user_lightnovel_fav_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "favorite_lightnovel_favorite_id_favorite_id_fk": {
-          "name": "favorite_lightnovel_favorite_id_favorite_id_fk",
+        "favorite_lightnovel_user_id_user_id_fk": {
+          "name": "favorite_lightnovel_user_id_user_id_fk",
           "tableFrom": "favorite_lightnovel",
-          "tableTo": "favorite",
+          "tableTo": "user",
           "columnsFrom": [
-            "favorite_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -1225,10 +1196,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "favorite_lightnovel_favorite_id_lightnovel_id_pk": {
-          "name": "favorite_lightnovel_favorite_id_lightnovel_id_pk",
+        "favorite_lightnovel_user_id_lightnovel_id_pk": {
+          "name": "favorite_lightnovel_user_id_lightnovel_id_pk",
           "columns": [
-            "favorite_id",
+            "user_id",
             "lightnovel_id"
           ]
         }
@@ -1239,8 +1210,8 @@
       "name": "favorite_manga",
       "schema": "",
       "columns": {
-        "favorite_id": {
-          "name": "favorite_id",
+        "user_id": {
+          "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -1252,14 +1223,22 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_manga_fav_idx": {
+          "name": "user_manga_fav_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "favorite_manga_favorite_id_favorite_id_fk": {
-          "name": "favorite_manga_favorite_id_favorite_id_fk",
+        "favorite_manga_user_id_user_id_fk": {
+          "name": "favorite_manga_user_id_user_id_fk",
           "tableFrom": "favorite_manga",
-          "tableTo": "favorite",
+          "tableTo": "user",
           "columnsFrom": [
-            "favorite_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -1282,10 +1261,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "favorite_manga_favorite_id_manga_id_pk": {
-          "name": "favorite_manga_favorite_id_manga_id_pk",
+        "favorite_manga_user_id_manga_id_pk": {
+          "name": "favorite_manga_user_id_manga_id_pk",
           "columns": [
-            "favorite_id",
+            "user_id",
             "manga_id"
           ]
         }

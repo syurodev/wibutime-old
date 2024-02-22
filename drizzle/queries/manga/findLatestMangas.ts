@@ -42,18 +42,11 @@ export const findLatestMangas = async (take: number) => {
             }
           }
         },
-        favorite: {
+        favorites: {
           columns: {
-            favoriteId: false,
+            userId: true,
             mangaId: false
           },
-          with: {
-            favorite: {
-              columns: {
-                id: true
-              }
-            }
-          }
         },
         user: {
           columns: {

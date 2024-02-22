@@ -48,9 +48,9 @@ export const animeDetail = async (animeId: string) => {
             image: true
           }
         },
-        favorite: {
+        favorites: {
           columns: {
-            favoriteId: true
+            userId: true
           }
         }
       },

@@ -47,9 +47,9 @@ export const lightnovelDetail = async (novelId: string, userId?: string) => {
             image: true
           }
         },
-        favorite: {
+        favorites: {
           columns: {
-            favoriteId: true
+            userId: true
           }
         }
       },
