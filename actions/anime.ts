@@ -412,75 +412,75 @@ export const getSeasonDetail = async (seasonId: string) => {
       data: null
     }
 
-    const result: {
-      id: string;
-      name: string;
-      episode: {
-        id: string;
-        createdAt: Date | null;
-        updatedAt: Date | null;
-        deleted: boolean | null;
-        content: {
-          url: string
-        };
-        viewed: number | null;
-        viewed_at: Date | null;
-        thumbnail?: {
-          url: string
-        };
-        index: string;
-        seasonId: string;
-      }[];
-      anime: {
-        id: string,
-        name: string,
-        user: {
-          id: string,
-          name: string,
-          image?: string | null,
-          followedUsers: {
-            followedBy: string
-          }[],
-        },
-        translationGroup?: {
-          id: string,
-          name: string,
-          image?: string,
-          followers: {
-            followerId: string
-          }[],
-        } | null,
-        favorites: {
-          userId: string
-        }[]
-      }
-    } = {
-      ...existingSeason,
-      anime: {
-        ...existingSeason.anime,
-        favorites: [],
-        translationGroup: {
-          id: existingSeason.anime.translationGroup?.id || "",
-          name: existingSeason.anime.translationGroup?.name || "",
-          image: existingSeason.anime.translationGroup?.image.url,
-          followers: existingSeason.anime.translationGroup?.followers || []
-        }
-      },
-      episode: existingSeason.episode.map((item) => ({
-        ...item,
-        content: {
-          url: item.content.url!
-        },
-        thumbnail: {
-          url: item.thumbnail.url!
-        }
-      }))
-    }
+    // const result: {
+    //   id: string;
+    //   name: string;
+    //   episode: {
+    //     id: string;
+    //     createdAt: Date | null;
+    //     updatedAt: Date | null;
+    //     deleted: boolean | null;
+    //     content: {
+    //       url: string
+    //     };
+    //     viewed: number | null;
+    //     viewed_at: Date | null;
+    //     thumbnail?: {
+    //       url: string
+    //     };
+    //     index: string;
+    //     seasonId: string;
+    //   }[];
+    //   anime: {
+    //     id: string,
+    //     name: string,
+    //     user: {
+    //       id: string,
+    //       name: string,
+    //       image?: string | null,
+    //       followedUsers: {
+    //         followedBy: string
+    //       }[],
+    //     },
+    //     translationGroup?: {
+    //       id: string,
+    //       name: string,
+    //       image?: string,
+    //       followers: {
+    //         followerId: string
+    //       }[],
+    //     } | null,
+    //     favorites: {
+    //       userId: string
+    //     }[]
+    //   }
+    // } = {
+    //   ...existingSeason,
+    //   anime: {
+    //     ...existingSeason.anime,
+    //     favorites: [],
+    //     translationGroup: {
+    //       id: existingSeason.anime.translationGroup?.id || "",
+    //       name: existingSeason.anime.translationGroup?.name || "",
+    //       image: existingSeason.anime.translationGroup?.image.url,
+    //       followers: existingSeason.anime.translationGroup?.followers || []
+    //     }
+    //   },
+    //   episode: existingSeason.episode.map((item) => ({
+    //     ...item,
+    //     content: {
+    //       url: item.content.url!
+    //     },
+    //     thumbnail: {
+    //       url: item.thumbnail.url!
+    //     }
+    //   }))
+    // }
 
     return {
       code: 200,
       message: "success",
-      data: result
+      data: existingSeason
     }
   } catch (error) {
     console.log(error)

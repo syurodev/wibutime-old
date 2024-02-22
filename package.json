@@ -94,6 +94,7 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.17.21",
     "@types/bcryptjs": "^2.4.6",
+    "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.14",
     "@types/qs": "^6.9.11",

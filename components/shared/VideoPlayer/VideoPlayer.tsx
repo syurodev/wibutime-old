@@ -6,8 +6,10 @@ const VideoPlayer = ({ src }: { src: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestIdRef = useRef<number>();
 
+
   useEffect(() => {
     const draw = () => {
+      // console.log("draw")
       const video = videoRef.current;
       const canvas = canvasRef.current;
       if (video && canvas) {
@@ -15,13 +17,16 @@ const VideoPlayer = ({ src }: { src: string }) => {
         if (ctx) {
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
+          // ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          // Clear canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          // Draw only the necessary part
           ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         }
       }
     };
 
     const drawLoop = () => {
-
       draw();
       requestIdRef.current = requestAnimationFrame(drawLoop);
     };
@@ -53,6 +58,12 @@ const VideoPlayer = ({ src }: { src: string }) => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   if (videoRef.current) {
+  //     videoRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  //   }
+  // }, [])
+
   return (
     <div className='relative'>
       <video
@@ -68,7 +79,7 @@ const VideoPlayer = ({ src }: { src: string }) => {
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className="absolute top-0 left-0 -z-[1] w-full block m-0 opacity-25 scale-150 blur-3xl"
+        className="absolute top-0 left-0 -z-[1] w-full block m-0 opacity-15 scale-x-[1.6] scale-y-[1.6] sm:scale-x-[1.1] blur-[60px] rounded-xl"
       ></canvas>
     </div>
   )

@@ -60,7 +60,7 @@ const ContextMenuComponent: FC<IProps> = ({
           {
             id && (
               <ContextMenuItem inset>
-                <a href={`/${type}s/${type}/${id}`} target='_blank'>Mở bằng thẻ mới</a>
+                <a href={`/${type}s/${type}/${id}`} target='_blank' rel="noopener">Mở bằng thẻ mới</a>
               </ContextMenuItem>
             )
           }

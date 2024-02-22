@@ -25,6 +25,20 @@ const BlockLeak = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 's' && event.shiftKey && event.metaKey) {
+        console.log('Người dùng đã nhấn Windows + Shift + S');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     isTabFocused ? (
       <></>

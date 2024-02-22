@@ -2,18 +2,36 @@ import { db } from "@/drizzle/db";
 import { animeEpisode, animeSeason, followerGroup, followerUser, translationGroup, users } from "@/drizzle/schema";
 import { and, desc, eq } from "drizzle-orm";
 
-export const seasonDetail = async (seasonId: string): Promise<{
+type SeasonDetail = {
   id: string;
   name: string;
+  image?: {
+    key: string,
+    url: string
+  },
+  aired: string,
+  broadcastDay: string,
+  broadcastTime: Date,
+  musics?: {
+    type: MusicType,
+    name: string,
+    url?: string,
+  }[],
+  studio: string,
+  numberOfEpisodes: number | null,
   episode: {
     id: string;
     createdAt: Date | null;
     updatedAt: Date | null;
     deleted: boolean | null;
-    content: any;
+    content: {
+      url: string
+    };
     viewed: number | null;
     viewed_at: Date | null;
-    thumbnail: any;
+    thumbnail?: {
+      url: string
+    };
     index: string;
     seasonId: string;
   }[];
@@ -31,25 +49,24 @@ export const seasonDetail = async (seasonId: string): Promise<{
     translationGroup?: {
       id: string,
       name: string,
-      image?: any,
+      image?: string,
       followers: {
         followerId: string
       }[],
     } | null,
-    // favorite: {
-    //   userId: string
-    // }[]
+    favorites: {
+      userId: string
+    }[]
   }
-} | null> => {
+}
+
+export const seasonDetail = async (seasonId: string): Promise<SeasonDetail | null> => {
   try {
     const data = await db.query.animeSeason.findFirst({
       where: and(
         eq(animeSeason.id, seasonId),
         eq(animeSeason.deleted, false)
       ),
-      columns: {
-        id: true
-      },
       with: {
         anime: {
           columns: {
@@ -60,7 +77,52 @@ export const seasonDetail = async (seasonId: string): Promise<{
       }
     })
 
-    const existingSeason = await db.query.animeSeason.findFirst({
+    const existingSeason: {
+      id: string;
+      name: string;
+      image?: any,
+      aired: string,
+      broadcastDay: string,
+      broadcastTime: Date,
+      musics?: any,
+      studio: string,
+      numberOfEpisodes: number | null,
+      episode: {
+        id: string;
+        createdAt: Date | null;
+        updatedAt: Date | null;
+        deleted: boolean | null;
+        content: any;
+        viewed: number | null;
+        viewed_at: Date | null;
+        thumbnail: any;
+        index: string;
+        seasonId: string;
+      }[];
+      anime: {
+        id: string,
+        name: string,
+        user: {
+          id: string,
+          name: string,
+          image?: string | null,
+          followedUsers: {
+            followedBy: string
+          }[],
+        },
+        translationGroup?: {
+          id: string,
+          name: string,
+          image?: any,
+          followers: {
+            followerId: string
+          }[],
+        } | null,
+        favorites: {
+          userId: string
+        }[]
+      }
+    } | undefined = await db.query.animeSeason.findFirst({
       where: and(
         eq(animeSeason.id, seasonId),
         eq(animeSeason.deleted, false)
@@ -68,6 +130,13 @@ export const seasonDetail = async (seasonId: string): Promise<{
       columns: {
         id: true,
         name: true,
+        image: true,
+        aired: true,
+        broadcastDay: true,
+        broadcastTime: true,
+        musics: true,
+        studio: true,
+        numberOfEpisodes: true,
       },
       with: {
         episode: {
@@ -117,7 +186,31 @@ export const seasonDetail = async (seasonId: string): Promise<{
 
     if (!existingSeason) return null
 
-    return existingSeason
+    const result: SeasonDetail = {
+      ...existingSeason,
+      anime: {
+        ...existingSeason.anime,
+
+        favorites: existingSeason.anime.favorites,
+        translationGroup: {
+          id: existingSeason.anime.translationGroup?.id || "",
+          name: existingSeason.anime.translationGroup?.name || "",
+          image: existingSeason.anime.translationGroup?.image.url,
+          followers: existingSeason.anime.translationGroup?.followers || []
+        }
+      },
+      episode: existingSeason.episode.map((item) => ({
+        ...item,
+        content: {
+          url: item.content.url!
+        },
+        thumbnail: {
+          url: item.thumbnail.url!
+        }
+      }))
+    }
+
+    return result
   } catch (error) {
     console.log(error)
     return null
