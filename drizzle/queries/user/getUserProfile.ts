@@ -111,76 +111,72 @@ export const getUserProfile = async (userId: string) => {
             }
           }
         },
-        favorite: {
+        favoriteAnimes: {
           with: {
-            animes: {
+            anime: {
+              columns: {
+                id: true,
+                name: true,
+              },
               with: {
-                anime: {
+                seasons: {
                   columns: {
                     id: true,
-                    name: true,
-                  },
-                  with: {
-                    seasons: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        image: true
-                      }
-                    },
-                    user: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        image: true,
-                      }
-                    }
+                    image: true,
+                    name: true
                   }
-                }
-              }
-            },
-            mangas: {
-              with: {
-                manga: {
-                  columns: {
-                    id: true,
-                    name: true,
-                  },
-                  with: {
-                    seasons: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        image: true
-                      }
-                    },
-                    user: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        image: true,
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            lightnovels: {
-              with: {
-                lightnovel: {
+                },
+                user: {
                   columns: {
                     id: true,
                     name: true,
                     image: true,
-                  },
-                  with: {
-                    user: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        image: true,
-                      }
-                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        favoriteMangas: {
+          with: {
+            manga: {
+              columns: {
+                id: true,
+                name: true,
+              },
+              with: {
+                seasons: {
+                  columns: {
+                    id: true,
+                    image: true,
+                    name: true
+                  }
+                },
+                user: {
+                  columns: {
+                    id: true,
+                    name: true,
+                    image: true,
+                  }
+                }
+              }
+            }
+          }
+        },
+        favoriteLightnovels: {
+          with: {
+            lightnovel: {
+              columns: {
+                id: true,
+                name: true,
+                image: true,
+              },
+              with: {
+                user: {
+                  columns: {
+                    id: true,
+                    name: true,
+                    image: true,
                   }
                 }
               }

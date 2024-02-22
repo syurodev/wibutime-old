@@ -100,8 +100,8 @@ export const getUserDetail = async (userId: string): Promise<{
         })) : []
       })) : [],
       favorites: {
-        animes: user.favorite?.animes ?
-          user.favorite?.animes.map(anime => ({
+        animes: user.favoriteAnimes ?
+          user.favoriteAnimes.map(anime => ({
             id: anime.anime.id,
             name: anime.anime.name,
             image: anime.anime.seasons[0].image as {
@@ -113,8 +113,8 @@ export const getUserDetail = async (userId: string): Promise<{
             }
           }))
           : [],
-        mangas: user.favorite?.mangas ?
-          user.favorite?.mangas.map(manga => ({
+        mangas: user.favoriteMangas ?
+          user.favoriteMangas.map(manga => ({
             id: manga.manga.id,
             name: manga.manga.name,
             image: manga.manga.seasons[0].image as {
@@ -126,8 +126,8 @@ export const getUserDetail = async (userId: string): Promise<{
             }
           }))
           : [],
-        lightnovels: user.favorite?.lightnovels ?
-          user.favorite?.lightnovels.map(lightnovel => ({
+        lightnovels: user.favoriteLightnovels ?
+          user.favoriteLightnovels.map(lightnovel => ({
             id: lightnovel.lightnovel.id,
             name: lightnovel.lightnovel.name,
             image: lightnovel.lightnovel.image as {

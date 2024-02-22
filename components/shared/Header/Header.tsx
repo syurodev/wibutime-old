@@ -145,7 +145,7 @@ const Header: FC = () => {
         )
       }
 
-      {/* <BlockLeak /> */}
+      <BlockLeak />
     </>
   )
 }
