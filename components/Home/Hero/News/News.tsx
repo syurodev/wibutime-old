@@ -67,7 +67,7 @@ const News: FC = () => {
                   >
                     {/* Image */}
                     <motion.div
-                      className='min-h-[500px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto'
+                      className='min-h-[500px] lg:min-h-[600px] aspect-[2/3] relative flex items-start overflow-hidden flex-auto md:min-w-[350px] lg:min-w-[400px]'
                       variants={slide}
                       initial="initial"
                       animate="animate"

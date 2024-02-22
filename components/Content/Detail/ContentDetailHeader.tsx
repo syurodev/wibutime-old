@@ -71,6 +71,10 @@ const ContentDetailHeader: FC<IProps> = ({
 
   const session = useCurrentUser()
 
+  const handleFavorite = () => {
+
+  }
+
   return (
     <div className='w-full h-dvh md:min-w-[40%] flex flex-col items-center relative'>
       <ContextMenuComponent
@@ -134,7 +138,7 @@ const ContentDetailHeader: FC<IProps> = ({
 
             {/* Image */}
             <motion.div
-              className='aspect-[2/3] w-full max-w-[54%] h-fit max-h-[81%] lg:max-w-[46%] lg:max-h-[69%] relative rounded-lg overflow-hidden shadow-xl'
+              className='aspect-[2/3] w-full max-w-[54%] h-fit max-h-[81%] lg:max-h-[500px] lg:max-w-[333px] relative rounded-lg overflow-hidden shadow-xl'
               variants={slide}
               initial="initial"
               animate="animate"
@@ -194,6 +198,7 @@ const ContentDetailHeader: FC<IProps> = ({
               <Button
                 variant={"ghost"}
                 className='group items-center gap-1'
+                onClick={handleFavorite}
               >
                 <LuHeart className="group-hover:text-rose-300 transition-colors" />
                 <span className='text-xs'>{favorites}</span>
@@ -270,30 +275,6 @@ const ContentDetailHeader: FC<IProps> = ({
                   >
                     <LuVideo />
                     <span>{studio}</span>
-                  </motion.div>
-                )
-              }
-
-              {
-                session && session.id === user.id && menuType && (
-                  <motion.div
-                    className='text-sm text-secondary-foreground flex items-center gap-1'
-                    variants={slideWithoutScale}
-                    custom={0.63}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                  >
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <LuMoreHorizontal />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
-                        <DropdownMenuItem>Thêm season</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-
                   </motion.div>
                 )
               }
