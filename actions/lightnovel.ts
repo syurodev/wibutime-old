@@ -449,7 +449,7 @@ export const purchaseChapter = async (
       message: "Không tìm thấy phiên đăng nhập, vui lòng đăng nhập và thử lại"
     }
 
-    if (session.coins < 200) return {
+    if (!session.coins || session.coins < 200) return {
       code: 401,
       message: "Số coins còn lại không đủ"
     }
