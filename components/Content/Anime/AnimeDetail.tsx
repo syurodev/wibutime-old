@@ -2,14 +2,13 @@
 import React, { FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
-import { motion } from 'framer-motion'
 
 import { getAnimeDetail } from '@/actions/anime'
 import ContentDetailHeader from '@/components/Content/Detail/ContentDetailHeader'
-import { slideWithoutScale } from '@/lib/motion/slide'
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
 import SeasonCard from './_components/SeasonCard'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import SlideWithoutScale from '@/components/shared/Motion/SlideWithoutScale'
 
 type IProps = {
   id: string
@@ -45,13 +44,9 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
         {/* orther name */}
         {
           data.data.otherNames.length > 0 && (
-            <motion.div
-              variants={slideWithoutScale}
-              custom={0.35}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+            <SlideWithoutScale
               className='rounded-lg border p-4 bg-background shadow mx-4'
+              delay={0.35}
             >
               <p className='font-semibold text-sm mb-2'>Tên khác:</p>
               {
@@ -64,54 +59,42 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
                   </p>
                 ))
               }
-            </motion.div>
+            </SlideWithoutScale>
           )
         }
 
         {/* summary */}
-        <motion.div
-          variants={slideWithoutScale}
-          custom={0.45}
-          initial="initial"
-          animate="animate"
-          exit="exit"
+        <SlideWithoutScale
           className='rounded-lg border p-4 bg-background shadow mx-4'
+          delay={0.45}
         >
           <p className='font-semibold text-sm'>Tóm tắt:</p>
           {
             data.data.summary &&
             <RenderEditorContent content={data.data.summary} fontSize='text-sm' />
           }
-        </motion.div>
+        </SlideWithoutScale>
 
         {/* note */}
-        <motion.div
-          variants={slideWithoutScale}
-          custom={0.55}
-          initial="initial"
-          animate="animate"
-          exit="exit"
+        <SlideWithoutScale
           className='rounded-lg border p-4 bg-background shadow mx-4'
+          delay={0.55}
         >
           <p className='font-semibold text-sm'>Ghi chú:</p>
           {
             data.data.note &&
             <RenderEditorContent content={data.data.note} fontSize='text-sm' />
           }
-        </motion.div>
+        </SlideWithoutScale>
 
         {/* Season */}
         <div className='flex flex-col justify-start gap-3 flex-wrap mx-4'>
           {
             data.data.seasons && data.data.seasons.map((item, index) => {
               return (
-                <motion.div
-                  key={`category-${index}`}
-                  variants={slideWithoutScale}
-                  custom={0.5 + (index * 0.1)}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
+                <SlideWithoutScale
+                  key={item.id}
+                  delay={0.5 + (index * 0.1)}
                 >
                   <SeasonCard
                     name={item.name}
@@ -131,7 +114,7 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
                     animeId={id}
                     poster={session ? data.data.user.id === session.id : false}
                   />
-                </motion.div>
+                </SlideWithoutScale>
               )
             })
           }

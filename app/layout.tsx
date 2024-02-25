@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import '@/app/globals.css'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
@@ -33,6 +34,7 @@ export default async function RootLayout({
           >
             {children}
             <Analytics />
+            <SpeedInsights />
             <Toaster />
             {/* <Footer /> */}
           </ThemeProvider>

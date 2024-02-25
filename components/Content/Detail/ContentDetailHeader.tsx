@@ -3,17 +3,8 @@
 import React, { FC } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { LuCaseSensitive, LuEye, LuHeart, LuPaintbrush, LuPencil, LuVideo, LuMoreHorizontal } from 'react-icons/lu'
+import { LuCaseSensitive, LuEye, LuHeart, LuPaintbrush, LuPencil, LuVideo } from 'react-icons/lu'
 import Image from 'next/image'
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 import { slide, slideWithoutScale } from '@/lib/motion/slide'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

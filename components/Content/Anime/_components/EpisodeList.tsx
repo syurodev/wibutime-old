@@ -46,6 +46,7 @@ const EpisodeList: FC<IProps> = ({ episodes, epIndex }) => {
               <Link
                 key={ep.id}
                 href={`?ep=${ep.index}`}
+                scroll={false}
               >
                 <AccordionContent
                   className={`flex items-start gap-3 ${epIndex === ep.index ? "bg-secondary hover:bg-secondary" : ""} ${index === episodes.length - 1 ? "mb-4" : "mb-2"}`}

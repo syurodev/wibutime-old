@@ -53,20 +53,21 @@ const Header: FC = () => {
         className={`${styles.header} ${isActive ? "bg-background supports-[backdrop-filter]:bg-background" : "bg-background/40 supports-[backdrop-filter]:bg-background/40"} backdrop-blur-lg p-3 z-50 transition-all duration-200 ease-in-out w-screen`}
       >
         <div
-          className={`${styles.bar} ${isActive ? "max-w-[1500px]" : "max-w-[1400px]"} w-full mx-auto transition-all delay-75 duration-1000`}
+          className={`${styles.bar} ${isActive ? "max-w-[1500px]" : "max-w-[1400px]"} w-full mx-auto transition-all delay-75 duration-1000 overflow-hidden`}
         // className={`${styles.bar} w-screen`}
         >
           <Link
             href={"/"}
             className='relative flex items-center justify-start pl-10'
             scroll
+            onClick={() => setIsActive(false)}
           >
             <Lottie animationData={logoAnimation} loop={false} className='absolute size-44 -left-[75px]' />
             <span className='font-semibold'>Wibutime</span>
           </Link>
 
           <div className='flex items-center gap-3'>
-            <div onClick={() => { setIsActive(!isActive) }} className={styles.el}>
+            <div onClick={() => { setIsActive(!isActive) }} className={`${styles.el} min-w-8 min-h-8`}>
               <div className={`${styles.burger} ${isActive ? styles.burgerActive : ""} before:bg-black dark:before:bg-white after:bg-black 
           dark:after:bg-white`}></div>
               <div className={`${styles.label} hidden md:flex`}>
@@ -122,7 +123,7 @@ const Header: FC = () => {
         ></motion.div>
 
         <AnimatePresence mode='wait'>
-          {isActive && <Nav />}
+          {isActive && <Nav setIsActive={setIsActive} />}
         </AnimatePresence>
       </nav>
 
@@ -145,7 +146,7 @@ const Header: FC = () => {
         )
       }
 
-      <BlockLeak />
+      {/* <BlockLeak /> */}
     </>
   )
 }

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import styles from './styles.module.scss';
 import { blur, translate } from '../../anim';
-import { FC, memo } from 'react';
+import { Dispatch, FC, SetStateAction, memo } from 'react';
 
 type IProps = {
   links: {
@@ -17,10 +17,11 @@ type IProps = {
   setSelectedLink: React.Dispatch<React.SetStateAction<{
     isActive: boolean;
     index: number;
-  }>>
+  }>>;
+  setIsActive: Dispatch<SetStateAction<boolean>>
 }
 
-const Body: FC<IProps> = ({ links, selectedLink, setSelectedLink }) => {
+const Body: FC<IProps> = ({ links, selectedLink, setSelectedLink, setIsActive }) => {
 
   const getChars = (word: string) => {
     let chars: any[] = [];
@@ -44,7 +45,7 @@ const Body: FC<IProps> = ({ links, selectedLink, setSelectedLink }) => {
       {
         links.map((link, index) => {
           const { title, href, status } = link;
-          return <Link key={`l_${index}`} href={href}>
+          return <Link key={`l_${index}`} href={href} onClick={() => setIsActive(false)}>
             <motion.p
               className={status === "comingsoon" ? "select-none pointer-events-none !opacity-35" : ""}
               onMouseOver={() => { setSelectedLink({ isActive: true, index }) }}

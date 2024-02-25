@@ -11,13 +11,13 @@ const MainLayout = ({
   return (
     <main>
       <Header />
-      <ContextMenuComponent>
-        <div className='min-h-dvh w-screen overflow-hidden'>
-          <QueryProvider>
-            {children}
-          </QueryProvider>
-        </div>
-      </ContextMenuComponent>
+      {/* <ContextMenuComponent> */}
+      <div className='min-h-dvh w-screen overflow-hidden'>
+        <QueryProvider>
+          {children}
+        </QueryProvider>
+      </div>
+      {/* </ContextMenuComponent> */}
     </main>
   )
 }
