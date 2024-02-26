@@ -32,8 +32,6 @@ const LightnovelDetail: FC<IProps> = ({ id }) => {
     notFound()
   }
 
-  console.log(data.data)
-
   const [openPurchase, setOpenPurchase] = useState<boolean>(false)
   const [purchaseData, setPurchaseData] = useState<{
     novelId: string,
@@ -56,6 +54,7 @@ const LightnovelDetail: FC<IProps> = ({ id }) => {
         <ContentDetailHeader
           categories={data.data.categories}
           favorites={data.data.favorites.length}
+          favorited={data.data.favorited}
           name={data.data.name}
           user={data.data.user}
           viewed={data.data.viewed}

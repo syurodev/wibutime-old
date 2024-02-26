@@ -13,6 +13,7 @@ import { badgeVariants } from '@/components/ui/badge'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import ContextMenuComponent from '@/components/shared/ContextMenu/ContextMenuComponent'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
+import FavoriteButton from '@/components/shared/FavoriteButton/FavoriteButton'
 
 type IProps = {
   user: {
@@ -33,7 +34,8 @@ type IProps = {
   id: string,
   words?: string,
   viewed: string,
-  favorites: number
+  favorites: number,
+  favorited: boolean,
   categories: {
     id: string,
     name: string
@@ -51,6 +53,7 @@ const ContentDetailHeader: FC<IProps> = ({
   name,
   words,
   viewed,
+  favorited,
   favorites,
   categories,
   author,
@@ -59,12 +62,7 @@ const ContentDetailHeader: FC<IProps> = ({
   menuType,
   id
 }) => {
-
   const session = useCurrentUser()
-
-  const handleFavorite = () => {
-
-  }
 
   return (
     <div className='w-full h-dvh md:min-w-[40%] flex flex-col items-center relative'>
@@ -186,14 +184,14 @@ const ContentDetailHeader: FC<IProps> = ({
                 <span className='text-xs'>{viewed}</span>
               </Button>
 
-              <Button
-                variant={"ghost"}
-                className='group items-center gap-1'
-                onClick={handleFavorite}
-              >
-                <LuHeart className="group-hover:text-rose-300 transition-colors" />
-                <span className='text-xs'>{favorites}</span>
-              </Button>
+              <FavoriteButton
+                type={menuType === "anime" ? "anime" : menuType === "anime season" ? "anime" : menuType === "manga" ? "manga" : menuType === "manga season" ? "manga" : menuType === "lightnovel" ? "lightnovel" : "lightnovel"}
+                action='favo'
+                contentId={id}
+                favoriteNumber={favorites}
+                userId={session?.id ?? undefined}
+                favorited={favorited}
+              />
             </motion.div>
 
             {/* Categories */}

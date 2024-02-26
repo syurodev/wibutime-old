@@ -239,7 +239,9 @@ export const getVolumes = async (novelId: string) => {
   }
 }
 
-export const getLightnovelDetail = async (novelId: string) => {
+export const getLightnovelDetail = async (
+  novelId: string,
+) => {
   try {
     const session = await getServerSession()
 
@@ -253,87 +255,86 @@ export const getLightnovelDetail = async (novelId: string) => {
       }
     }
 
-    const result: LightnovelDetail = {
-      id: lightnovel.id,
-      name: lightnovel.name,
-      type: "lightnovel",
-      createdAt: lightnovel.createdAt ? lightnovel.createdAt.toISOString() : "",
-      updateAt: lightnovel.updatedAt ? lightnovel.updatedAt.toISOString() : "",
-      categories: lightnovel.categories.map(cate => cate.category),
-      favorites: lightnovel.favorites,
-      otherNames: lightnovel.otherNames as string[],
-      summary: lightnovel.summary,
-      note: lightnovel.note,
-      user: lightnovel.user,
-      words: formatNumber(lightnovel.volumes.reduce((totalWords, volume) => {
-        return totalWords + volume.chapters.reduce((volumeWords, chapter) => {
-          return volumeWords + (chapter.words || 0);
-        }, 0);
-      }, 0)),
-      viewed: formatNumber(lightnovel.volumes.reduce((totalViewed, volume) => {
-        return totalViewed + volume.chapters.reduce((volumeViewed, chapter) => {
-          return volumeViewed + (chapter.viewed || 0);
-        }, 0);
-      }, 0)),
-      translationGroup: lightnovel.translationGroup as {
-        id: string;
-        image: {
-          key?: string,
-          url: string
-        } | null;
-        name: string;
-      },
-      image: lightnovel.image as {
-        key?: string,
-        url: string
-      } | undefined,
-      artist: lightnovel.artist,
-      author: lightnovel.author,
-      volumes: await Promise.all(lightnovel.volumes.map(async (item) => {
-        const chapters = await Promise.all(item.chapters.map(async (chapter) => {
-          let purchasesId = "";
-          if (session && session.id !== lightnovel.user.id) {
-            const res = await findChapterPurchased(chapter.id, session.id!);
-            if (res) {
-              purchasesId = res.id;
-            }
-          }
-          return {
-            id: chapter.id,
-            name: chapter.name,
-            charge: (() => {
-              if (!session) {
-                return chapter.charge ?? false;
-              } else if (session.id === lightnovel.user.id) {
-                return false
-              }
-              else {
-                return purchasesId !== "" ? false : (chapter.charge ?? false);
-              }
-            })(),
-            createdAt: chapter.createdAt ? chapter.createdAt.toISOString() : "",
-            viewed: chapter.viewed || 0
-          };
-        }));
-        return {
-          id: item.id,
-          name: item.name,
-          createdAt: item.createdAt ? item.createdAt.toISOString() : "",
-          updateAt: item.createdAt ? item.createdAt.toISOString() : "",
-          image: item.image as {
-            key?: string,
-            url: string
-          } | null,
-          chapters: chapters // Assign the resolved chapters array
-        };
-      }))
-    }
-
+    // const result: LightnovelDetail = {
+    //   id: lightnovel.id,
+    //   name: lightnovel.name,
+    //   type: "lightnovel",
+    //   createdAt: lightnovel.createdAt ? lightnovel.createdAt.toISOString() : "",
+    //   updateAt: lightnovel.updatedAt ? lightnovel.updatedAt.toISOString() : "",
+    //   categories: lightnovel.categories.map(cate => cate.category),
+    //   favorites: lightnovel.favorites,
+    //   otherNames: lightnovel.otherNames as string[],
+    //   summary: lightnovel.summary,
+    //   note: lightnovel.note,
+    //   user: lightnovel.user,
+    //   words: formatNumber(lightnovel.volumes.reduce((totalWords, volume) => {
+    //     return totalWords + volume.chapters.reduce((volumeWords, chapter) => {
+    //       return volumeWords + (chapter.words || 0);
+    //     }, 0);
+    //   }, 0)),
+    //   viewed: formatNumber(lightnovel.volumes.reduce((totalViewed, volume) => {
+    //     return totalViewed + volume.chapters.reduce((volumeViewed, chapter) => {
+    //       return volumeViewed + (chapter.viewed || 0);
+    //     }, 0);
+    //   }, 0)),
+    //   translationGroup: lightnovel.translationGroup as {
+    //     id: string;
+    //     image: {
+    //       key?: string,
+    //       url: string
+    //     } | null;
+    //     name: string;
+    //   },
+    //   image: lightnovel.image as {
+    //     key?: string,
+    //     url: string
+    //   } | undefined,
+    //   artist: lightnovel.artist,
+    //   author: lightnovel.author,
+    //   volumes: await Promise.all(lightnovel.volumes.map(async (item) => {
+    //     const chapters = await Promise.all(item.chapters.map(async (chapter) => {
+    //       let purchasesId = "";
+    //       if (session && session.id !== lightnovel.user.id) {
+    //         const res = await findChapterPurchased(chapter.id, session.id!);
+    //         if (res) {
+    //           purchasesId = res.id;
+    //         }
+    //       }
+    //       return {
+    //         id: chapter.id,
+    //         name: chapter.name,
+    //         charge: (() => {
+    //           if (!session) {
+    //             return chapter.charge ?? false;
+    //           } else if (session.id === lightnovel.user.id) {
+    //             return false
+    //           }
+    //           else {
+    //             return purchasesId !== "" ? false : (chapter.charge ?? false);
+    //           }
+    //         })(),
+    //         createdAt: chapter.createdAt ? chapter.createdAt.toISOString() : "",
+    //         viewed: chapter.viewed || 0
+    //       };
+    //     }));
+    //     return {
+    //       id: item.id,
+    //       name: item.name,
+    //       createdAt: item.createdAt ? item.createdAt.toISOString() : "",
+    //       updateAt: item.createdAt ? item.createdAt.toISOString() : "",
+    //       image: item.image as {
+    //         key?: string,
+    //         url: string
+    //       } | null,
+    //       chapters: chapters // Assign the resolved chapters array
+    //     };
+    //   }))
+    // }
 
     return {
       code: 200,
       message: "success",
-      data: result
+      data: lightnovel
     }
   } catch (error) {
 

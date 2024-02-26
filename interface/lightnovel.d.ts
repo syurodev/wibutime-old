@@ -43,6 +43,7 @@ type LightnovelDetail = {
   name: string,
   otherNames: string[],
   type: "lightnovel"
+  favorited: boolean,
   favorites: any[]
   categories: {
     id: string,
