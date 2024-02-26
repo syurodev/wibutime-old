@@ -1,5 +1,6 @@
-import { getCategoriesAndCountContent } from "@/drizzle/queries/category/getCategoriesAndCountContent"
 import { NextRequest, NextResponse } from "next/server"
+
+import { getCategoriesAndCountContent } from "@/drizzle/queries/category/getCategoriesAndCountContent"
 
 export async function GET(
   req: NextRequest,

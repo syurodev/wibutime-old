@@ -62,7 +62,7 @@ const CategoriesContent: FC<IProps> = ({ data }) => {
             return (
               <SlideWithoutScale
                 key={item.id}
-                delay={0.1 + index * 0.1}
+                delay={0.1 + index * 0.05}
               >
                 <CategoryCard cate={item} />
               </SlideWithoutScale>

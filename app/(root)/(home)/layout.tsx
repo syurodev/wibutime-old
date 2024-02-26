@@ -13,7 +13,7 @@ const Layout = ({
   children: React.ReactNode
 }) => {
   return (
-    <Container>
+    <Container className='flex flex-col gap-5'>
       <section className='grid grid-cols-[1fr] lg:grid-cols-[3fr_1fr] gap-5'>
         {news}
         {trending}

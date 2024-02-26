@@ -210,7 +210,7 @@ const ContentDetailHeader: FC<IProps> = ({
                       exit="exit"
                     >
                       <Link
-                        href={"#"}
+                        href={`/categories/${item.id}`}
                         className={badgeVariants({ variant: "default" })}
                       >
                         {item.name}

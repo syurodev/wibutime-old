@@ -1,5 +1,5 @@
 import { db } from "@/drizzle/db";
-import { animeEpisode, animeSeason, followerGroup, followerUser, translationGroup, users } from "@/drizzle/schema";
+import { animeEpisode, animeSeason, followerGroup, followerUser } from "@/drizzle/schema";
 import { and, desc, eq } from "drizzle-orm";
 
 type SeasonDetail = {

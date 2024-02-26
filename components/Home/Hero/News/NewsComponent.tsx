@@ -209,7 +209,7 @@ const NewsComponent: FC = () => {
                                     exit="exit"
                                   >
                                     <Link
-                                      href={"#"}
+                                      href={`/categories/${cate.id}`}
                                     >
                                       <Badge
                                         variant="default"
