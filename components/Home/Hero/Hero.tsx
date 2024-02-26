@@ -1,8 +1,8 @@
 import React from 'react'
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
 
-import News from './News/News'
-import Trending from './Trending/Trending'
+import News from './News/NewsComponent'
+import Trending from './Trending/TrendingComponent'
 import { getHero } from '@/actions/home';
 
 const Hero = async () => {

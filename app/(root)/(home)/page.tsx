@@ -7,7 +7,6 @@ export default async function Home() {
   return (
     <Container>
       <div className="flex flex-col gap-5">
-        <Hero />
         <MainSection />
       </div>
     </Container>

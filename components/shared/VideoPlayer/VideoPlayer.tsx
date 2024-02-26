@@ -73,7 +73,8 @@ const VideoPlayer = ({ src }: { src: string }) => {
         className='rounded-xl overflow-hidden w-full block m-0'
         controlsList="nodownload"
         src={src}
-      // contextMenu='return null'
+        preload="metadata"
+        contextMenu='return null'
       >
       </video>
       <canvas

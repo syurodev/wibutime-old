@@ -12,7 +12,7 @@ type IProps = {
   data: ContinueData[]
 }
 
-const Continue: FC<IProps> = ({ data }) => {
+const ContinueComponent: FC<IProps> = ({ data }) => {
   return (
     <section>
       <h1 className='uppercase font-semibold text-lg'>Continue</h1>
@@ -79,4 +79,4 @@ const Continue: FC<IProps> = ({ data }) => {
   )
 }
 
-export default Continue
+export default ContinueComponent

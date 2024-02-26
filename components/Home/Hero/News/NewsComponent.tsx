@@ -12,26 +12,26 @@ import { useQuery } from '@tanstack/react-query'
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from '@/components/ui/badge';
 import { slide, slideWithoutScale } from '@/lib/motion/slide'
-import { getHero } from '@/actions/home';
+import { getHeroNews } from '@/actions/home';
 
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
 
-const News: FC = () => {
+const NewsComponent: FC = () => {
   const { data, error } = useQuery({
-    queryKey: ["news", "trending"],
-    queryFn: getHero
+    queryKey: ["heronews"],
+    queryFn: getHeroNews
   })
 
-  if (!data?.data) {
+  if (!data || !data.data) {
     notFound()
   }
 
   const [currentIndex, setCurrentIndex] = useState<number>(0)
 
   useEffect(() => {
-    if (data?.data && data?.data?.news && data?.data?.news.length > 1) {
+    if (data.data && data.data && data.data.length > 1) {
       const interval = setInterval(() => {
-        if (currentIndex >= data?.data?.news.length! - 1) {
+        if (currentIndex >= data.data!.length! - 1) {
           setCurrentIndex(0);
         } else {
           setCurrentIndex(currentIndex + 1);
@@ -58,7 +58,7 @@ const News: FC = () => {
       >
         <AnimatePresence mode='wait'>
           {
-            data.data.news.map((item, index) => {
+            data.data.map((item, index) => {
               return (
                 index === currentIndex && (
                   <div
@@ -266,4 +266,4 @@ const News: FC = () => {
   )
 }
 
-export default News
+export default NewsComponent

@@ -11,16 +11,16 @@ import { motion } from 'framer-motion';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { slide } from '@/lib/motion/slide'
-import { getHero } from '@/actions/home'
+import { getHeroTrending } from '@/actions/home'
 
 
-const Trending: FC = () => {
+const TrendingComponent: FC = () => {
   const { data, error } = useQuery({
-    queryKey: ["news", "trending"],
-    queryFn: getHero
+    queryKey: ["herotrending"],
+    queryFn: getHeroTrending
   })
 
-  if (!data?.data) {
+  if (!data || !data.data) {
     notFound()
   }
 
@@ -48,7 +48,7 @@ const Trending: FC = () => {
                 className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.data.trending.animes.length > 0 ? data.data.trending.animes.map((item, index) => {
+                  data.data.animes.length > 0 ? data.data.animes.map((item, index) => {
                     return (
                       <motion.div
                         key={`animetranding-${index}`}
@@ -105,7 +105,7 @@ const Trending: FC = () => {
                 className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.data.trending.mangas.length > 0 ? data.data.trending.mangas.map((item, index) => {
+                  data.data.mangas.length > 0 ? data.data.mangas.map((item, index) => {
                     return (
                       <motion.div
                         key={`mangatranding-${index}`}
@@ -161,7 +161,7 @@ const Trending: FC = () => {
                 className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.data.trending.lightnovels.length > 0 ? data.data.trending.lightnovels.map((item, index) => {
+                  data.data.lightnovels.length > 0 ? data.data.lightnovels.map((item, index) => {
                     return (
                       <motion.div
                         key={`lightnoveltranding-${index}`}
@@ -219,4 +219,4 @@ const Trending: FC = () => {
   )
 }
 
-export default Trending
+export default TrendingComponent

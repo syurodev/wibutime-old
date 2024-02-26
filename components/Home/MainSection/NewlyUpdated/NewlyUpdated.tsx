@@ -58,7 +58,7 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
   return (
     type === "anime" ? (
       data.data.anime.length > 0 &&
-      <div>
+      <section>
         <div className='flex justify-between items-center'>
           <h1 className='uppercase font-semibold text-lg'>{title}</h1>
 
@@ -93,10 +93,10 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
             })
           }
         </div>
-      </div>
+      </section>
     ) : type === "manga" ? (
       data.data.manga.length > 0 &&
-      <div>
+      <section>
         <div className='flex justify-between items-center'>
           <h1 className='uppercase font-semibold text-lg'>{title}</h1>
 
@@ -131,10 +131,10 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
             })
           }
         </div>
-      </div>
+      </section>
     ) : (
       data.data.lightnovel.length > 0 &&
-      <div>
+      <section>
         <div className='flex justify-between items-center'>
           <h1 className='uppercase font-semibold text-lg'>{title}</h1>
 
@@ -167,7 +167,7 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
             })
           }
         </div>
-      </div>
+      </section>
     )
   )
 }

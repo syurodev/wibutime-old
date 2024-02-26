@@ -1,7 +1,8 @@
+import React from 'react'
+
 import Container from '@/components/shared/Container'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import React from 'react'
 
 const CategoriesLoading = () => {
   return (
