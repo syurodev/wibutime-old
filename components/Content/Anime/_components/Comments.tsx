@@ -46,7 +46,7 @@ const Comments: FC<IProps> = ({ episodeId }) => {
         <AccordionContent
           className="flex flex-col items-start gap-3 mb-2"
         >
-          <AddComment />
+          {/* <AddComment /> */}
           comment
         </AccordionContent>
       </AccordionItem>
