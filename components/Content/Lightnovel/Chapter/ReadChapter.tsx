@@ -13,10 +13,11 @@ const MenuButton = dynamic(() => import('@/components/Content/Lightnovel/Chapter
 })
 
 type IProps = {
-  data: LightnovelChapterDetail
+  data: LightnovelChapterDetail,
+  comments: CommentData[]
 }
 
-const ReadChapter: FC<IProps> = ({ data }) => {
+const ReadChapter: FC<IProps> = ({ data, comments }) => {
   useEffect(() => {
     const upViewed = setTimeout(async () => {
       await updateLightnovelChapterViewed(data.id)
@@ -75,7 +76,7 @@ const ReadChapter: FC<IProps> = ({ data }) => {
               className='flex items-center gap-1'
             >
               <LuMessageCircle />
-              <span className='text-xs font-semibold'>{data.comments.length}</span>
+              <span className='text-xs font-semibold'>{data.comments}</span>
             </motion.div>
           </div>
         </div>
@@ -102,6 +103,7 @@ const ReadChapter: FC<IProps> = ({ data }) => {
         volumes={data.volumes}
         novelName={data.novelName}
         authorId={data.authorId}
+        comments={comments}
       />
     </>
   )

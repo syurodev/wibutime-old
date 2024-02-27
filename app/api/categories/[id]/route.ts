@@ -1,5 +1,6 @@
+import { NextRequest } from "next/server"
+
 import { searchContentWithCategory } from "@/drizzle/queries/search/searchContentWithCategory";
-import { NextRequest, NextResponse } from "next/server"
 
 
 export async function GET(

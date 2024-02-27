@@ -19,6 +19,8 @@ import { lightnovelDetail } from "@/drizzle/queries/lightnovel/lightnovelDetail"
 import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
 import { purchaseLightnovelChap } from "@/drizzle/queries/lightnovel/purchaseLightnovelChap"
 import { findChapterPurchased } from "@/drizzle/queries/lightnovel/findChapterPurchased"
+import { CommentInsert } from "@/drizzle/schema"
+import { insertComment } from "@/drizzle/queries/lightnovel/insertComment"
 
 export const createLightnovel = async (values: string) => {
   try {
@@ -442,6 +444,55 @@ export const purchaseChapter = async (
     return {
       code: 500,
       message: "Lỗi server vui lòng thử lại"
+    }
+  }
+}
+
+export const createComment = async (
+  comment: string,
+  contentId: string,
+  callbackUrl: string,
+  reply?: string,
+) => {
+  try {
+    const session = await getServerSession()
+
+    if (!session || !session.id) return {
+      code: 400,
+      message: "Không tìm thấy phiên đăng nhập, vui lòng đăng nhập và thử lại"
+    }
+
+    let data: {
+      comment: string,
+      userId: string,
+      reply?: string,
+    } = {
+      comment: comment,
+      userId: session.id,
+    }
+
+    if (reply) data.reply = reply
+
+    const createdComment = await insertComment({
+      ...data
+    }, contentId)
+
+    if (!createdComment) return {
+      code: 400,
+      message: "Có lỗi trong quá trình đăng comment, vui lòng thử lại"
+    }
+
+    revalidatePath(callbackUrl)
+
+    return {
+      code: 200,
+      message: "success"
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server"
     }
   }
 }

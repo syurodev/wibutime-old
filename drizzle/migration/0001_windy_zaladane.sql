@@ -1,0 +1,1 @@
+ALTER TABLE "comment" ALTER COLUMN "comment" SET DATA TYPE text;

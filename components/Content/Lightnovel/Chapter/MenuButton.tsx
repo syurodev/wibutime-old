@@ -1,7 +1,7 @@
 "use client"
 
 import React, { FC, memo, useEffect, useState } from 'react'
-import { LuArrowLeft, LuArrowRight, LuHome, LuListOrdered, LuMessageCircle } from 'react-icons/lu'
+import { LuArrowLeft, LuArrowRight, LuHome, LuListOrdered, LuMessageCircle, LuX } from 'react-icons/lu'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ type IProps = {
   novelId: string,
   novelName: string,
   authorId: string,
+  comments: CommentData[],
   currentChapter: string,
   volumes: {
     id: string,
@@ -34,6 +35,7 @@ const MenuButton: FC<IProps> = ({
   volumes,
   novelName,
   authorId,
+  comments,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isOpenChapterList, setIsOpenChapterList] = useState<boolean>(false)
@@ -71,7 +73,7 @@ const MenuButton: FC<IProps> = ({
   return (
     <>
       <div
-        className={`fixed bottom-5 right-5 opacity-70 overflow-hidden shadow flex flex-col items-center justify-around hover:opacity-100 transition-all duration-300 ease-in-out bg-primary w-3 h-3 rounded-full hover:w-12 hover:h-12 hover:bottom-2 hover:right-2 origin-center ${isOpen && "!h-60 !w-12 !right-2 !bottom-2"}`}
+        className={`fixed bottom-5 right-5 opacity-70 overflow-hidden shadow flex flex-col items-center justify-around hover:opacity-100 transition-all duration-300 ease-in-out bg-primary w-3 h-3 rounded-full hover:w-12 hover:h-12 hover:bottom-2 hover:right-2 origin-center ${isOpen && "!h-72 !w-12 !right-2 !bottom-2"}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {
@@ -125,6 +127,15 @@ const MenuButton: FC<IProps> = ({
               >
                 <LuListOrdered className="text-lg" />
               </Button>
+
+              <Button
+                size={"icon"}
+                rounded={"full"}
+                variant={"secondary"}
+                onClick={() => setIsOpen(false)}
+              >
+                <LuX className="text-lg" />
+              </Button>
             </>
           )
         }
@@ -147,6 +158,10 @@ const MenuButton: FC<IProps> = ({
       <CommentSheet
         isOpen={isOpenComment}
         onOpenChange={setIsOpenComment}
+        commentFor='lightnovel chapter'
+        contentId={currentChapter}
+        authorId={authorId}
+        comments={comments}
       />
     </>
   )

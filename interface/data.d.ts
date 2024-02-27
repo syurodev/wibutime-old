@@ -67,3 +67,27 @@ type DaysOfTheWeek = "Sun" | "Mon" | "Tues" | "Wed" | "Thurs" | "Fri" | "Sat"
 type MusicType = "Opening Theme" | "Ending Theme" | "OST"
 
 type ContextMenu = "anime" | "anime season" | "lightnovel" | "lightnovel volume" | "manga" | "manga season"
+
+type CommentType = "anime" | "anime ep" | "manga" | "manga chapter" | "lightnovel" | "lightnovel chapter"
+
+type CommentData = {
+  id: string,
+  comment: string,
+  createdAt: Date,
+  uncomplete?: boolean,
+  user: {
+    id: string,
+    name: string,
+    image?: string
+  }
+  replys?: {
+    id: string,
+    comment: string,
+    createdAt: Date,
+    user: {
+      id: string,
+      name: string,
+      image?: string,
+    }
+  }[]
+}

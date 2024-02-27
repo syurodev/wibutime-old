@@ -18,6 +18,20 @@ const ReadLightnovel: FC<IProps> = async ({ params }) => {
     notFound()
   }
 
+  const res = await fetch(`${process.env.APP_URL}/api/lightnovels/lightnovel/comment?id=${params.chapterId}&type=lightnovel chapter`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+
+  let comments: CommentData[] = []
+
+  if (res.ok) {
+    comments = await res.json()
+  }
+
+
   return (
     <Container
       showScroll={true}
@@ -29,7 +43,7 @@ const ReadLightnovel: FC<IProps> = async ({ params }) => {
         content.data.charge ? (
           <Purchase data={content.data} />
         ) : (
-          <ReadChapter data={content.data} />
+          <ReadChapter data={content.data} comments={comments} />
         )
       }
     </Container>

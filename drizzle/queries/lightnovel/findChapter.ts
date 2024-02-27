@@ -11,25 +11,8 @@ export const findChapter = async (chapterId: string, userId?: string) => {
       where: and(eq(lightnovelChapter.id, chapterId), eq(lightnovelChapter.deleted, false)),
       with: {
         comments: {
-          with: {
-            comment: {
-              columns: {
-                id: true,
-                comment: true,
-                createdAt: true,
-                updatedAt: true,
-                reply: true
-              },
-              with: {
-                user: {
-                  columns: {
-                    id: true,
-                    name: true,
-                    image: true
-                  }
-                }
-              },
-            }
+          columns: {
+            commentId: true
           }
         },
         volume: {
@@ -105,18 +88,7 @@ export const findChapter = async (chapterId: string, userId?: string) => {
       charge: charge,
       content: existingChapter.content,
       volumes: volumes,
-      comments: existingChapter.comments.length > 0 ? existingChapter.comments.map(comment => ({
-        id: comment.comment.id,
-        createAt: comment.comment.createdAt ? comment.comment.createdAt.toISOString() : "",
-        updateAt: comment.comment.updatedAt ? comment.comment.updatedAt.toISOString() : "",
-        comment: comment.comment.comment as any,
-        user: {
-          id: comment.comment.user.id,
-          image: comment.comment.user.image as string,
-          name: comment.comment.user.name,
-        }
-      })) : [],
-
+      comments: existingChapter.comments.length,
       createdAt: existingChapter.createdAt ? existingChapter.createdAt.toISOString() : "",
       updateAt: existingChapter.updatedAt ? existingChapter.updatedAt.toISOString() : "",
       viewed: formatNumber(existingChapter.viewed || 0),

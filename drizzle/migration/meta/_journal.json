@@ -8,6 +8,13 @@
       "when": 1708593382422,
       "tag": "0000_heavy_gauntlet",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709035437794,
+      "tag": "0001_windy_zaladane",
+      "breakpoints": true
     }
   ]
 }

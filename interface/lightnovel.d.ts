@@ -114,17 +114,7 @@ type LightnovelChapterDetail = {
   updateAt: string,
   viewed: string,
   words: string,
-  comments: {
-    id: string,
-    user: {
-      id: string,
-      name: string,
-      image: string | null,
-    },
-    comment: any,
-    updateAt: string,
-    createAt: string,
-  }[],
+  comments: number,
 }
 
 type LightnovelNew = {

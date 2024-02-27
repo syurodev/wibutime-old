@@ -663,7 +663,7 @@ export type RatingInsert = InferInsertModel<typeof rating>
 //* comment
 export const comment = pgTable("comment", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
-  comment: jsonb("comment").notNull(),
+  comment: text("comment").notNull(),
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -678,10 +678,7 @@ export const commentRelations = relations(comment, (({ one, many }) => ({
     references: [users.id]
   }),
 
-  reply: one(comment, {
-    fields: [comment.reply],
-    references: [comment.id]
-  }),
+  reply: many(comment),
 
   lightnovel: many(commentToLightnovel),
   lightnovelChapter: many(commentToLightnovelChapter),

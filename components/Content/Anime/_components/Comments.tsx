@@ -5,7 +5,7 @@ import { LuPlusCircle } from "react-icons/lu"
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { getCommentsAnimeEpisode } from '@/actions/anime'
-import AddComment from './AddComment'
+import AddComment from '../../../shared/Comment/AddComment'
 import { Button } from '@/components/ui/button'
 
 type IProps = {
