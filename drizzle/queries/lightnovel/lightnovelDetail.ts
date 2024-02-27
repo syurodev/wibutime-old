@@ -4,6 +4,7 @@ import { db } from "@/drizzle/db";
 import { lightnovel, lightnovelChapter, lightnovelVolume, purchaseLightnovelChapter } from "@/drizzle/schema";
 import { formatNumber } from "@/lib/formatNumber";
 import { findChapterPurchased } from "./findChapterPurchased";
+import { checkUserIdExistsInFavotiteArray } from "@/lib/checkUserIdExistsInFavotiteArray";
 
 export const lightnovelDetail = async (novelId: string, userId?: string) => {
   try {
@@ -63,7 +64,7 @@ export const lightnovelDetail = async (novelId: string, userId?: string) => {
       id: existingLightnovel.id,
       name: existingLightnovel.name,
       type: "lightnovel",
-      favorited: !userId ? false : checkUserIdExists(existingLightnovel.favorites, userId),
+      favorited: !userId ? false : checkUserIdExistsInFavotiteArray(existingLightnovel.favorites, userId),
       createdAt: existingLightnovel.createdAt ? existingLightnovel.createdAt.toISOString() : "",
       updateAt: existingLightnovel.updatedAt ? existingLightnovel.updatedAt.toISOString() : "",
       categories: existingLightnovel.categories.map(cate => cate.category),
@@ -141,13 +142,4 @@ export const lightnovelDetail = async (novelId: string, userId?: string) => {
     console.log(error)
     return null
   }
-}
-
-function checkUserIdExists(arr: { userId: string; }[], userId: string) {
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i].userId === userId) {
-      return true;
-    }
-  }
-  return false;
 }

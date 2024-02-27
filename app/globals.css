@@ -139,7 +139,7 @@ ol {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 50px;
-  @apply bg-secondary
+  @apply dark:bg-secondary bg-gray-400
 }
 
 .showScroll::-webkit-scrollbar {

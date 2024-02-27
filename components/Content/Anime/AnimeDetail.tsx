@@ -38,6 +38,7 @@ const AnimeDetail: FC<IProps> = ({ id }) => {
         image={data.data.image?.url}
         menuType='anime'
         id={data.data.id}
+        favorited={data.data.favorited}
       />
 
       <div className='flex flex-col gap-4 md:mt-20 pb-4 w-full md:sticky md:h-[calc(100dvh-80px)] md:overflow-y-scroll'>

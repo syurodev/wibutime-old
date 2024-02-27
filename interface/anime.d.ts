@@ -55,7 +55,8 @@ type AnimeDetail = {
   id: string,
   name: string,
   otherNames: string[],
-  type: "anime"
+  type: "anime",
+  favorited: boolean,
   favorites: any[]
   categories: {
     id: string,

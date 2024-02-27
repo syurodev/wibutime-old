@@ -353,9 +353,10 @@ export const getChapterContent = async (chapterId: string): Promise<{
   data: LightnovelChapterDetail | null
 }> => {
   try {
-    const content = await findChapter(chapterId)
-
     const session = await getServerSession()
+
+    const content = await findChapter(chapterId, session?.id ?? undefined)
+
 
     if (!content) {
       return {
@@ -365,51 +366,13 @@ export const getChapterContent = async (chapterId: string): Promise<{
       }
     }
 
-    let charge: boolean;
-
-    if (!session) {
-      charge = content.charge ?? true;
-    } else if (session.id === content.volume.lightnovel.userId) {
-      charge = false;
-    } else {
-      const res = await findChapterPurchased(chapterId, session.id!);
-      charge = res ? false : content.charge ?? true;
-    }
-
-    const result: LightnovelChapterDetail = {
-      id: content.id,
-      name: content.name,
-      authorId: content.volume.lightnovel.userId,
-      novelId: content.volume.lightnovel.id!,
-      charge: charge,
-      content: content.content,
-      comments: content.comments.length > 0 ? content.comments.map(comment => ({
-        id: comment.comment.id,
-        createAt: comment.comment.createdAt ? comment.comment.createdAt.toISOString() : "",
-        updateAt: comment.comment.updatedAt ? comment.comment.updatedAt.toISOString() : "",
-        comment: comment.comment.comment as any,
-        user: {
-          id: comment.comment.user.id,
-          image: comment.comment.user.image as string,
-          name: comment.comment.user.name,
-        }
-      })) : [],
-      createdAt: content.createdAt ? content.createdAt.toISOString() : "",
-      updateAt: content.updatedAt ? content.updatedAt.toISOString() : "",
-      viewed: formatNumber(content.viewed || 0),
-      words: formatNumber(content.words || 0)
-    }
-
-
-
     return {
       code: 200,
       message: "success",
-      data: result
+      data: content
     }
   } catch (error) {
-
-
+    console.log(error)
     return {
       code: 500,
       message: "Lỗi server",

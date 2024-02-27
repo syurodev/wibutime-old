@@ -14,6 +14,7 @@ import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
 import { insertAnimeEpisode } from "@/drizzle/queries/anime/insertAnimeEpisode"
 import { seasonDetail } from "@/drizzle/queries/anime/seasonDetail"
 import { findComments } from "@/drizzle/queries/anime/findComments"
+import { checkUserIdExistsInFavotiteArray } from "@/lib/checkUserIdExistsInFavotiteArray"
 
 export const createAnime = async (
   values: string,
@@ -259,7 +260,9 @@ export const getAnimeDetail = async (
   animeId: string
 ) => {
   try {
-    const existingAnime = await animeDetail(animeId)
+    const session = await getServerSession()
+
+    const existingAnime = await animeDetail(animeId, session?.id ?? undefined)
 
     if (!existingAnime) return {
       code: 404,
@@ -267,72 +270,10 @@ export const getAnimeDetail = async (
       data: null
     }
 
-    const result: AnimeDetail = {
-      id: existingAnime.id,
-      name: existingAnime.name,
-      type: "anime",
-      createdAt: existingAnime.createdAt ? existingAnime.createdAt.toISOString() : "",
-      updateAt: existingAnime.updatedAt ? existingAnime.updatedAt.toISOString() : "",
-      categories: existingAnime.categories.map(cate => cate.category),
-      favorites: existingAnime.favorites,
-      otherNames: existingAnime.otherNames as string[],
-      summary: existingAnime.summary,
-      note: existingAnime.note,
-      user: existingAnime.user,
-      viewed: formatNumber(existingAnime.seasons.reduce((totalViewed, season) => {
-        return totalViewed + season.episode.reduce((seasonViewed, ep) => {
-          return seasonViewed + (ep.viewed || 0);
-        }, 0);
-      }, 0)),
-      translationGroup: existingAnime.translationGroup as {
-        id: string;
-        image: {
-          key?: string,
-          url: string
-        } | null;
-        name: string;
-      },
-      image: existingAnime.seasons[0].image as {
-        key?: string,
-        url: string
-      } | undefined,
-      seasons: existingAnime.seasons.map(item => (
-        {
-          id: item.id,
-          name: item.name,
-          createdAt: item.createdAt ? item.createdAt.toISOString() : "",
-          updateAt: item.createdAt ? item.createdAt.toISOString() : "",
-          image: item.image as {
-            key?: string,
-            url: string
-          } | null,
-          aired: item.aired,
-          studio: item.studio,
-          broadcastDay: item.broadcastDay,
-          broadcastTime: item.broadcastTime.toISOString(),
-          numberOfEpisodes: item.numberOfEpisodes || 0,
-          episodes: item.episode.map(ep => ({
-            id: ep.id,
-            index: ep.index!,
-            createdAt: ep.createdAt ? ep.createdAt.toISOString() : "",
-            viewed: formatNumber(ep.viewed || 0),
-            content: ep.content as {
-              key: string,
-              url: string
-            },
-            thumbnail: ep.thumbnail ? ep.thumbnail as {
-              key: string,
-              url: string
-            } : null
-          }))
-        }
-      ))
-    }
-
     return {
       code: 200,
       message: "success",
-      data: result
+      data: existingAnime
     }
   } catch (error) {
     console.log(error)

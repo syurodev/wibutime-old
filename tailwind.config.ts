@@ -10,6 +10,9 @@ module.exports = {
   ],
   prefix: "",
   theme: {
+    fontFamily: {
+      'serif': ['serif']
+    },
     container: {
       center: true,
       padding: "2rem",

@@ -63,17 +63,17 @@ type LightnovelDetail = {
   author?: string | null,
   artist?: string | null,
   user: {
-    id: string;
-    image: string | null;
-    name: string;
+    id: string,
+    image: string | null,
+    name: string,
   },
   translationGroup?: {
-    id: string;
+    id: string,
     image: {
       key?: string,
       url: string
-    } | null;
-    name: string;
+    } | null,
+    name: string,
   }
 }
 
@@ -90,27 +90,41 @@ type LightnovelVolumeDetail = {
 }
 
 type LightnovelChapterDetail = {
-  id: string;
-  name: string;
-  novelId: string;
-  authorId: string;
-  content: any;
-  createdAt: string;
-  charge: boolean;
-  updateAt: string;
-  viewed: string;
-  words: string;
+  id: string,
+  name: string,
+  novelId: string,
+  novelName: string,
+  authorId: string,
+  content: any,
+  createdAt: string,
+  charge: boolean,
+  volumes: {
+    id: string,
+    image: {
+      key: string,
+      url: string
+    },
+    name: string,
+    chapters: {
+      id: string,
+      name: string,
+      charge: boolean,
+    }[]
+  }[],
+  updateAt: string,
+  viewed: string,
+  words: string,
   comments: {
-    id: string;
+    id: string,
     user: {
-      id: string;
-      name: string;
-      image: string | null;
-    };
-    comment: any;
-    updateAt: string;
-    createAt: string;
-  }[];
+      id: string,
+      name: string,
+      image: string | null,
+    },
+    comment: any,
+    updateAt: string,
+    createAt: string,
+  }[],
 }
 
 type LightnovelNew = {
@@ -118,7 +132,7 @@ type LightnovelNew = {
   name: string,
   type: ContentType,
   user: {
-    id: string
+    id: string,
   },
   summary: any,
   categories: {
@@ -127,7 +141,7 @@ type LightnovelNew = {
   }[],
   image: {
     key?: string,
-    url: string
+    url: string,
   } | null,
   volumes: {
     id: string,

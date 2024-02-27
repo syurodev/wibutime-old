@@ -1,12 +1,9 @@
 import React, { FC } from 'react'
 import { notFound } from 'next/navigation';
 
-import { getChapterContent, purchaseChapter } from '@/actions/lightnovel';
+import { getChapterContent } from '@/actions/lightnovel';
 import ReadChapter from '@/components/Content/Lightnovel/Chapter/ReadChapter';
 import Container from '@/components/shared/Container';
-import { LuCoins } from 'react-icons/lu';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 import Purchase from '@/components/shared/Purchase/Purchase';
 
 type IProps = {
@@ -22,7 +19,12 @@ const ReadLightnovel: FC<IProps> = async ({ params }) => {
   }
 
   return (
-    <Container>
+    <Container
+      showScroll={true}
+      className='max-h-dvh overflow-y-auto'
+      reading={true}
+      backgroundReading='bg-[#FFF0E6]'
+    >
       {
         content.data.charge ? (
           <Purchase data={content.data} />

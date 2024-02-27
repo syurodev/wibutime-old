@@ -58,8 +58,6 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
     notFound();
   }
 
-  console.log(data.data)
-
   const searchParams = useSearchParams()
   const epIndex = searchParams.get('ep')
 

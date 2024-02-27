@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Noto_Sans } from 'next/font/google'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import '@/app/globals.css'
@@ -9,7 +9,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 
-const inter = Inter({ subsets: ['latin'] })
+const poppins = Noto_Sans({ subsets: ['vietnamese'], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
 
 export const metadata: Metadata = {
   title: 'Wibutime',
@@ -26,7 +26,7 @@ export default async function RootLayout({
 
   return (
     <html lang="vi" suppressHydrationWarning>
-      <body className={`${inter.className} w-screen`}>
+      <body className={`${poppins.className} w-screen`}>
         <SessionProvider session={session}>
           <ThemeProvider
             attribute="class"

@@ -24,7 +24,7 @@ type IDescription = {
     content: any[];
   };
   className?: string
-  fontSize?: "text-sm" | "text-base" | "text-xs",
+  fontSize?: "text-sm" | "text-base" | "text-xs" | "text-lg" | "text-[1.2rem]",
   font?: "font-sans" | "font-serif" | "font-mono"
 };
 
@@ -33,17 +33,17 @@ const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontS
     return generateHTML(content, [
       Document.configure({
         HTMLAttributes: {
-          class: `${fontSize ? fontSize : "text-base min-h-[24px] select-none"} ${font ? font : ""}`,
+          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} min-h-[16px] select-none`,
         }
       }),
       Paragraph.configure({
         HTMLAttributes: {
-          class: `${fontSize ? fontSize : "text-base min-h-[24px] select-none"} ${font ? font : ""}`,
+          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} min-h-[16px] select-none`,
         }
       }),
       Text.configure({
         HTMLAttributes: {
-          class: `${fontSize ? fontSize : "text-base min-h-[24px] select-none"} ${font ? font : ""}`,
+          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} min-h-[16px] select-none`,
         }
       }),
       Typography,
