@@ -1,7 +1,6 @@
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
-import { text, timestamp, pgTable, jsonb, boolean, integer, primaryKey, uuid, date, varchar, time, index } from "drizzle-orm/pg-core";
+import { text, timestamp, pgTable, jsonb, boolean, integer, primaryKey, uuid, date, varchar, index } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from '@auth/core/adapters'
-
 
 export const users = pgTable("user", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
@@ -678,7 +677,13 @@ export const commentRelations = relations(comment, (({ one, many }) => ({
     references: [users.id]
   }),
 
-  reply: many(comment),
+  // reply: many(comment, { relationName: "comment_reply" }),
+
+  reply: one(comment, {
+    fields: [comment.reply],
+    references: [comment.id],
+    relationName: "comment_reply"
+  }),
 
   lightnovel: many(commentToLightnovel),
   lightnovelChapter: many(commentToLightnovelChapter),
