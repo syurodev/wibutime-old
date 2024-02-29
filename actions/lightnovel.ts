@@ -21,6 +21,7 @@ import { purchaseLightnovelChap } from "@/drizzle/queries/lightnovel/purchaseLig
 import { findChapterPurchased } from "@/drizzle/queries/lightnovel/findChapterPurchased"
 import { CommentInsert } from "@/drizzle/schema"
 import { insertComment } from "@/drizzle/queries/lightnovel/insertComment"
+import { findLightnovelComments } from "@/drizzle/queries/lightnovel/findComments"
 
 export const createLightnovel = async (values: string) => {
   try {
@@ -493,6 +494,43 @@ export const createComment = async (
     return {
       code: 500,
       message: "Lỗi server"
+    }
+  }
+}
+
+export const getLightnovelComments = async (contentId: string, type: CommentType): Promise<{
+  code: number,
+  message: string,
+  data: CommentData[]
+}> => {
+  try {
+    if (type === "lightnovel chapter") {
+      const res = await findLightnovelComments(10, 1, contentId)
+
+      if (!res) return {
+        code: 404,
+        message: "Không có bình luận",
+        data: []
+      }
+
+      return {
+        code: 200,
+        message: "success",
+        data: res
+      }
+    }
+
+    return {
+      code: 200,
+      message: "success",
+      data: []
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server",
+      data: []
     }
   }
 }
