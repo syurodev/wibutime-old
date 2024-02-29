@@ -35,7 +35,7 @@ const CommentSheet: FC<IProps> = ({
   comments
 }) => {
   const [optimisticComments, addOptimisticComment] = useOptimistic(
-    comments,
+    comments ?? [],
     (state, newComment: CommentData) => {
       return [...state, newComment]
     }
@@ -56,7 +56,7 @@ const CommentSheet: FC<IProps> = ({
               className='flex flex-col gap-3'
             >
               {
-                optimisticComments.length === 0 ? (
+                !optimisticComments || optimisticComments.length === 0 ? (
                   <p className='text-sm font-semibold text-secondary-foreground text-center'>Không có bình luận</p>
                 ) : (
                   optimisticComments.map((comment, index) => (
