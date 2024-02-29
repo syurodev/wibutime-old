@@ -13,7 +13,7 @@ export const findLightnovelComments = async (
       with: {
         comment: {
           with: {
-            reply: {
+            replies: {
               with: {
                 user: {
                   columns: {
@@ -45,7 +45,7 @@ export const findLightnovelComments = async (
         name: comment.comment.user.name,
         image: comment.comment.user.image ?? undefined,
       },
-      replys: comment.comment.reply ? comment.comment.reply.map(comment => ({
+      replies: comment.comment.replies ? comment.comment.replies.map(comment => ({
         id: comment.id,
         comment: comment.comment,
         createdAt: comment.createdAt!,

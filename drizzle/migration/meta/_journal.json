@@ -15,6 +15,13 @@
       "when": 1709035437794,
       "tag": "0001_windy_zaladane",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709176623601,
+      "tag": "0002_medical_rocket_racer",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,6 @@
-import { findLightnovelComments } from "@/drizzle/queries/lightnovel/findComments"
 import { NextRequest } from "next/server"
+
+import { findLightnovelComments } from "@/drizzle/queries/lightnovel/findComments"
 
 export async function GET(
   req: NextRequest,

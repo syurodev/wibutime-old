@@ -667,8 +667,6 @@ export const comment = pgTable("comment", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   deleted: boolean("deleted").default(false),
-
-  reply: uuid("reply")
 })
 
 export const commentRelations = relations(comment, (({ one, many }) => ({
@@ -677,13 +675,7 @@ export const commentRelations = relations(comment, (({ one, many }) => ({
     references: [users.id]
   }),
 
-  // reply: many(comment, { relationName: "comment_reply" }),
-
-  reply: one(comment, {
-    fields: [comment.reply],
-    references: [comment.id],
-    relationName: "comment_reply"
-  }),
+  replies: many(reply),
 
   lightnovel: many(commentToLightnovel),
   lightnovelChapter: many(commentToLightnovelChapter),
@@ -691,6 +683,29 @@ export const commentRelations = relations(comment, (({ one, many }) => ({
   animeEpisode: many(commentToAnimeEpisode),
   manga: many(commentToManga),
   mangaChapter: many(commentToMangaChapter),
+})))
+
+export const reply = pgTable("reply", {
+  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  comment: text("comment").notNull(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  deleted: boolean("deleted").default(false),
+
+  replyTo: uuid("reply_to").notNull().references(() => comment.id, { onDelete: "cascade" }),
+})
+
+export const replyRelations = relations(reply, (({ one }) => ({
+  user: one(users, {
+    fields: [reply.userId],
+    references: [users.id]
+  }),
+
+  replyTo: one(comment, {
+    fields: [reply.replyTo],
+    references: [comment.id],
+  }),
 })))
 
 export type Comment = InferSelectModel<typeof comment>
