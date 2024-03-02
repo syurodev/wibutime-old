@@ -310,7 +310,7 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
                   <FormLabel>Tóm tắt<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <TiptapEditor
-                      content={field.name}
+                      content={field.value}
                       onChange={field.onChange}
                       contentFor='summary'
                       contentType='anime'
@@ -456,7 +456,7 @@ const FormCreateAnime: FC<IProps> = ({ categories }) => {
                   <FormLabel>Ghi chú</FormLabel>
                   <FormControl>
                     <TiptapEditor
-                      content={field.name}
+                      content={field.value}
                       onChange={field.onChange}
                       contentFor='note'
                       contentType='anime'

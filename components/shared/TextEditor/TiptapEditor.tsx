@@ -22,7 +22,10 @@ import { compressImage } from '@/lib/compressImage'
 import { uploadFiles } from '@/lib/uploadthing'
 
 type IProps = {
-  content: string,
+  content?: {
+    type: string;
+    content: any[];
+  },
   onChange: (richText: JSONContent) => void
   contentId?: string
   setWords?: React.Dispatch<React.SetStateAction<number>>
@@ -40,7 +43,7 @@ const TiptapEditor: FC<IProps> = ({
 }) => {
   // const history = localStorage.getItem(`editor-new-${contentType ?? ""}-${contentFor}-${contentId ?? ""}`)
   const [imageUpload, setImageUpload] = useState<boolean>(false)
-
+  console.log(content)
   const editor = useEditor({
     extensions: [
       StarterKit.configure({

@@ -7,9 +7,16 @@ export const findLightnovel = async (novelId: string) => {
   try {
     const existingLightnovel = await db.query.lightnovel.findFirst({
       where: eq(lightnovel.id, novelId),
-      columns: {
-        id: true,
-        userId: true
+      with: {
+        categories: {
+          columns: {
+            categoryId: false,
+            lightnovelId: false,
+          },
+          with: {
+            category: true,
+          }
+        }
       }
     })
 

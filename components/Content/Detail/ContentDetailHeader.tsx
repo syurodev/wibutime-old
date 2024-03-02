@@ -65,7 +65,7 @@ const ContentDetailHeader: FC<IProps> = ({
   const session = useCurrentUser()
 
   return (
-    <div className='w-full h-dvh md:min-w-[40%] flex flex-col items-center relative'>
+    <div className='w-full min-h-[1000px] h-dvh md:min-w-[40%] flex flex-col items-center relative'>
       <ContextMenuComponent
         id={id}
         type={menuType}

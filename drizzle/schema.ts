@@ -273,7 +273,7 @@ export const lightnovel = pgTable("lightnovel", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   deleted: boolean("deleted").default(false),
-  status: text("status", { enum: ["Pause", "Complete", "InProcess"] }),
+  status: text("status", { enum: ["Pause", "Complete", "InProcess"] }).default("InProcess"),
   note: jsonb("note"),
 
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
@@ -360,7 +360,7 @@ export const anime = pgTable("anime", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   deleted: boolean("deleted").default(false),
-  status: text("status", { enum: ["Pause", "Complete", "InProcess"] }),
+  status: text("status", { enum: ["Pause", "Complete", "InProcess"] }).default("InProcess"),
   note: jsonb("note"),
 
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
@@ -453,7 +453,7 @@ export const manga = pgTable("manga", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   deleted: boolean("deleted").default(false),
-  status: text("status", { enum: ["Pause", "Complete", "InProcess"] }),
+  status: text("status", { enum: ["Pause", "Complete", "InProcess"] }).default("InProcess"),
   note: jsonb("note"),
 
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),

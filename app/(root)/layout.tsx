@@ -1,5 +1,5 @@
 import QueryProvider from '@/components/providers/QueryProvider'
-// import ContextMenuComponent from '@/components/shared/ContextMenu/ContextMenuComponent'
+import ContextMenuComponent from '@/components/shared/ContextMenu/ContextMenuComponent'
 import Header from '@/components/shared/Header/Header'
 import React from 'react'
 
@@ -11,13 +11,13 @@ const MainLayout = ({
   return (
     <main>
       <Header />
-      {/* <ContextMenuComponent> */}
-      <div className='min-h-dvh w-screen overflow-hidden'>
-        <QueryProvider>
-          {children}
-        </QueryProvider>
-      </div>
-      {/* </ContextMenuComponent> */}
+      <ContextMenuComponent>
+        <div className='min-h-dvh w-screen overflow-hidden'>
+          <QueryProvider>
+            {children}
+          </QueryProvider>
+        </div>
+      </ContextMenuComponent>
     </main>
   )
 }

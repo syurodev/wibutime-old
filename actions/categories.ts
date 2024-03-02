@@ -3,7 +3,14 @@
 import { getCategories } from "@/drizzle/queries/category/getAllCategory"
 import { getCategoriesAndCountContent } from "@/drizzle/queries/category/getCategoriesAndCountContent"
 
-export const getAllCategories = async () => {
+export const getAllCategories = async (): Promise<{
+  code: number,
+  message: string,
+  data: {
+    id: string;
+    name: string;
+  }[] | null
+}> => {
   try {
     const categories = await getCategories()
 

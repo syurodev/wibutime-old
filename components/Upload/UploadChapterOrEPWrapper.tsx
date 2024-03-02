@@ -1,4 +1,6 @@
 import React, { FC } from 'react'
+import dynamic from 'next/dynamic'
+
 import {
   Drawer,
   DrawerContent,
@@ -6,8 +8,13 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
-import FormUploadLightnovelChapter from './Lightnovel/FormUploadLightnovelChapter'
-import FormUploadEpisode from './Anime/FormUploadEpisode'
+
+const FormUploadEpisode = dynamic(() => import('@/components/Upload/Anime/FormUploadEpisode'), {
+  ssr: true
+})
+const FormUploadLightnovelChapter = dynamic(() => import('@/components/Upload/Lightnovel/FormUploadLightnovelChapter'), {
+  ssr: true,
+})
 
 type IProps = {
   isOpen: boolean
@@ -47,7 +54,6 @@ const UploadChapterOrEPWrapper: FC<IProps> = ({
         </div>
       </DrawerContent>
     </Drawer>
-
   )
 }
 

@@ -184,7 +184,7 @@ const FormUploadLightnovelChapter: FC<IProps> = ({ novelId, onOpenChange, open }
                   {
                     open && (
                       <TiptapEditor
-                        content={field.name}
+                        content={field.value}
                         onChange={field.onChange}
                         contentId={novelId}
                         setWords={setWords}

@@ -19,10 +19,12 @@ export const lightnovelSchema = z.object({
   ).nonempty({ message: "Vui lòng nhập ít nhất một tên khác" }),
   summary: EditorContentSchema,
   image: z.object({
-    key: z.string().optional(),
+    key: z.string(),
     url: z.string().url()
   }).optional(),
 })
+
+export type LightnovelSchema = z.infer<typeof lightnovelSchema>
 
 export const lightnovelVolumeSchema = z.object({
   name: z.string().min(1, { message: "Vui lòng nhập tên chapter" }),

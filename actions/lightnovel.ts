@@ -18,10 +18,9 @@ import { upViewed } from "@/drizzle/queries/lightnovel/upViewed"
 import { lightnovelDetail } from "@/drizzle/queries/lightnovel/lightnovelDetail"
 import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
 import { purchaseLightnovelChap } from "@/drizzle/queries/lightnovel/purchaseLightnovelChap"
-import { findChapterPurchased } from "@/drizzle/queries/lightnovel/findChapterPurchased"
-import { CommentInsert } from "@/drizzle/schema"
 import { insertComment } from "@/drizzle/queries/lightnovel/insertComment"
 import { findLightnovelComments } from "@/drizzle/queries/lightnovel/findComments"
+import { updateLightnovel } from "@/drizzle/queries/lightnovel/updateLightnovel"
 
 export const createLightnovel = async (values: string) => {
   try {
@@ -530,6 +529,110 @@ export const getLightnovelComments = async (contentId: string, type: CommentType
       code: 500,
       message: "Lỗi server",
       data: []
+    }
+  }
+}
+
+export const getLightnovel = async (novelId: string) => {
+  try {
+    const existingLightnovel = await findLightnovel(novelId)
+
+    if (!existingLightnovel) return {
+      code: 404,
+      message: "Không tìm thấy lightnovel",
+      data: null
+    }
+
+    return {
+      code: 200,
+      message: "success",
+      data: existingLightnovel
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server",
+      data: null
+    }
+  }
+}
+
+export const editLightnovel = async (novelId: string, values: string, callbackUrl: string) => {
+  try {
+    const session = await getServerSession()
+
+    if (!session || !session.id) return {
+      code: 401,
+      message: "Không tìm thấy phiên đăng nhập, vui lòng đăng nhập và thử lại",
+      data: false
+    }
+
+    if (!session.permissions.includes("UPLOAD")) return {
+      code: 401,
+      message: "Bạn không có quyền chỉnh sửa lightnovel",
+      data: false
+    }
+
+    const validationValues = lightnovelSchema.safeParse(JSON.parse(values))
+
+    if (!validationValues.success) {
+      return {
+        code: 401,
+        message: "Vui lòng kiểm tra lại dữ liệu đã nhập",
+        data: false
+      }
+    }
+
+    const existingLightnovel = await findLightnovel(novelId)
+
+    if (!existingLightnovel) return {
+      code: 404,
+      message: "Không tìm thấy lightnovel",
+      data: false
+    }
+
+    if (existingLightnovel.userId !== session.id) return {
+      code: 401,
+      message: "Bạn không có quyền chỉnh sửa lightnovel này",
+      data: false
+    }
+
+    const result = await updateLightnovel(
+      novelId,
+      {
+        name: validationValues.data.name,
+        artist: validationValues.data.artist,
+        author: validationValues.data.author,
+        image: validationValues.data.image,
+        note: validationValues.data.note,
+        otherNames: validationValues.data.other_names && validationValues.data.other_names.length > 0 ? validationValues.data.other_names.map(item => item.text) : [],
+        summary: validationValues.data.summary,
+        userId: session.id!,
+      },
+      validationValues.data.categories
+    )
+
+    if (result) {
+      revalidatePath(callbackUrl)
+      return {
+        code: 200,
+        message: "Cập nhật lightnovel thành công",
+        data: true
+      }
+    } else {
+      return {
+        code: 400,
+        message: "Có lỗi trong quá trình cập nhật, vui lòng thử lại",
+        data: false
+      }
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      code: 500,
+      message: "Lỗi server",
+      data: false
     }
   }
 }

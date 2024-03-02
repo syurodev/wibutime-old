@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import dynamic from 'next/dynamic'
 
 import {
   Drawer,
@@ -7,8 +8,13 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
-import FormUploadLightnovelVolume from './Lightnovel/FormUploadLightnovelVolume'
-import FormCreateAnimeSeason from './Anime/FormCreateAnimeSeason'
+
+const FormCreateAnimeSeason = dynamic(() => import('@/components/Upload/Anime/FormCreateAnimeSeason'), {
+  ssr: true,
+})
+const FormUploadLightnovelVolume = dynamic(() => import('@/components/Upload/Lightnovel/FormUploadLightnovelVolume'), {
+  ssr: true,
+})
 
 type IProps = {
   isOpen: boolean

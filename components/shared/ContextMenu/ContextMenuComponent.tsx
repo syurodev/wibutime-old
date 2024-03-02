@@ -15,6 +15,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
+import CreateAnimeLightnovelMangaWrapper from '@/components/Upload/CreateAnimeLightnovelMangaWrapper';
 
 const UploadChapterOrEPWrapper = dynamic(() => import('@/components/Upload/UploadChapterOrEPWrapper'), {
   ssr: false,
@@ -41,6 +42,7 @@ const ContextMenuComponent: FC<IProps> = ({
   const router = useRouter()
   const [isOpenUploadChapterOrEpisode, setIsOpenUploadChapterOrEpisode] = useState<boolean>(false)
   const [isOpenUploadVolumeOrSeason, setIsOpenUploadVolumeOrSeason] = useState<boolean>(false)
+  const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false)
 
   return (
     <>
@@ -71,9 +73,6 @@ const ContextMenuComponent: FC<IProps> = ({
                 <ContextMenuSub>
                   <ContextMenuSubTrigger inset>Thao tác</ContextMenuSubTrigger>
                   <ContextMenuSubContent className="w-48">
-                    <ContextMenuItem>
-                      Chỉnh sửa
-                    </ContextMenuItem>
                     {/* Lightnovel */}
                     {
                       type === "lightnovel" && (
@@ -84,9 +83,15 @@ const ContextMenuComponent: FC<IProps> = ({
                     }
                     {
                       (type === "lightnovel" || type === "lightnovel volume") && (
-                        <ContextMenuItem onClick={() => setIsOpenUploadChapterOrEpisode(true)}>
-                          Thêm Chapter
-                        </ContextMenuItem>
+                        <>
+                          <ContextMenuItem onClick={() => setIsOpenUploadChapterOrEpisode(true)}>
+                            Thêm Chapter
+                          </ContextMenuItem>
+
+                          <ContextMenuItem onClick={() => setIsOpenEdit(true)}>
+                            Chỉnh sửa
+                          </ContextMenuItem>
+                        </>
                       )
                     }
                     {/* Anime */}
@@ -150,6 +155,19 @@ const ContextMenuComponent: FC<IProps> = ({
             type={type}
             id={id}
             name={name}
+          />
+        )
+      }
+
+      {
+        id && type && name && (
+          <CreateAnimeLightnovelMangaWrapper
+            isOpen={isOpenEdit}
+            onOpenChange={setIsOpenEdit}
+            type={type}
+            id={id}
+            name={name}
+            edit={true}
           />
         )
       }

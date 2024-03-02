@@ -3,8 +3,7 @@
 import React, { FC, useState, useTransition } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -18,54 +17,85 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Tag, TagInput } from "@/components/ui/tag-input";
-import { lightnovelSchema } from '@/schemas/lightnovel';
+import { LightnovelSchema, lightnovelSchema } from '@/schemas/lightnovel';
 import MultiSelect from '../../ui/select-multi';
 import { compressImage } from '@/lib/compressImage';
 import { uploadFiles } from '@/lib/uploadthing';
 import { deleteFiles } from '@/actions/uploadthing';
 import { Dropzone } from '../../ui/dropzone';
-import { createLightnovel } from '@/actions/lightnovel';
+import { createLightnovel, editLightnovel } from '@/actions/lightnovel';
 import { toast } from 'sonner';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import TiptapEditor from '@/components/shared/TextEditor/TiptapEditor';
 
 type IProps = {
-  categories: Category[] | null
+  categories: Category[] | null,
+  content?: LightnovelSchema,
+  edit?: boolean,
+  novelId?: string,
+  onOpenChange?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
+const FormCreateLightnovel: FC<IProps> = ({
+  categories,
+  content,
+  edit,
+  novelId,
+  onOpenChange
+}) => {
   const [isUploadSmallImage, setIsUploadSmallImage] = useState<boolean>(false)
   const [image, setImage] = useState<{
     key: string,
     url: string
-  }>({
+  }>(content?.image ?? {
     key: "",
     url: "",
   });
-  const [tags, setTags] = useState<Tag[]>([]);
-  const form = useForm<z.infer<typeof lightnovelSchema>>({
+  const [tags, setTags] = useState<Tag[]>(content?.other_names ?? []);
+  const form = useForm<LightnovelSchema>({
     resolver: zodResolver(lightnovelSchema),
     defaultValues: {
-      name: "",
+      name: content?.name ?? "",
+      artist: content?.artist ?? "",
+      author: content?.author ?? "",
+      categories: content?.categories ?? [],
+      image: content?.image ?? undefined,
+      note: content?.note ?? undefined,
+      other_names: content?.other_names ?? [],
+      summary: content?.summary ?? undefined,
     },
   })
 
+  const pathName = usePathname()
   const router = useRouter()
   const [isPending, startTransiton] = useTransition()
 
-  function onSubmit(values: z.infer<typeof lightnovelSchema>) {
+  function onSubmit(values: LightnovelSchema) {
     startTransiton(async () => {
-      const res = await createLightnovel(JSON.stringify(values))
+      if (edit && novelId) {
+        const res = await editLightnovel(novelId, JSON.stringify(values), pathName)
 
-      if (res?.code !== 200) {
-        toast.error(res?.message)
+        if (res.code !== 200) {
+          toast.error(res?.message)
+        } else {
+          toast.success(res?.message)
+          if (onOpenChange) {
+            onOpenChange(false)
+          }
+        }
       } else {
-        toast.success(res?.message, {
-          description: res.submess
-        })
-        // localStorage.removeItem(`editor-new-lightnovel-summary-}`)
-        // localStorage.removeItem(`editor-new-lightnovel-note-}`)
-        router.push(`/lightnovels/lightnovel/${res.data?.id}`)
+        const res = await createLightnovel(JSON.stringify(values))
+
+        if (res?.code !== 200) {
+          toast.error(res?.message)
+        } else {
+          toast.success(res?.message, {
+            description: res.submess
+          })
+          // localStorage.removeItem(`editor-new-lightnovel-summary-}`)
+          // localStorage.removeItem(`editor-new-lightnovel-note-}`)
+          router.push(`/lightnovels/lightnovel/${res.data?.id}`)
+        }
       }
     })
   }
@@ -184,7 +214,7 @@ const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
                   <FormLabel>Tóm tắt<span className='text-destructive'>*</span></FormLabel>
                   <FormControl>
                     <TiptapEditor
-                      content={field.name}
+                      content={field.value}
                       onChange={field.onChange}
                       contentFor='summary'
                       contentType='lightnovel'
@@ -240,7 +270,7 @@ const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
                   <FormLabel>Ghi chú</FormLabel>
                   <FormControl>
                     <TiptapEditor
-                      content={field.name}
+                      content={field.value}
                       onChange={field.onChange}
                       contentFor='note'
                       contentType='lightnovel'
@@ -256,7 +286,7 @@ const FormCreateLightnovel: FC<IProps> = ({ categories }) => {
         <div className='w-full flex justify-end'>
           <Button type="submit" disabled={isPending} className='min-w-[120px]'>
             {isPending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-            Đăng
+            {edit ? "Chỉnh sửa" : "Đăng"}
           </Button>
         </div>
       </form>

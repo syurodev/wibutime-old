@@ -64,9 +64,10 @@ const LightnovelDetail: FC<IProps> = ({ id }) => {
           translationGroup={data.data.translationGroup}
           words={data.data.words}
           id={data.data.id}
+          menuType='lightnovel'
         />
 
-        <div className='flex flex-col gap-4 md:mt-20 pb-4 w-full md:sticky md:h-[calc(100dvh-80px)] md:overflow-y-scroll'>
+        <div className='flex flex-col gap-4 md:mt-20 pb-4 w-full md:min-h-[920px] md:sticky md:h-[calc(100dvh-80px)] md:overflow-y-scroll'>
           {/* orther name */}
           {
             data.data.otherNames.length > 0 && (
