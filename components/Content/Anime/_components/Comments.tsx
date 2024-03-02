@@ -27,8 +27,6 @@ const Comments: FC<IProps> = ({ episodeId }) => {
     fetchComments()
   }, [episodeId])
 
-  console.log("comments", comments)
-
   return (
     <Accordion
       type="single"

@@ -27,6 +27,7 @@ export type UserInsert = InferInsertModel<typeof users>
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   roles: many(userOnRole),
+  favoriteComments: many(favoriteComment),
   followedUsers: many(followerUser, { relationName: "followed_user" }),
   followerUsers: many(followerUser, { relationName: "follower_user" }),
   followerGroups: many(followerGroup, { relationName: "follower_groups" }),
@@ -662,6 +663,7 @@ export type RatingInsert = InferInsertModel<typeof rating>
 //* comment
 export const comment = pgTable("comment", {
   id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
+  parentId: uuid("parent_id"),
   comment: text("comment").notNull(),
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
@@ -675,7 +677,13 @@ export const commentRelations = relations(comment, (({ one, many }) => ({
     references: [users.id]
   }),
 
-  replies: many(reply),
+  replies: many(comment, { relationName: "replies" }),
+  favorites: many(favoriteComment),
+  parentComment: one(comment, {
+    fields: [comment.parentId],
+    references: [comment.id],
+    relationName: "replies"
+  }),
 
   lightnovel: many(commentToLightnovel),
   lightnovelChapter: many(commentToLightnovelChapter),
@@ -685,31 +693,28 @@ export const commentRelations = relations(comment, (({ one, many }) => ({
   mangaChapter: many(commentToMangaChapter),
 })))
 
-export const reply = pgTable("reply", {
-  id: uuid("id").notNull().unique().primaryKey().defaultRandom(),
-  comment: text("comment").notNull(),
-  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-  deleted: boolean("deleted").default(false),
-
-  replyTo: uuid("reply_to").notNull().references(() => comment.id, { onDelete: "cascade" }),
-})
-
-export const replyRelations = relations(reply, (({ one }) => ({
-  user: one(users, {
-    fields: [reply.userId],
-    references: [users.id]
-  }),
-
-  replyTo: one(comment, {
-    fields: [reply.replyTo],
-    references: [comment.id],
-  }),
-})))
-
 export type Comment = InferSelectModel<typeof comment>
 export type CommentInsert = InferInsertModel<typeof comment>
+
+export const favoriteComment = pgTable("favorite_comment", {
+  commentId: uuid("comment_id")
+    .notNull()
+    .references(() => comment.id),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
+})
+
+export const favoriteCommentRelations = relations(favoriteComment, (({ one }) => ({
+  comment: one(comment, {
+    fields: [favoriteComment.commentId],
+    references: [comment.id]
+  }),
+  user: one(users, {
+    fields: [favoriteComment.userId],
+    references: [users.id]
+  }),
+})))
 
 //* comment to lightnovel
 export const commentToLightnovel = pgTable("comment_lightnovel", {

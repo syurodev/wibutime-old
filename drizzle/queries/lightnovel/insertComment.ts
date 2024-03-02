@@ -3,7 +3,8 @@ import { CommentInsert, comment, commentToLightnovelChapter } from "@/drizzle/sc
 
 export const insertComment = async (
   values: CommentInsert,
-  contentId: string
+  contentId: string,
+  replyId?: string,
 ) => {
   try {
     const createdComment = await db.insert(comment)

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { FC, useOptimistic } from 'react'
+import React, { FC, useOptimistic, useState } from 'react'
 
 import {
   Sheet,
@@ -15,7 +15,6 @@ import AddComment from './AddComment'
 import SlideWithoutScale from '../Motion/SlideWithoutScale'
 import { AnimatePresence } from 'framer-motion'
 import CommentItem from './CommentItem'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
 
 type IProps = {
   isOpen: boolean
@@ -41,16 +40,22 @@ const CommentSheet: FC<IProps> = ({
     }
   )
 
+  const [reply, setReply] = useState<{
+    replyId: string,
+    replyContent: string,
+    userName: string,
+  } | null>(null)
+
   return (
     <Sheet
       open={isOpen}
       onOpenChange={onOpenChange}
     >
-      <SheetContent className='flex justify-between flex-col'>
+      <SheetContent className='flex justify-between flex-col w-full max-w-[450px]'>
         <SheetHeader>
           <SheetTitle>Bình luận</SheetTitle>
         </SheetHeader>
-        <ScrollArea className="h-full w-full rounded-md p-4">
+        <ScrollArea className="h-full w-full rounded-md">
           <AnimatePresence mode='wait'>
             <div
               className='flex flex-col gap-3'
@@ -67,6 +72,7 @@ const CommentSheet: FC<IProps> = ({
                       <CommentItem
                         authorId={authorId}
                         comment={comment}
+                        setReply={setReply}
                       />
                     </SlideWithoutScale>
                   ))
@@ -79,6 +85,8 @@ const CommentSheet: FC<IProps> = ({
           contentId={contentId}
           type={commentFor}
           addOptimisticComment={addOptimisticComment}
+          reply={reply}
+          setReply={setReply}
         />
       </SheetContent>
     </Sheet>

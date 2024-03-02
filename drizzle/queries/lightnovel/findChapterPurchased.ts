@@ -1,6 +1,7 @@
+import { and, eq } from "drizzle-orm";
+
 import { db } from "@/drizzle/db";
 import { purchaseLightnovelChapter } from "@/drizzle/schema";
-import { and, eq } from "drizzle-orm";
 
 export const findChapterPurchased = async (chapterId: string, userId: string): Promise<{
   id: string;

@@ -453,7 +453,7 @@ export const createComment = async (
   comment: string,
   contentId: string,
   callbackUrl: string,
-  reply?: string,
+  parentId?: string,
 ) => {
   try {
     const session = await getServerSession()
@@ -463,20 +463,17 @@ export const createComment = async (
       message: "Không tìm thấy phiên đăng nhập, vui lòng đăng nhập và thử lại"
     }
 
-    let data: {
+    const data: {
       comment: string,
       userId: string,
-      reply?: string,
+      parentId: string | null,
     } = {
       comment: comment,
       userId: session.id,
+      parentId: parentId ?? null
     }
 
-    if (reply) data.reply = reply
-
-    const createdComment = await insertComment({
-      ...data
-    }, contentId)
+    const createdComment = await insertComment({ ...data }, contentId)
 
     if (!createdComment) return {
       code: 400,
@@ -504,8 +501,10 @@ export const getLightnovelComments = async (contentId: string, type: CommentType
   data: CommentData[]
 }> => {
   try {
+    const session = await getServerSession()
+
     if (type === "lightnovel chapter") {
-      const res = await findLightnovelComments(10, 1, contentId)
+      const res = await findLightnovelComments(10, 1, contentId, session?.id ?? undefined)
 
       if (!res) return {
         code: 404,

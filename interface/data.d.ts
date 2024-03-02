@@ -74,15 +74,19 @@ type CommentData = {
   id: string,
   comment: string,
   createdAt: Date,
+  favoriteNumber: string,
+  isFavorite: boolean,
   uncomplete?: boolean,
   user: {
     id: string,
     name: string,
     image?: string
   }
-  replys?: {
+  replies?: {
     id: string,
     comment: string,
+    favoriteNumber: string,
+    isFavorite: boolean,
     createdAt: Date,
     user: {
       id: string,

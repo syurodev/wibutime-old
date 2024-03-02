@@ -22,6 +22,20 @@
       "when": 1709176623601,
       "tag": "0002_medical_rocket_racer",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1709352636312,
+      "tag": "0003_friendly_iron_monger",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1709353382413,
+      "tag": "0004_motionless_violations",
+      "breakpoints": true
     }
   ]
 }
