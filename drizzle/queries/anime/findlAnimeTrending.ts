@@ -1,9 +1,10 @@
 import { db } from "@/drizzle/db";
+import { formatNumber } from "@/lib/formatNumber";
 import { sql } from "drizzle-orm";
 
-export const findlAnimeTrending = async (limit: number, startDay: Date, endDay: Date) => {
+export const findlAnimeTrending = async (limit: number, startDay: Date, endDay: Date): Promise<TrendingData[] | null> => {
   try {
-    const data: {
+    const topAnime: {
       id: string,
       name: string,
       image: string | null,
@@ -45,7 +46,17 @@ export const findlAnimeTrending = async (limit: number, startDay: Date, endDay: 
       LIMIT
         ${limit};
     `)
-    return data
+
+    const animeTrendingResult: TrendingData[] = topAnime && topAnime.length > 0 ?
+      topAnime.map((item) => ({
+        id: item.id,
+        image: item.image ? JSON.parse(item.image) : null,
+        name: item.name,
+        numfavorites: formatNumber(Number(item.numfavorites)),
+        totalviews: formatNumber(Number(item.totalviews))
+      }))
+      : []
+    return animeTrendingResult
 
   } catch (error) {
     console.log(error)

@@ -1,9 +1,10 @@
 import { db } from "@/drizzle/db";
+import { formatNumber } from "@/lib/formatNumber";
 import { sql } from "drizzle-orm";
 
-export const findlMangaTrending = async (limit: number, startDay: Date, endDay: Date) => {
+export const findlMangaTrending = async (limit: number, startDay: Date, endDay: Date): Promise<TrendingData[] | null> => {
   try {
-    const data: {
+    const topManga: {
       id: string,
       name: string,
       image: string | null,
@@ -45,7 +46,17 @@ export const findlMangaTrending = async (limit: number, startDay: Date, endDay: 
       LIMIT
         ${limit};  
     `)
-    return data
+
+    const mangaTrendingResult: TrendingData[] = topManga && topManga.length > 0 ?
+      topManga.map((item) => ({
+        id: item.id,
+        image: item.image ? JSON.parse(item.image) : null,
+        name: item.name,
+        numfavorites: formatNumber(Number(item.numfavorites)),
+        totalviews: formatNumber(Number(item.totalviews))
+      }))
+      : []
+    return mangaTrendingResult
 
   } catch (error) {
     console.log(error)

@@ -1,26 +1,35 @@
-import React, { Suspense } from 'react'
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
+import React from 'react'
 
-import { getHeroTrending } from '@/actions/home'
 import TrendingComponent from '@/components/Home/Hero/Trending/TrendingComponent'
-import TrendingLoading from './loading'
+import { notFound } from 'next/navigation'
 
 const Trending = async () => {
-  const queryClient = new QueryClient()
-  await queryClient.prefetchQuery({
-    queryKey: ["herotrending"],
-    queryFn: getHeroTrending
-  })
+  const res = await fetch(
+    `${process.env.APP_URL}/api/home/trending`,
+    {
+      method: "GET",
+      cache: "default"
+    }
+  )
+
+  if (!res.ok) return notFound()
+
+  const data: {
+    status: "success" | "error",
+    data: {
+      animes: TrendingData[];
+      mangas: TrendingData[];
+      lightnovels: TrendingData[];
+    } | null
+  } = await res.json()
+
+  if (data.status === "error" || !data.data) return notFound()
 
   return (
     <section>
       <h1 className='uppercase font-semibold text-lg mb-1'>Trending</h1>
 
-      <Suspense fallback={<TrendingLoading />}>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <TrendingComponent />
-        </HydrationBoundary>
-      </Suspense>
+      <TrendingComponent data={data.data} />
     </section>
   )
 }

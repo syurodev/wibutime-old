@@ -2,8 +2,9 @@ import { desc, eq } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
 import { lightnovel, lightnovelChapter, lightnovelVolume } from "@/drizzle/schema";
+import { formatNumber } from "@/lib/formatNumber";
 
-export const findLatestLightnovels = async (take: number) => {
+export const findLatestLightnovels = async (take: number): Promise<LightnovelNew[] | null> => {
   try {
     const lightnovels = await db.query.lightnovel.findMany({
       where: eq(lightnovel.deleted, false),
@@ -60,11 +61,36 @@ export const findLatestLightnovels = async (take: number) => {
       orderBy: desc(lightnovel.updatedAt)
     })
 
-    if (!lightnovels) return []
+    if (!lightnovels) return null
 
-    return lightnovels
+    const formatLightnovels: LightnovelNew[] | null = lightnovels.length === 0 ? null : lightnovels.map((novel) => ({
+      id: novel.id,
+      name: novel.name,
+      summary: novel.summary,
+      user: {
+        id: novel.user.id
+      },
+      categories: novel.categories.map((cate) => cate.category),
+      type: "lightnovel" as ContentType,
+      image: novel.image as {
+        key?: string,
+        url: string
+      } | null,
+      volumes: novel.volumes.length === 0 ? null : {
+        id: novel.volumes[0].id,
+        name: novel.volumes[0].name,
+        chapters: novel.volumes[0].chapters.length === 0 ? null : {
+          id: novel.volumes[0].chapters[0].id,
+          name: novel.volumes[0].chapters[0].name,
+          words: formatNumber(novel.volumes[0].chapters[0].words || 0),
+        }
+      },
+      favorites: formatNumber(novel.favorites.length)
+    }))
+
+    return formatLightnovels
   } catch (error) {
     console.log(error)
-    return []
+    return null
   }
 }

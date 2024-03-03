@@ -3,35 +3,28 @@
 import { FC, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
 import { IoArrowForward } from "react-icons/io5";
 import { LuCaseSensitive, LuDot } from "react-icons/lu";
 import { AnimatePresence, motion } from 'framer-motion'
-import { useQuery } from '@tanstack/react-query'
 
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from '@/components/ui/badge';
 import { slide, slideWithoutScale } from '@/lib/motion/slide'
-import { getHeroNews } from '@/actions/home';
 
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
 
-const NewsComponent: FC = () => {
-  const { data } = useQuery({
-    queryKey: ["heronews"],
-    queryFn: getHeroNews
-  })
+type IProps = {
+  data: NewsData
+}
 
-  if (!data || !data.data) {
-    notFound()
-  }
+const NewsComponent: FC<IProps> = ({ data }) => {
 
   const [currentIndex, setCurrentIndex] = useState<number>(0)
 
   useEffect(() => {
-    if (data.data && data.data && data.data.length > 1) {
+    if (data && data && data.length > 1) {
       const interval = setInterval(() => {
-        if (currentIndex >= data.data!.length! - 1) {
+        if (currentIndex >= data!.length! - 1) {
           setCurrentIndex(0);
         } else {
           setCurrentIndex(currentIndex + 1);
@@ -56,7 +49,7 @@ const NewsComponent: FC = () => {
       >
         <AnimatePresence mode='wait'>
           {
-            data.data.map((item, index) => {
+            data.map((item, index) => {
               return (
                 index === currentIndex && (
                   <div

@@ -3,26 +3,22 @@
 import React, { FC } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useQuery } from '@tanstack/react-query'
-import { notFound } from 'next/navigation'
 import { IoEyeOutline } from "react-icons/io5";
 import { GoHeart } from "react-icons/go";
 import { motion } from 'framer-motion';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { slide } from '@/lib/motion/slide'
-import { getHeroTrending } from '@/actions/home'
 
-
-const TrendingComponent: FC = () => {
-  const { data, error } = useQuery({
-    queryKey: ["herotrending"],
-    queryFn: getHeroTrending
-  })
-
-  if (!data || !data.data) {
-    notFound()
+type IProps = {
+  data: {
+    animes: TrendingData[];
+    mangas: TrendingData[];
+    lightnovels: TrendingData[];
   }
+}
+
+const TrendingComponent: FC<IProps> = ({ data }) => {
 
   return (
     <div>
@@ -47,7 +43,7 @@ const TrendingComponent: FC = () => {
                 className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.data.animes.length > 0 ? data.data.animes.map((item, index) => {
+                  data.animes.length > 0 ? data.animes.map((item, index) => {
                     return (
                       <motion.div
                         key={`animetranding-${index}`}
@@ -104,7 +100,7 @@ const TrendingComponent: FC = () => {
                 className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.data.mangas.length > 0 ? data.data.mangas.map((item, index) => {
+                  data.mangas.length > 0 ? data.mangas.map((item, index) => {
                     return (
                       <motion.div
                         key={`mangatranding-${index}`}
@@ -160,7 +156,7 @@ const TrendingComponent: FC = () => {
                 className='flex flex-wrap justify-between h-full w-full px-2'
               >
                 {
-                  data.data.lightnovels.length > 0 ? data.data.lightnovels.map((item, index) => {
+                  data.lightnovels.length > 0 ? data.lightnovels.map((item, index) => {
                     return (
                       <motion.div
                         key={`lightnoveltranding-${index}`}

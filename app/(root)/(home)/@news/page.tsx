@@ -1,26 +1,31 @@
-import React, { Suspense } from 'react'
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
+import React from 'react'
+import { notFound } from 'next/navigation'
 
-import { getHeroNews } from '@/actions/home'
 import NewsComponent from '@/components/Home/Hero/News/NewsComponent'
-import NewsLoading from './loading'
 
 const News = async () => {
-  const queryClient = new QueryClient()
-  await queryClient.prefetchQuery({
-    queryKey: ["heronews"],
-    queryFn: getHeroNews
-  })
+  const res = await fetch(
+    `${process.env.APP_URL}/api/home/news`,
+    {
+      method: "GET",
+      cache: "default"
+    }
+  )
+
+  if (!res.ok) return notFound()
+
+  const data: {
+    status: "success" | "error",
+    data: NewsData | null
+  } = await res.json()
+
+  if (data.status === "error" || !data.data) return notFound()
 
   return (
     <section>
       <h1 className='uppercase font-semibold text-lg mb-1'>News</h1>
 
-      <Suspense fallback={<NewsLoading />}>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <NewsComponent />
-        </HydrationBoundary>
-      </Suspense>
+      <NewsComponent data={data.data} />
     </section>
   )
 }

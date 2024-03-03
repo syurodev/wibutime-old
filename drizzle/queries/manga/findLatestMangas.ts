@@ -2,8 +2,9 @@ import { desc, eq } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
 import { manga, mangaChapter, mangaSeason } from "@/drizzle/schema";
+import { formatNumber } from "@/lib/formatNumber";
 
-export const findLatestMangas = async (take: number) => {
+export const findLatestMangas = async (take: number): Promise<MangaNew[] | null> => {
   try {
     const mangas = await db.query.manga.findMany({
       where: eq(manga.deleted, false),
@@ -58,11 +59,35 @@ export const findLatestMangas = async (take: number) => {
       orderBy: desc(manga.updatedAt)
     })
 
-    if (!mangas) return []
+    if (!mangas) return null
 
-    return mangas
+    const formatMangas: MangaNew[] | null = mangas.length === 0 ? null : mangas.map((manga) => ({
+      id: manga.id,
+      name: manga.name,
+      summary: manga.summary,
+      user: {
+        id: manga.user.id
+      },
+      type: "manga" as ContentType,
+      categories: manga.categories.map((cate) => cate.category),
+      image: manga.seasons[0].image as {
+        key?: string,
+        url: string
+      } | null,
+      seasons: manga.seasons.length === 0 ? null : {
+        id: manga.seasons[0].id,
+        name: manga.seasons[0].name,
+        chapters: manga.seasons[0].chapters.length === 0 ? null : manga.seasons[0].chapters.map((item) => ({
+          id: item.id,
+          index: item.index || ""
+        })),
+      },
+      favorites: formatNumber(manga.favorites.length)
+    }))
+
+    return formatMangas
   } catch (error) {
     console.log(error)
-    return []
+    return null
   }
 }

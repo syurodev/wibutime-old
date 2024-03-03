@@ -11,28 +11,32 @@ const UserProfileLoading = () => {
       <Skeleton className="h-8 w-[200px] mx-auto mt-4" />
       <Skeleton className="h-4 w-[100px] mx-auto mt-1" />
 
-      <div className='flex flex-col gap-1 mt-4'>
-        <Skeleton className="h-4 w-full mx-auto mt-2" />
-        <Skeleton className="h-4 w-full mx-auto mt-2" />
-        <Skeleton className="h-4 w-1/2 mt-2" />
-      </div>
+      <div className='lg:grid lg:gap-7 lg:grid-cols-[1fr_3fr] w-full h-full'>
+        <div className='h-fit'>
+          <div className='flex flex-col gap-1 mt-4'>
+            <Skeleton className="h-4 w-full mx-auto mt-2" />
+            <Skeleton className="h-4 w-full mx-auto mt-2" />
+            <Skeleton className="h-4 w-1/2 mt-2" />
+          </div>
 
-      <div className='flex gap-4 mt-4 items-center justify-center'>
-        <div>
-          <Skeleton className="h-5 w-16 mx-auto" />
-          <Skeleton className="h-4 w-8 mx-auto mt-1" />
+          <div className='flex gap-4 mt-4 items-center justify-center'>
+            <div>
+              <Skeleton className="h-5 w-16 mx-auto" />
+              <Skeleton className="h-4 w-8 mx-auto mt-1" />
+            </div>
+            <div>
+              <Skeleton className="h-5 w-16 mx-auto" />
+              <Skeleton className="h-4 w-8 mx-auto mt-1" />
+            </div>
+            <div>
+              <Skeleton className="h-5 w-16 mx-auto" />
+              <Skeleton className="h-4 w-8 mx-auto mt-1" />
+            </div>
+          </div>
         </div>
-        <div>
-          <Skeleton className="h-5 w-16 mx-auto" />
-          <Skeleton className="h-4 w-8 mx-auto mt-1" />
-        </div>
-        <div>
-          <Skeleton className="h-5 w-16 mx-auto" />
-          <Skeleton className="h-4 w-8 mx-auto mt-1" />
-        </div>
-      </div>
 
-      <Skeleton className="mt-4 h-full w-full rounded-lg" />
+        <Skeleton className="mt-4 h-full w-full rounded-lg" />
+      </div>
     </Container>
   )
 }
