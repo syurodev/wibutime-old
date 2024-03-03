@@ -26,7 +26,6 @@ const TrendingComponent: FC = () => {
 
   return (
     <div>
-      <h1 className='uppercase font-semibold text-lg'>Trending</h1>
       <motion.div
         className='w-full h-fit overflow-hidden relative rounded-2xl shadow dark:border'
         variants={slide}

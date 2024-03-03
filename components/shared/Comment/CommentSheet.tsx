@@ -61,7 +61,7 @@ const CommentSheet: FC<IProps> = ({
       open={isOpen}
       onOpenChange={onOpenChange}
     >
-      <SheetContent className='flex justify-between flex-col w-full max-w-[450px]'>
+      <SheetContent className='flex justify-between flex-col !w-full !max-w-[500px]'>
         <SheetHeader>
           <SheetTitle>Bình luận</SheetTitle>
         </SheetHeader>

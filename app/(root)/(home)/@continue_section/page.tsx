@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import ContinueComponent from '@/components/Home/MainSection/Continue/ContinueComponent'
+import ContinueLoading from './loading'
 
 const data = {
   continue: [
@@ -151,7 +152,13 @@ const data = {
 
 const Continue = () => {
   return (
-    <ContinueComponent data={data.continue} />
+    <section>
+      <h1 className='uppercase font-semibold text-lg mb-1'>Continue</h1>
+
+      <Suspense fallback={<ContinueLoading />}>
+        <ContinueComponent data={data.continue} />
+      </Suspense>
+    </section>
   )
 }
 

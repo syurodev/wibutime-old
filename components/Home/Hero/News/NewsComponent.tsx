@@ -17,7 +17,7 @@ import { getHeroNews } from '@/actions/home';
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
 
 const NewsComponent: FC = () => {
-  const { data, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ["heronews"],
     queryFn: getHeroNews
   })
@@ -46,8 +46,6 @@ const NewsComponent: FC = () => {
 
   return (
     <div>
-      <h1 className='uppercase font-semibold text-lg'>News</h1>
-
       <motion.div
         className='w-full h-fit overflow-hidden relative rounded-2xl shadow'
         variants={slide}

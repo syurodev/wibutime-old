@@ -8,6 +8,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { notFound } from 'next/navigation'
 
+import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { slideWithoutScale } from '@/lib/motion/slide'
 import { formatDate } from '@/lib/formatDate'
 import RenderEditorContent from '@/components/shared/TextEditor/RenderEditorContent'
@@ -146,71 +148,73 @@ const LightnovelDetail: FC<IProps> = ({ id }) => {
                         <CardDescription className='!m-0'>{`${item.chapters.length} Chapters`}</CardDescription>
                       </CardHeader>
                       <CardContent className='flex gap-3 p-4 pt-0'>
-                        <div className='aspect-[2/3] min-w-[100px] rounded-lg shadow overflow-hidden relative'>
+                        <div className='w-[167px] h-[250px] rounded-lg shadow overflow-hidden relative flex-none'>
                           <Image
                             src={item.image ? item.image.url : "images/image2.jpeg"}
                             alt={item.name}
                             fill
                             sizes='full'
                             priority
-                            className='object-cover'
+                            className='object-cover aspect-[2/3]'
                           />
                         </div>
 
-                        <div className='flex flex-col gap-2 w-full'>
-                          {
-                            item.chapters.map((chapter, index) => {
-                              if (chapter.charge) {
-                                return (
-                                  <div
-                                    key={`${item.name}-${chapter.name}`}
-                                    className='flex items-center justify-between w-full gap-2 cursor-pointer'
-                                    onClick={() => {
-                                      setPurchaseData({
-                                        novelId: id,
-                                        authorId: data.data.user.id,
-                                        chapterId: chapter.id,
-                                        name: chapter.name,
-                                        type: "lightnovel"
-                                      })
-                                      setOpenPurchase(true)
-                                    }}
-                                  >
-                                    <div className='flex items-center gap-1'>
-                                      <LuCoins className="!text-base min-w-4 w-4" />
-                                      <p className='line-clamp-1 text-sm font-semibold'>
-                                        {chapter.name}
-                                      </p>
-                                    </div>
-
-                                    <span className='text-xs text-secondary-foreground'>
-                                      {formatDate(chapter.createdAt)}
-                                    </span>
-                                  </div>
-                                )
-                              } else {
-                                return (
-                                  <Link
-                                    key={`${item.name}-${chapter.name}`}
-                                    href={`/lightnovels/lightnovel/${data.data.id}/r/${chapter.id}`}
-                                  >
+                        <ScrollArea className="h-[250px] w-full">
+                          <div className='flex flex-col gap-2 w-full'>
+                            {
+                              item.chapters.map((chapter, index) => {
+                                if (chapter.charge) {
+                                  return (
                                     <div
-                                      className='flex items-center justify-between w-full gap-2'
+                                      key={`${item.name}-${chapter.name}`}
+                                      className='flex items-center justify-between w-full gap-2 cursor-pointer'
+                                      onClick={() => {
+                                        setPurchaseData({
+                                          novelId: id,
+                                          authorId: data.data.user.id,
+                                          chapterId: chapter.id,
+                                          name: chapter.name,
+                                          type: "lightnovel"
+                                        })
+                                        setOpenPurchase(true)
+                                      }}
                                     >
-                                      <p className='line-clamp-1 text-sm'>
-                                        {chapter.name}
-                                      </p>
+                                      <div className='flex items-center gap-1'>
+                                        <LuCoins className="!text-base min-w-4 w-4" />
+                                        <p className='line-clamp-1 text-sm font-semibold'>
+                                          {chapter.name}
+                                        </p>
+                                      </div>
 
                                       <span className='text-xs text-secondary-foreground'>
                                         {formatDate(chapter.createdAt)}
                                       </span>
                                     </div>
-                                  </Link>
-                                )
-                              }
-                            })
-                          }
-                        </div>
+                                  )
+                                } else {
+                                  return (
+                                    <Link
+                                      key={`${item.name}-${chapter.name}`}
+                                      href={`/lightnovels/lightnovel/${data.data.id}/r/${chapter.id}`}
+                                    >
+                                      <div
+                                        className='flex items-center justify-between w-full gap-2'
+                                      >
+                                        <p className='line-clamp-1 text-sm'>
+                                          {chapter.name}
+                                        </p>
+
+                                        <span className='text-xs text-secondary-foreground'>
+                                          {formatDate(chapter.createdAt)}
+                                        </span>
+                                      </div>
+                                    </Link>
+                                  )
+                                }
+                              })
+                            }
+                          </div>
+                        </ScrollArea>
                       </CardContent>
                     </Card>
                   </motion.div>

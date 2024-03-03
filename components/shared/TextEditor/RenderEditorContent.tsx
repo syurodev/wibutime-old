@@ -15,6 +15,7 @@ import HardBreak from '@tiptap/extension-hard-break'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
 import Link from '@tiptap/extension-link'
+import HorizontalRule from '@tiptap/extension-horizontal-rule'
 import { default as TiptapImage } from '@tiptap/extension-image'
 
 type IDescription = {
@@ -75,6 +76,7 @@ const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontS
         }
       }),
       OrderedList,
+      HorizontalRule,
       Strike.configure({
         HTMLAttributes: {
           class: "line-through"
