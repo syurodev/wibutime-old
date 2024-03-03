@@ -1,9 +1,8 @@
 import React, { FC } from 'react'
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
 
-import { getUserDetail } from '@/actions/user'
 import UserProfile from '@/components/UserProfile/UserProfile'
 import Container from '@/components/shared/Container'
+import { notFound } from 'next/navigation'
 
 type IProps = {
   params: {
@@ -12,18 +11,25 @@ type IProps = {
 }
 
 const UserPage: FC<IProps> = async ({ params }) => {
-  const queryClient = new QueryClient()
-  await queryClient.prefetchQuery({
-    queryKey: ["user", params.id],
-    queryFn: async () => getUserDetail(params.id)
-  })
+  const res = await fetch(
+    `${process.env.APP_URL}/api/u/${params.id}`,
+    {
+      cache: "default"
+    }
+  )
 
+  if (!res.ok) return notFound()
+
+  const data: {
+    status: "success" | "error",
+    data: UserProfile | null
+  } = await res.json()
+
+  if (data.status === "error" || !data.data) return notFound()
 
   return (
     <Container>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <UserProfile id={params.id} />
-      </HydrationBoundary>
+      <UserProfile data={data.data} />
     </Container>
   )
 }

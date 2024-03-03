@@ -1,8 +1,6 @@
 "use client"
 
 import React, { FC } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { notFound } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 import {
@@ -12,22 +10,20 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import CardItem from '@/components/shared/Card/CardItem'
-import { getUserDetail } from '@/actions/user'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { slideWithoutScale } from '@/lib/motion/slide'
 
 type IProps = {
-  id: string
+  animes: AnimeQuickInformation[],
+  mangas: MangaQuickInformation[],
+  lightnovels: LightnovelQuickInformation[],
 }
 
-const Uploaded: FC<IProps> = ({ id }) => {
-  const { data, error } = useQuery({
-    queryKey: ["user", id],
-    queryFn: async () => getUserDetail(id)
-  })
-
-  if (error) notFound()
-  if (!data?.data) notFound()
+const Uploaded: FC<IProps> = ({
+  animes,
+  mangas,
+  lightnovels,
+}) => {
 
   const session = useCurrentUser()
 
@@ -40,8 +36,8 @@ const Uploaded: FC<IProps> = ({ id }) => {
       </TabsList>
       <TabsContent value="animes" className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {
-          data.data.animes && data.data.animes.length > 0 ? (
-            data.data.animes.map((item, index) => {
+          animes && animes.length > 0 ? (
+            animes.map((item, index) => {
               return (
                 <motion.div
                   key={`anime - ${item.name}`}
@@ -71,8 +67,8 @@ const Uploaded: FC<IProps> = ({ id }) => {
       </TabsContent>
       <TabsContent value="mangas" className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {
-          data.data.mangas && data.data.mangas.length > 0 ? (
-            data.data.mangas.map((item, index) => {
+          mangas && mangas.length > 0 ? (
+            mangas.map((item, index) => {
               return (
                 <motion.div
                   key={`manga - ${item.name}`}
@@ -103,8 +99,8 @@ const Uploaded: FC<IProps> = ({ id }) => {
       </TabsContent>
       <TabsContent value="lightnovels" className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {
-          data.data.lightnovels && data.data.lightnovels.length > 0 ? (
-            data.data.lightnovels.map((item, index) => {
+          lightnovels && lightnovels.length > 0 ? (
+            lightnovels.map((item, index) => {
               return (
                 <motion.div
                   key={`lightnovel - ${item.name}`}

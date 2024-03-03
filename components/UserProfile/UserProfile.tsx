@@ -3,30 +3,20 @@
 import React, { FC } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { useQuery } from '@tanstack/react-query'
-import { notFound } from 'next/navigation'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import UserInfo from './_component/Info'
 import Uploaded from './_component/Uploaded'
 import { getAllUserImage } from '@/lib/getAllUserImage'
 import { slide, slideWithoutScale } from '@/lib/motion/slide'
-import { getUserDetail } from '@/actions/user'
 
 type IProps = {
-  id: string
+  data: UserProfile
 }
 
-const UserProfile: FC<IProps> = ({ id }) => {
-  const { data, error } = useQuery({
-    queryKey: ["user", id],
-    queryFn: async () => getUserDetail(id)
-  })
+const UserProfile: FC<IProps> = ({ data }) => {
 
-  if (error) notFound()
-  if (!data?.data) notFound()
-
-  const allImage = getAllUserImage(data?.data)
+  const allImage = getAllUserImage(data)
 
   return (
     <div className='flex flex-col gap-5'>
@@ -75,11 +65,11 @@ const UserProfile: FC<IProps> = ({ id }) => {
             className='size-28 z-10 shadow-lg'
           >
             <AvatarImage
-              src={data.data.image || "/images/default-avatar.webp"}
-              alt={data.data.name}
+              src={data.image || "/images/default-avatar.webp"}
+              alt={data.name}
               className='object-cover'
             />
-            <AvatarFallback className='select-none'>{data.data.name}</AvatarFallback>
+            <AvatarFallback className='select-none'>{data.name}</AvatarFallback>
           </Avatar>
           <div
             className='absolute size-[120px] bg-background -top-[4px] -left-[4px] rounded-full -z-10'
@@ -94,10 +84,10 @@ const UserProfile: FC<IProps> = ({ id }) => {
           animate="animate"
           exit="exit"
         >
-          {data.data.name}
+          {data.name}
         </motion.p>
 
-        {data.data.username && <motion.p
+        {data.username && <motion.p
           className='text-center text-xs text-secondary-foreground'
           variants={slideWithoutScale}
           custom={0.55}
@@ -105,19 +95,23 @@ const UserProfile: FC<IProps> = ({ id }) => {
           animate="animate"
           exit="exit"
         >
-          @{data.data.username}
+          @{data.username}
         </motion.p>}
       </div>
 
       <div className='grid grid-cols-1 gap-7 lg:grid-cols-[1fr_3fr]'>
         <UserInfo
-          description={data.data.description}
-          animes={data.data.animes.length}
-          mangas={data.data.mangas.length}
-          lightnovels={data.data.lightnovels.length}
+          description={data.description}
+          animes={data.animes.length}
+          mangas={data.mangas.length}
+          lightnovels={data.lightnovels.length}
         />
 
-        <Uploaded id={id} />
+        <Uploaded
+          animes={data.animes ?? []}
+          lightnovels={data.lightnovels ?? []}
+          mangas={data.mangas ?? []}
+        />
       </div>
     </div>
   )
