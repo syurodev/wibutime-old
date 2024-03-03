@@ -12,7 +12,6 @@ type IProps = {
   novelId: string,
   novelName: string,
   authorId: string,
-  comments: CommentData[],
   currentChapter: string,
   volumes: {
     id: string,
@@ -35,7 +34,6 @@ const MenuButton: FC<IProps> = ({
   volumes,
   novelName,
   authorId,
-  comments,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isOpenChapterList, setIsOpenChapterList] = useState<boolean>(false)
@@ -161,7 +159,6 @@ const MenuButton: FC<IProps> = ({
         commentFor='lightnovel chapter'
         contentId={currentChapter}
         authorId={authorId}
-        comments={comments}
       />
     </>
   )

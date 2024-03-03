@@ -1,6 +1,6 @@
 "use client"
 
-import React, { FC, useOptimistic, useState } from 'react'
+import React, { FC, useEffect, useState, useTransition } from 'react'
 
 import {
   Sheet,
@@ -9,12 +9,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Skeleton } from '@/components/ui/skeleton'
 
 import AddComment from './AddComment'
-// import { Skeleton } from '@/components/ui/skeleton'
 import SlideWithoutScale from '../Motion/SlideWithoutScale'
 import { AnimatePresence } from 'framer-motion'
 import CommentItem from './CommentItem'
+import { getLightnovelComments } from '@/actions/lightnovel'
 
 type IProps = {
   isOpen: boolean
@@ -22,7 +23,6 @@ type IProps = {
   authorId: string
   contentId: string
   commentFor: CommentType
-  comments: CommentData[]
 }
 
 const CommentSheet: FC<IProps> = ({
@@ -31,14 +31,24 @@ const CommentSheet: FC<IProps> = ({
   authorId,
   contentId,
   commentFor,
-  comments
 }) => {
-  const [optimisticComments, addOptimisticComment] = useOptimistic(
-    comments ?? [],
-    (state, newComment: CommentData) => {
-      return [...state, newComment]
+  const [comments, setComments] = useState<CommentData[]>([])
+  const [isPending, startTransition] = useTransition()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const fetchComment = () => {
+    startTransition(async () => {
+      const comments = await getLightnovelComments(contentId, "lightnovel chapter")
+
+      setComments(comments.data ?? [])
+    })
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchComment()
     }
-  )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
 
   const [reply, setReply] = useState<{
     replyId: string,
@@ -61,22 +71,40 @@ const CommentSheet: FC<IProps> = ({
               className='flex flex-col gap-3'
             >
               {
-                !optimisticComments || optimisticComments.length === 0 ? (
-                  <p className='text-sm font-semibold text-secondary-foreground text-center'>Không có bình luận</p>
-                ) : (
-                  optimisticComments.map((comment, index) => (
+                isPending ? (
+                  Array.from({ length: 5 }).map((_, index) => (
                     <SlideWithoutScale
-                      key={`comment ${comment.id}`}
+                      key={`comment skeleton ${index}`}
                       delay={index * 0.1}
                     >
-                      <CommentItem
-                        authorId={authorId}
-                        comment={comment}
-                        setReply={setReply}
-                      />
+                      <div
+                        className="flex items-center space-x-4"
+                      >
+                        <Skeleton className="h-12 w-12 rounded-full" />
+                        <div className="space-y-2">
+                          <Skeleton className="h-4 w-[250px]" />
+                          <Skeleton className="h-4 w-[200px]" />
+                        </div>
+                      </div>
                     </SlideWithoutScale>
                   ))
-                )
+                ) :
+                  !comments || comments.length === 0 ? (
+                    <p className='text-sm font-semibold text-secondary-foreground text-center'>Không có bình luận</p>
+                  ) : (
+                    comments.map((comment, index) => (
+                      <SlideWithoutScale
+                        key={`comment ${comment.id}`}
+                        delay={index * 0.1}
+                      >
+                        <CommentItem
+                          authorId={authorId}
+                          comment={comment}
+                          setReply={setReply}
+                        />
+                      </SlideWithoutScale>
+                    ))
+                  )
               }
             </div>
           </AnimatePresence>
@@ -84,9 +112,10 @@ const CommentSheet: FC<IProps> = ({
         <AddComment
           contentId={contentId}
           type={commentFor}
-          addOptimisticComment={addOptimisticComment}
+          addOptimisticComment={setComments}
           reply={reply}
           setReply={setReply}
+          fetchComment={fetchComment}
         />
       </SheetContent>
     </Sheet>

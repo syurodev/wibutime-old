@@ -451,7 +451,6 @@ export const purchaseChapter = async (
 export const createComment = async (
   comment: string,
   contentId: string,
-  callbackUrl: string,
   parentId?: string,
 ) => {
   try {
@@ -478,8 +477,6 @@ export const createComment = async (
       code: 400,
       message: "Có lỗi trong quá trình đăng comment, vui lòng thử lại"
     }
-
-    revalidatePath(callbackUrl)
 
     return {
       code: 200,

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS "anime" (
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	"deleted" boolean DEFAULT false,
-	"status" text,
+	"status" text DEFAULT 'InProcess',
 	"note" jsonb,
 	"user_id" uuid NOT NULL,
 	"translation_group_id" uuid,
@@ -86,12 +86,12 @@ CREATE TABLE IF NOT EXISTS "category_manga" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "comment" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"comment" jsonb NOT NULL,
+	"parent_id" uuid,
+	"comment" text NOT NULL,
 	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	"deleted" boolean DEFAULT false,
-	"reply" uuid,
 	CONSTRAINT "comment_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
@@ -129,6 +129,11 @@ CREATE TABLE IF NOT EXISTS "comment_manga_chapter" (
 	"comment_id" uuid NOT NULL,
 	"chapter_id" uuid NOT NULL,
 	CONSTRAINT "comment_manga_chapter_comment_id_chapter_id_pk" PRIMARY KEY("comment_id","chapter_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "favorite_comment" (
+	"comment_id" uuid NOT NULL,
+	"user_id" uuid NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "favorite_anime" (
@@ -172,7 +177,7 @@ CREATE TABLE IF NOT EXISTS "lightnovel" (
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	"deleted" boolean DEFAULT false,
-	"status" text,
+	"status" text DEFAULT 'InProcess',
 	"note" jsonb,
 	"user_id" uuid NOT NULL,
 	"translation_group_id" uuid,
@@ -213,7 +218,7 @@ CREATE TABLE IF NOT EXISTS "manga" (
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	"deleted" boolean DEFAULT false,
-	"status" text,
+	"status" text DEFAULT 'InProcess',
 	"note" jsonb,
 	"user_id" uuid NOT NULL,
 	"translation_group_id" uuid,
@@ -563,6 +568,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "comment_manga_chapter" ADD CONSTRAINT "comment_manga_chapter_chapter_id_manga_chapter_id_fk" FOREIGN KEY ("chapter_id") REFERENCES "manga_chapter"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "favorite_comment" ADD CONSTRAINT "favorite_comment_comment_id_comment_id_fk" FOREIGN KEY ("comment_id") REFERENCES "comment"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "favorite_comment" ADD CONSTRAINT "favorite_comment_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

@@ -1,5 +1,5 @@
 {
-  "id": "427a09d2-6dd7-4002-a1bb-3311caf7e9af",
+  "id": "ae92504e-3e37-4311-a073-6e456c6a8ce3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -156,7 +156,8 @@
           "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'InProcess'"
         },
         "note": {
           "name": "note",
@@ -667,9 +668,15 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "comment": {
           "name": "comment",
-          "type": "jsonb",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -699,12 +706,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
-        },
-        "reply": {
-          "name": "reply",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -1074,6 +1075,55 @@
           ]
         }
       },
+      "uniqueConstraints": {}
+    },
+    "favorite_comment": {
+      "name": "favorite_comment",
+      "schema": "",
+      "columns": {
+        "comment_id": {
+          "name": "comment_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "favorite_comment_comment_id_comment_id_fk": {
+          "name": "favorite_comment_comment_id_comment_id_fk",
+          "tableFrom": "favorite_comment",
+          "tableTo": "comment",
+          "columnsFrom": [
+            "comment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "favorite_comment_user_id_user_id_fk": {
+          "name": "favorite_comment_user_id_user_id_fk",
+          "tableFrom": "favorite_comment",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "favorite_anime": {
@@ -1458,7 +1508,8 @@
           "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'InProcess'"
         },
         "note": {
           "name": "note",
@@ -1772,7 +1823,8 @@
           "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'InProcess'"
         },
         "note": {
           "name": "note",

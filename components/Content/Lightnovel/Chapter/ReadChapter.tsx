@@ -14,10 +14,9 @@ const MenuButton = dynamic(() => import('@/components/Content/Lightnovel/Chapter
 
 type IProps = {
   data: LightnovelChapterDetail,
-  comments: CommentData[]
 }
 
-const ReadChapter: FC<IProps> = ({ data, comments }) => {
+const ReadChapter: FC<IProps> = ({ data }) => {
   useEffect(() => {
     const upViewed = setTimeout(async () => {
       await updateLightnovelChapterViewed(data.id)
@@ -103,7 +102,6 @@ const ReadChapter: FC<IProps> = ({ data, comments }) => {
         volumes={data.volumes}
         novelName={data.novelName}
         authorId={data.authorId}
-        comments={comments}
       />
     </>
   )

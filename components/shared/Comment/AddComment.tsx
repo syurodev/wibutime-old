@@ -3,7 +3,6 @@
 import React, { FC, useState, useTransition } from 'react'
 import { v4 as uuid } from "uuid";
 import { toast } from 'sonner'
-import { usePathname } from 'next/navigation'
 
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from '@/components/ui/button'
@@ -29,7 +28,8 @@ type IProps = {
     replyContent: string;
     userName: string;
   } | null
-  addOptimisticComment: (action: CommentData) => void
+  addOptimisticComment: React.Dispatch<React.SetStateAction<CommentData[]>>,
+  fetchComment: () => void
 }
 
 const AddComment: FC<IProps> = ({
@@ -39,9 +39,9 @@ const AddComment: FC<IProps> = ({
   addOptimisticComment,
   reply,
   setReply,
+  fetchComment
 }) => {
   const [commentContent, setCommentContent] = useState<string>("")
-  const pathName = usePathname()
   const session = useCurrentUser()
   const [isPending, startTransition] = useTransition()
 
@@ -60,17 +60,18 @@ const AddComment: FC<IProps> = ({
           image: session?.image ?? undefined
         }
       }
-      addOptimisticComment(newComment)
+      addOptimisticComment((prev) => [...prev, newComment])
     }
 
     startTransition(async () => {
-      const res = await createComment(commentContent, contentId, pathName, reply?.replyId ?? undefined)
+      const res = await createComment(commentContent, contentId, reply?.replyId ?? undefined)
 
       if (res.code !== 200) {
         toast.error(res.message)
       } else {
         setCommentContent("")
         setReply(null)
+        fetchComment()
       }
     })
   }

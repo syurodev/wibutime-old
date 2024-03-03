@@ -17,7 +17,7 @@ let db: PostgresJsDatabase<typeof schema>;
 if (process.env.NODE_ENV === "production") {
   const client = postgres(connectionString, {
     prepare: false,
-    connect_timeout: 10000,
+    connect_timeout: 15000,
     idle_timeout: 3000,
     max: 20,
   });
