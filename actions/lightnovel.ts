@@ -359,7 +359,6 @@ export const getChapterContent = async (chapterId: string): Promise<{
 
     const content = await findChapter(chapterId, session?.id ?? undefined)
 
-
     if (!content) {
       return {
         code: 404,

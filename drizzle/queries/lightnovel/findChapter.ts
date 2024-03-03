@@ -5,7 +5,7 @@ import { lightnovelChapter, lightnovelVolume } from "@/drizzle/schema";
 import { formatNumber } from "@/lib/formatNumber";
 import { findChapterCharge } from "@/lib/findChapterCharge";
 
-export const findChapter = async (chapterId: string, userId?: string) => {
+export const findChapter = async (chapterId: string, userId?: string): Promise<LightnovelChapterDetail | null> => {
   try {
     const existingChapter = await db.query.lightnovelChapter.findFirst({
       where: and(eq(lightnovelChapter.id, chapterId), eq(lightnovelChapter.deleted, false)),
@@ -13,7 +13,7 @@ export const findChapter = async (chapterId: string, userId?: string) => {
         comments: {
           columns: {
             commentId: true
-          }
+          },
         },
         volume: {
           columns: {
@@ -40,7 +40,8 @@ export const findChapter = async (chapterId: string, userId?: string) => {
                         id: true,
                         charge: true,
                         name: true,
-                      }
+                      },
+                      orderBy: desc(lightnovelChapter.createdAt)
                     }
                   }
                 }

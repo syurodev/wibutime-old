@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 type IProps = {
   delay?: number,
   className?: string,
-  children: ReactNode
+  children: ReactNode,
 }
 
 const SlideWithoutScale: FC<IProps> = ({ delay, className, children }) => {

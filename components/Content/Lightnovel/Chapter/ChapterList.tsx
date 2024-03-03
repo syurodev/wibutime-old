@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/sheet"
 import Image from 'next/image'
 import { LuCoins } from 'react-icons/lu'
-import { formatDate } from '@/lib/formatDate'
 import Link from 'next/link'
 import PurchaseDialog from '@/components/shared/Purchase/PurchaseDialog'
+import SlideWithoutScale from '@/components/shared/Motion/SlideWithoutScale'
 
 type IProps = {
   isOpen: boolean
@@ -70,7 +70,6 @@ const ChapterList: FC<IProps> = ({
         <SheetContent>
           <SheetHeader>
             <SheetTitle>Danh sách Chapter</SheetTitle>
-
             {
               volumes.map((volume, index) => (
                 <div key={volume.id}>
@@ -86,8 +85,8 @@ const ChapterList: FC<IProps> = ({
                     </div>
 
                     <div className='flex flex-col'>
-                      <p className='text-base font-semibold line-clamp-2'>{novelName}</p>
-                      <p className='text-sm font-semibold'>{volume.name}</p>
+                      <p className='text-base font-semibold line-clamp-2 text-start'>{novelName}</p>
+                      <p className='text-sm font-semibold text-start'>{volume.name}</p>
                     </div>
                   </div>
 
@@ -110,14 +109,17 @@ const ChapterList: FC<IProps> = ({
                                 setOpenPurchase(true)
                               }}
                             >
-                              <div className='flex items-center gap-1'>
+                              <SlideWithoutScale
+                                className='flex items-center gap-1'
+                                delay={index * 0.05}
+                              >
                                 <LuCoins className="!text-base min-w-4 w-4" />
                                 <p
-                                  className={`line-clamp-1 text-sm font-semibold ${chapter.id === currentChapter && "text-lightnovel font-semibold"}`}
+                                  className={`line-clamp-1 text-sm text-start font-semibold ${chapter.id === currentChapter && "text-lightnovel font-semibold"}`}
                                 >
                                   {chapter.name}
                                 </p>
-                              </div>
+                              </SlideWithoutScale>
                             </div>
                           )
                         } else {
@@ -126,13 +128,14 @@ const ChapterList: FC<IProps> = ({
                               key={chapter.name}
                               href={`/lightnovels/lightnovel/${novelId}/r/${chapter.id}`}
                             >
-                              <div
+                              <SlideWithoutScale
                                 className='flex items-center justify-between w-full gap-2'
+                                delay={index * 0.05}
                               >
-                                <p className={`line-clamp-1 text-sm ${chapter.id === currentChapter && "text-lightnovel font-semibold"}`}>
+                                <p className={`line-clamp-1 text-sm text-start ${chapter.id === currentChapter && "text-lightnovel font-semibold"}`}>
                                   {chapter.name}
                                 </p>
-                              </div>
+                              </SlideWithoutScale>
                             </Link>
                           )
                         }
