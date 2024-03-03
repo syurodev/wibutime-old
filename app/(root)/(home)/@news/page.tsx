@@ -5,7 +5,7 @@ import NewsComponent from '@/components/Home/Hero/News/NewsComponent'
 
 const News = async () => {
   const res = await fetch(
-    `${process.env.APP_URL}/api/home/news`,
+    `${process.env.APP_URL}/api/home/news?limit=3`,
     {
       method: "GET",
       cache: "default"
@@ -16,16 +16,22 @@ const News = async () => {
 
   const data: {
     status: "success" | "error",
-    data: NewsData | null
+    data: {
+      animes: AnimeNew[];
+      mangas: MangaNew[];
+      lightnovels: LightnovelNew[];
+    } | null
   } = await res.json()
 
   if (data.status === "error" || !data.data) return notFound()
+
+  const news: NewsData = [...data.data.animes, ...data.data.lightnovels, ...data.data.mangas]
 
   return (
     <section>
       <h1 className='uppercase font-semibold text-lg mb-1'>News</h1>
 
-      <NewsComponent data={data.data} />
+      <NewsComponent data={news} />
     </section>
   )
 }

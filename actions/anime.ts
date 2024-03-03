@@ -6,7 +6,6 @@ import { findLatestAnimes } from "@/drizzle/queries/anime/findLatestAnimes"
 import { findSeasons } from "@/drizzle/queries/anime/findSeasons"
 import { insertAnime } from "@/drizzle/queries/anime/insertAnime"
 import { insertAnimeSeason } from "@/drizzle/queries/anime/insertAnimeSeason"
-import { formatNumber } from "@/lib/formatNumber"
 import { getServerSession } from "@/lib/getServerSession"
 import { animeEpisodeSchema, animeSchema, animeSeasonSchema } from "@/schemas/anime"
 import { animeDetail } from "@/drizzle/queries/anime/animeDetail"
@@ -14,7 +13,6 @@ import { convertUtcToGMT7 } from "@/lib/convertUtcToGMT7"
 import { insertAnimeEpisode } from "@/drizzle/queries/anime/insertAnimeEpisode"
 import { seasonDetail } from "@/drizzle/queries/anime/seasonDetail"
 import { findComments } from "@/drizzle/queries/anime/findComments"
-import { checkUserIdExistsInFavotiteArray } from "@/lib/checkUserIdExistsInFavotiteArray"
 
 export const createAnime = async (
   values: string,
@@ -114,37 +112,10 @@ export const getAnimeNews = async (limit: number = 12): Promise<{
       }
     }
 
-    const fotmatAnimes: AnimeNew[] | null = latestAnimes.length === 0 ? null : latestAnimes.map((anime) => ({
-      id: anime.id,
-      name: anime.name,
-      summary: anime.summary,
-      user: {
-        id: anime.user.id
-      },
-      type: "anime" as ContentType,
-      categories: anime.categories.map(cate => cate.category),
-      image: !anime.seasons || anime.seasons.length === 0 ? null : anime.seasons[-1].image as {
-        key?: string,
-        url: string
-      } | null,
-      seasons: !anime.seasons || anime.seasons.length === 0 ? null : {
-        id: anime.seasons[0].id,
-        name: anime.seasons[0].name,
-        end: anime.seasons[0].numberOfEpisodes || 0,
-        episodes: anime.seasons[0].episode.length === 0 ? null : anime.seasons[0].episode.map((item) => (
-          {
-            id: item.id,
-            index: item.index || ""
-          }
-        ))
-      },
-      favorites: formatNumber(anime.favorites.length)
-    }))
-
     return {
       code: 200,
       message: "success",
-      data: fotmatAnimes
+      data: latestAnimes
     }
 
   } catch (error) {

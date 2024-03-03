@@ -1,64 +1,33 @@
 'use client'
 import { FC } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { notFound } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 import { Button } from '@/components/ui/button'
 import { slide } from '@/lib/motion/slide'
 import CardItem from '@/components/shared/Card/CardItem'
-import { getNews } from '@/actions/home'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 
 type IProps = {
   title: string,
-  type: ContentType
+  type: ContentType,
+  animes?: AnimeNew[],
+  mangas?: MangaNew[],
+  lightnovels?: LightnovelNew[],
 }
 
-const NewlyUpdated: FC<IProps> = ({ title, type }) => {
+const NewlyUpdated: FC<IProps> = ({
+  title,
+  type,
+  animes,
+  mangas,
+  lightnovels,
+}) => {
   const session = useCurrentUser()
-  const { data, error } = useQuery({
-    queryKey: ["main section", "animenews", "manganews", "lightnovelnews"],
-    queryFn: async () => await getNews(12)
-  })
-
-  if (!data?.data) {
-    notFound()
-  }
-
-  function getDataByType(data: {
-    anime: AnimeNew[],
-    manga: MangaNew[],
-    lightnovel: LightnovelNew[]
-  },
-    type: ContentType
-  ): AnimeNew[] | MangaNew[] | LightnovelNew[] | null {
-    if (data === null) {
-      notFound()
-    }
-
-    switch (type) {
-      case "anime":
-        return data.anime;
-      case "manga":
-        return data.manga;
-      case "lightnovel":
-        return data.lightnovel;
-      default:
-        notFound()
-    }
-  }
-
-  const result = getDataByType(data.data, type)
-
-  if (!result) {
-    notFound()
-  }
 
   return (
     type === "anime" ? (
-      data.data.anime.length > 0 &&
-      <section>
+      animes && animes.length > 0 &&
+      <div>
         <div className='flex justify-between items-center'>
           <h1 className='uppercase font-semibold text-lg'>{title}</h1>
 
@@ -67,7 +36,7 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
 
         <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {
-            data.data.anime.map((item, index) => {
+            animes.map((item, index) => {
               return (
                 <motion.div
                   key={`${item.type}-newly-${index}`}
@@ -93,9 +62,9 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
             })
           }
         </div>
-      </section>
+      </div>
     ) : type === "manga" ? (
-      data.data.manga.length > 0 &&
+      mangas && mangas.length > 0 &&
       <section>
         <div className='flex justify-between items-center'>
           <h1 className='uppercase font-semibold text-lg'>{title}</h1>
@@ -105,7 +74,7 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
 
         <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {
-            data.data.manga.map((item, index) => {
+            mangas.map((item, index) => {
               return (
                 <motion.div
                   key={`${item.type}-newly-${index}`}
@@ -133,7 +102,7 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
         </div>
       </section>
     ) : (
-      data.data.lightnovel.length > 0 &&
+      lightnovels && lightnovels.length > 0 &&
       <section>
         <div className='flex justify-between items-center'>
           <h1 className='uppercase font-semibold text-lg'>{title}</h1>
@@ -143,7 +112,7 @@ const NewlyUpdated: FC<IProps> = ({ title, type }) => {
 
         <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {
-            data.data.lightnovel.map((item, index) => {
+            lightnovels.map((item, index) => {
               return (
                 <motion.div
                   key={`${item.type}-newly-${index}`}
