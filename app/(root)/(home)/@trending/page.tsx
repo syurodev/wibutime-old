@@ -8,7 +8,7 @@ const Trending = async () => {
     `${process.env.APP_URL}/api/home/trending`,
     {
       method: "GET",
-      cache: "default"
+      cache: "no-cache"
     }
   )
 

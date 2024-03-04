@@ -1,6 +1,7 @@
 import { db } from "@/drizzle/db";
+import { lightnovel } from "@/drizzle/schema";
 import { formatNumber } from "@/lib/formatNumber";
-import { sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 
 export const findlLightnovelTrending = async (limit: number, startDay: Date, endDay: Date): Promise<TrendingData[] | null> => {
   try {
@@ -10,7 +11,30 @@ export const findlLightnovelTrending = async (limit: number, startDay: Date, end
       image: string | null,
       numfavorites: bigint,
       totalviews: bigint
-    }[] | null = await db.execute(sql`SELECT ln.id, ln.name, ln.image, COUNT(DISTINCT fav.user_id) as numFavorites, SUM(lnc.viewed) AS totalViews FROM lightnovel ln LEFT JOIN lightnovel_volume lnv ON ln.id = lnv.lightnovel_id LEFT JOIN lightnovel_chapter lnc ON lnv.id = lnc.volume_id LEFT JOIN favorite_lightnovel fav ON ln.id = fav.lightnovel_id WHERE lnc.updated_at BETWEEN ${startDay.toISOString()} AND ${endDay.toISOString()} GROUP BY ln.id, ln.name, ln.image, lnv.id, lnc.id ORDER BY totalViews DESC LIMIT ${limit}`)
+    }[] | null = await db.execute(sql`
+        SELECT
+          ln.id,
+          ln.name,
+          ln.image,
+          COUNT(DISTINCT fav.user_id) AS numFavorites,
+          SUM(lnc.viewed) AS totalViews
+        FROM
+          lightnovel ln
+        LEFT JOIN
+          lightnovel_volume lnv ON ln.id = lnv.lightnovel_id
+        LEFT JOIN
+          lightnovel_chapter lnc ON lnv.id = lnc.volume_id
+        LEFT JOIN
+          favorite_lightnovel fav ON ln.id = fav.lightnovel_id
+        WHERE
+          lnc.updated_at BETWEEN CURRENT_DATE - INTERVAL '7 days' AND CURRENT_DATE
+        GROUP BY
+          ln.id, ln.name, ln.image
+        ORDER BY
+          totalViews DESC
+        LIMIT
+          ${limit}
+      `)
 
     const lightnovelTrendingResult: TrendingData[] = lightnovelTrending && lightnovelTrending.length > 0 ?
       lightnovelTrending.map((item) => ({
