@@ -70,7 +70,7 @@
     "embla-carousel-react": "^8.0.0-rc18",
     "framer-motion": "11.0.6",
     "lottie-react": "^2.4.0",
-    "next": "^14.1.0",
+    "next": "^14.1.1",
     "next-auth": "^5.0.0-beta.8",
     "next-pwa": "^5.6.0",
     "next-themes": "^0.2.1",
@@ -106,7 +106,7 @@
     "autoprefixer": "^10.0.1",
     "drizzle-kit": "^0.20.14",
     "eslint": "^8",
-    "eslint-config-next": "^14.1.0",
+    "eslint-config-next": "^14.1.1",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5.3.3"

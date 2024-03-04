@@ -65,7 +65,7 @@ const ContentDetailHeader: FC<IProps> = ({
   const session = useCurrentUser()
 
   return (
-    <div className='w-full min-h-[1000px] h-dvh md:min-w-[40%] flex flex-col items-center relative'>
+    <div className='w-full min-h-[800px] h-dvh md:min-w-[40%] flex flex-col items-center relative'>
       <ContextMenuComponent
         id={id}
         type={menuType}
@@ -157,7 +157,7 @@ const ContentDetailHeader: FC<IProps> = ({
             </motion.p>
 
             <motion.div
-              className='flex gap-4 justify-center -my-3'
+              className='flex gap-4 justify-center'
               variants={slideWithoutScale}
               custom={0.2}
               initial="initial"
@@ -169,6 +169,7 @@ const ContentDetailHeader: FC<IProps> = ({
                   <Button
                     className='items-center gap-1'
                     variant={"ghost"}
+                    size={"sm"}
                   >
                     <LuCaseSensitive className="text-xl" />
                     <span className='text-xs'>{words}</span>
@@ -179,6 +180,7 @@ const ContentDetailHeader: FC<IProps> = ({
               <Button
                 className='items-center gap-1'
                 variant={"ghost"}
+                size={"sm"}
               >
                 <LuEye />
                 <span className='text-xs'>{viewed}</span>

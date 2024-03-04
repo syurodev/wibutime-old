@@ -5,8 +5,8 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import UserInfo from './_component/Info'
-import Uploaded from './_component/Uploaded'
+import UserInfo from './Info'
+import Uploaded from './Uploaded'
 import { getAllUserImage } from '@/lib/getAllUserImage'
 import { slide, slideWithoutScale } from '@/lib/motion/slide'
 

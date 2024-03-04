@@ -37,6 +37,7 @@ const FavoriteButton: FC<IProps> = ({
 
     <Button
       variant={"ghost"}
+      size={"sm"}
       className='group items-center gap-1'
       disabled={isPending}
       onClick={handleFavorite}

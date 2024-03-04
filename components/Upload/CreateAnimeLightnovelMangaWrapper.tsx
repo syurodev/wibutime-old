@@ -85,7 +85,7 @@ const CreateAnimeLightnovelMangaWrapper: FC<IProps> = ({
       <DrawerContent className="max-h-[98%] h-fit overflow-y-hidden !border-none">
         {
           isPending ? (
-            <ReloadIcon className="h-4 w-4 animate-spin mx-auto" />
+            <ReloadIcon className="h-4 w-4 animate-spin mx-auto mt-2" />
           ) : (
             <>
               <DrawerHeader className='max-w-[1300px] mx-auto'>

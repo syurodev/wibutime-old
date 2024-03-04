@@ -109,6 +109,7 @@ const AddComment: FC<IProps> = ({
       </AnimatePresence>
       <Textarea
         className='w-full rounded-xl showScroll overflow-x-hidden'
+        autoFocus={false}
         value={commentContent}
         onChange={(e) => setCommentContent(e.target.value)}
         disabled={isPending}
