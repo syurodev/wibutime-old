@@ -23,7 +23,7 @@ type AnimeQuickInformation = {
   }[]
 }
 
-type AnimeNew = {
+type AnimeNewItem = {
   id: string,
   name: string,
   user: {
@@ -49,6 +49,11 @@ type AnimeNew = {
     }[] | null,
   } | null,
   favorites: string,
+}
+
+type AnimeNew = {
+  animes: AnimeNewItem[],
+  totalPage: number
 }
 
 type AnimeDetail = {
@@ -125,4 +130,62 @@ type AnimeEpisodeInfo = {
     url: string,
   } | null,
   createdAt: string
+}
+
+type SeasonDetail = {
+  id: string;
+  name: string;
+  image?: {
+    key: string,
+    url: string
+  },
+  aired: string,
+  broadcastDay: string,
+  broadcastTime: Date,
+  musics?: {
+    type: MusicType,
+    name: string,
+    url?: string,
+  }[],
+  studio: string,
+  numberOfEpisodes: number | null,
+  episode: {
+    id: string;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    deleted: boolean | null;
+    content: {
+      url: string
+    };
+    viewed: number | null;
+    viewed_at: Date | null;
+    thumbnail?: {
+      url: string
+    };
+    index: string;
+    seasonId: string;
+  }[];
+  anime: {
+    id: string,
+    name: string,
+    user: {
+      id: string,
+      name: string,
+      image?: string | null,
+      followedUsers: {
+        followedBy: string
+      }[],
+    },
+    translationGroup?: {
+      id: string,
+      name: string,
+      image?: string,
+      followers: {
+        followerId: string
+      }[],
+    } | null,
+    favorites: {
+      userId: string
+    }[]
+  }
 }

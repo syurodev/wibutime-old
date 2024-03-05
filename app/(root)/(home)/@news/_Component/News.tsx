@@ -17,8 +17,7 @@ type IProps = {
   data: NewsData
 }
 
-const NewsComponent: FC<IProps> = ({ data }) => {
-
+const News: FC<IProps> = ({ data }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
 
   useEffect(() => {
@@ -257,4 +256,4 @@ const NewsComponent: FC<IProps> = ({ data }) => {
   )
 }
 
-export default NewsComponent
+export default News

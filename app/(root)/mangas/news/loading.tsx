@@ -3,7 +3,7 @@ import React from 'react'
 import Container from '@/components/shared/Container'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const CategoryContentsLoading = () => {
+const ContentsLoading = () => {
   return (
     <Container>
       <Skeleton className="h-7 w-60 rounded-xl mb-3" />
@@ -12,7 +12,7 @@ const CategoryContentsLoading = () => {
       >
         {
           Array.from({ length: 12 }).map((_, index) => (
-            <Skeleton key={`CategoryContentsLoading ${index}`} className="aspect-[2/3] w-full rounded-xl" />
+            <Skeleton key={`ContentsLoading ${index}`} className="aspect-[2/3] w-full rounded-xl" />
           ))
         }
       </div>
@@ -20,4 +20,4 @@ const CategoryContentsLoading = () => {
   )
 }
 
-export default CategoryContentsLoading
+export default ContentsLoading

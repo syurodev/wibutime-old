@@ -18,7 +18,7 @@ type IProps = {
   }
 }
 
-const TrendingComponent: FC<IProps> = ({ data }) => {
+const Trending: FC<IProps> = ({ data }) => {
 
   return (
     <div>
@@ -214,4 +214,4 @@ const TrendingComponent: FC<IProps> = ({ data }) => {
   )
 }
 
-export default TrendingComponent
+export default Trending

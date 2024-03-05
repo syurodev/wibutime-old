@@ -1,11 +1,17 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
 import { manga, mangaChapter, mangaSeason } from "@/drizzle/schema";
 import { formatNumber } from "@/lib/formatNumber";
 
-export const findLatestMangas = async (take: number): Promise<MangaNew[] | null> => {
+export const findLatestMangas = async (limit: number, page: number = 0): Promise<MangaNew | null> => {
   try {
+    const mangaNumber: { num_manga: number }[] = await db.execute(sql`
+      SELECT COUNT(*) AS num_manga
+      FROM manga
+      WHERE deleted = false;
+    `)
+
     const mangas = await db.query.manga.findMany({
       where: eq(manga.deleted, false),
       columns: {
@@ -55,35 +61,39 @@ export const findLatestMangas = async (take: number): Promise<MangaNew[] | null>
           }
         }
       },
-      limit: take,
+      offset: (limit * page),
+      limit: limit,
       orderBy: desc(manga.updatedAt)
     })
 
     if (!mangas) return null
 
-    const formatMangas: MangaNew[] | null = mangas.length === 0 ? null : mangas.map((manga) => ({
-      id: manga.id,
-      name: manga.name,
-      summary: manga.summary,
-      user: {
-        id: manga.user.id
-      },
-      type: "manga" as ContentType,
-      categories: manga.categories.map((cate) => cate.category),
-      image: manga.seasons[0].image as {
-        key?: string,
-        url: string
-      } | null,
-      seasons: manga.seasons.length === 0 ? null : {
-        id: manga.seasons[0].id,
-        name: manga.seasons[0].name,
-        chapters: manga.seasons[0].chapters.length === 0 ? null : manga.seasons[0].chapters.map((item) => ({
-          id: item.id,
-          index: item.index || ""
-        })),
-      },
-      favorites: formatNumber(manga.favorites.length)
-    }))
+    const formatMangas: MangaNew = {
+      mangas: mangas.length === 0 ? [] : mangas.map((manga) => ({
+        id: manga.id,
+        name: manga.name,
+        summary: manga.summary,
+        user: {
+          id: manga.user.id
+        },
+        type: "manga" as ContentType,
+        categories: manga.categories.map((cate) => cate.category),
+        image: manga.seasons[0].image as {
+          key?: string,
+          url: string
+        } | null,
+        seasons: manga.seasons.length === 0 ? null : {
+          id: manga.seasons[0].id,
+          name: manga.seasons[0].name,
+          chapters: manga.seasons[0].chapters.length === 0 ? null : manga.seasons[0].chapters.map((item) => ({
+            id: item.id,
+            index: item.index || ""
+          })),
+        },
+        favorites: formatNumber(manga.favorites.length)
+      })),
+      totalPage: +(mangaNumber[0].num_manga / limit).toFixed()
+    } as MangaNew
 
     return formatMangas
   } catch (error) {

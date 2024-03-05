@@ -117,7 +117,7 @@ type LightnovelChapterDetail = {
   comments: number,
 }
 
-type LightnovelNew = {
+type LightnovelNewItem = {
   id: string,
   name: string,
   type: ContentType,
@@ -144,4 +144,9 @@ type LightnovelNew = {
     } | null,
   } | null,
   favorites: string,
+}
+
+type LightnovelNew = {
+  lightnovels: LightnovelNewItem[],
+  totalPage: number
 }

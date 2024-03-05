@@ -14,6 +14,7 @@ type IProps = {
 const SlideWithoutScale: FC<IProps> = ({ delay, className, children }) => {
   return (
     <motion.div
+      layout
       variants={slideWithoutScale}
       custom={delay ?? 0}
       initial="initial"

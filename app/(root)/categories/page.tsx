@@ -2,23 +2,15 @@ import React from 'react'
 import { notFound } from 'next/navigation'
 
 import Container from '@/components/shared/Container'
-import CategoryCard from '@/components/shared/Card/CategoryCard'
-import SlideWithoutScale from '@/components/shared/Motion/SlideWithoutScale'
 import CategoriesContent from './_components/CategoriesContent'
 
 const CategoriesPage = async () => {
-  // const queryClient = new QueryClient()
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["categories"],
-  //   queryFn: getAllCategoriesAndContent
-  // })
-
   const res = await fetch(`${process.env.APP_URL}/api/categories`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    cache: "force-cache"
+    next: { revalidate: 300 }
   })
 
   if (!res.ok) return notFound()

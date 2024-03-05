@@ -92,7 +92,6 @@ const Content: FC<IProps> = ({ data }) => {
         )
       }
     </div>
-
   )
 }
 

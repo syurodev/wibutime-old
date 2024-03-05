@@ -19,7 +19,7 @@ const LightnovelPage: FC<IProps> = async ({ params }) => {
       body: JSON.stringify({
         userId: session?.id ? session.id : ""
       }),
-      cache: "default"
+      next: { revalidate: 500 }
     }
   )
 

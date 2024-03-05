@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 
-import ContinueComponent from '@/components/Home/MainSection/Continue/ContinueComponent'
+import ContinueComponent from '@/app/(root)/(home)/@continue_section/_components/ContinueComponent'
 import ContinueLoading from './loading'
 
 const data = {

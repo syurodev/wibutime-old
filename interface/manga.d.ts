@@ -23,7 +23,7 @@ type MangaQuickInformation = {
   }[]
 }
 
-type MangaNew = {
+type MangaNewItem = {
   id: string,
   name: string,
   user: {
@@ -49,4 +49,9 @@ type MangaNew = {
     }[] | null,
   } | null,
   favorites: string,
+}
+
+type MangaNew = {
+  mangas: MangaNewItem[],
+  totalPage: number
 }

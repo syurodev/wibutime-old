@@ -1,63 +1,34 @@
 "use client"
 
 import React, { FC, useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { notFound, useSearchParams } from 'next/navigation';
-import { LuEye, LuHeart, LuUploadCloud } from 'react-icons/lu';
+import { useSearchParams } from 'next/navigation';
+import { LuEye, LuHeart } from 'react-icons/lu';
 import { motion } from 'framer-motion';
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import { Separator } from '@/components/ui/separator';
 
-import { getSeasonDetail } from '@/actions/anime';
 import Image from 'next/image';
 import { formatDate } from '@/lib/formatDate';
-import Link from 'next/link';
 import VideoPlayer from '@/components/shared/VideoPlayer/VideoPlayer';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { slideWithoutScale } from '@/lib/motion/slide';
 import { Button } from '@/components/ui/button';
 import { formatNumber } from '@/lib/formatNumber';
 import EpisodeList from './_components/EpisodeList';
 import Comments from './_components/Comments';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { convertDayOfWeek } from '@/lib/dayOfWeek';
 import { getTime } from '@/lib/getTime';
 import MusicList from './_components/MusicList';
 
 type IProps = {
-  seasonId: string;
+  data: SeasonDetail
 };
 
-const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
-  const { data } = useQuery({
-    queryKey: ["anime", "season", seasonId],
-    queryFn: async () => await getSeasonDetail(seasonId)
-  });
-
-  if (!data?.data) {
-    notFound();
-  }
-
+const AnimeWatchPageContent: FC<IProps> = ({ data }) => {
   const searchParams = useSearchParams()
   const epIndex = searchParams.get('ep')
 
@@ -76,11 +47,11 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
     } | undefined,
     index: string,
     seasonId: string,
-  } | undefined>(epIndex ? data.data.episode.find(item => item.index === epIndex) : data.data.episode[0])
+  } | undefined>(epIndex ? data.episode.find(item => item.index === epIndex) : data.episode[0])
 
   useEffect(() => {
-    setEpisode(data.data.episode.find(item => item.index === epIndex) || data.data.episode[0])
-  }, [data.data.episode, epIndex])
+    setEpisode(data.episode.find(item => item.index === epIndex) || data.episode[0])
+  }, [data.episode, epIndex])
 
   return (
     <div className='mt-8 w-full flex flex-col gap-3'>
@@ -93,8 +64,8 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
           exit="exit"
         >
           <Image
-            src={data.data.image?.url ?? "/images/default-content-image.webp"}
-            alt={`${data.data.name} - image`}
+            src={data.image?.url ?? "/images/default-content-image.webp"}
+            alt={`${data.name} - image`}
             className="object-cover"
             fill
           />
@@ -108,13 +79,13 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
           exit="exit"
           custom={0.1}
         >
-          <p className='font-semibold text-lg'>{data.data.name}</p>
-          <p className='text-sm'><span className='font-semibold'>Studio:</span> {data.data.studio}</p>
-          <p className='text-sm'><span className='font-semibold'>Ngày phát sóng:</span> {formatDate(data.data.aired)}</p>
-          <p className='text-sm'><span className='font-semibold'>Lịch chiếu:</span> {convertDayOfWeek(data.data.broadcastDay as DaysOfTheWeek)} lúc {getTime(new Date(data.data.broadcastTime))}</p>
-          <p className='text-sm'><span className='font-semibold'>Tiến độ:</span> {data.data.episode.length}/{data.data.numberOfEpisodes}</p>
+          <p className='font-semibold text-lg'>{data.name}</p>
+          <p className='text-sm'><span className='font-semibold'>Studio:</span> {data.studio}</p>
+          <p className='text-sm'><span className='font-semibold'>Ngày phát sóng:</span> {formatDate(data.aired)}</p>
+          <p className='text-sm'><span className='font-semibold'>Lịch chiếu:</span> {convertDayOfWeek(data.broadcastDay as DaysOfTheWeek)} lúc {getTime(new Date(data.broadcastTime))}</p>
+          <p className='text-sm'><span className='font-semibold'>Tiến độ:</span> {data.episode.length}/{data.numberOfEpisodes}</p>
 
-          <MusicList data={data.data.musics ?? null} />
+          <MusicList data={data.musics ?? null} />
         </motion.div>
       </div>
 
@@ -138,7 +109,7 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
             custom={0.25}
             className='text-balance'
           >
-            {data.data.name} :: {episode?.index}
+            {data.name} :: {episode?.index}
           </motion.h5>
 
           <div className='flex items-center gap-3 justify-between'>
@@ -175,7 +146,7 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
                 <span
                   className='text-sm font-semibold'
                 >
-                  {formatNumber(data.data.anime.favorites.length)}
+                  {formatNumber(data.anime.favorites.length)}
                 </span>
               </Button>
             </motion.div>
@@ -220,18 +191,18 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
               custom={0.4}
             >
               <Avatar className='size-12'>
-                <AvatarImage src={data.data.anime.user.image ? data.data.anime.user.image : "/images/default-avatar.webp"} alt={data.data.anime.user.name} />
-                <AvatarFallback>{data.data.anime.user.name}</AvatarFallback>
+                <AvatarImage src={data.anime.user.image ? data.anime.user.image : "/images/default-avatar.webp"} alt={data.anime.user.name} />
+                <AvatarFallback>{data.anime.user.name}</AvatarFallback>
               </Avatar>
 
               <div>
-                <p className='font-semibold text-sm'>{data.data.anime.user.name}</p>
-                <p className='text-xs text-secondary-foreground'>{data.data.anime.user.followedUsers.length} theo dõi</p>
+                <p className='font-semibold text-sm'>{data.anime.user.name}</p>
+                <p className='text-xs text-secondary-foreground'>{data.anime.user.followedUsers.length} theo dõi</p>
               </div>
             </motion.div>
 
             {
-              data.data.anime.translationGroup && data.data.anime.translationGroup.id !== "" && (
+              data.anime.translationGroup && data.anime.translationGroup.id !== "" && (
                 <>
                   <Separator orientation="vertical" className='h-8' />
 
@@ -244,13 +215,13 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
                     custom={0.45}
                   >
                     <Avatar className='size-12'>
-                      <AvatarImage src={data.data.anime.user.image ? data.data.anime.user.image : "/images/default-avatar.webp"} alt={data.data.anime.user.name} />
-                      <AvatarFallback>{data.data.anime.user.name}</AvatarFallback>
+                      <AvatarImage src={data.anime.user.image ? data.anime.user.image : "/images/default-avatar.webp"} alt={data.anime.user.name} />
+                      <AvatarFallback>{data.anime.user.name}</AvatarFallback>
                     </Avatar>
 
                     <div>
-                      <p className='font-semibold text-sm'>{data.data.anime.user.name}</p>
-                      <p className='text-xs text-secondary-foreground'>{data.data.anime.user.followedUsers.length} theo dõi</p>
+                      <p className='font-semibold text-sm'>{data.anime.user.name}</p>
+                      <p className='text-xs text-secondary-foreground'>{data.anime.user.followedUsers.length} theo dõi</p>
                     </div>
                   </motion.div>
                 </>
@@ -268,7 +239,7 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
             custom={0.5}
           >
             <EpisodeList
-              episodes={data.data.episode}
+              episodes={data.episode}
               epIndex={epIndex || ""}
             />
           </motion.div>
@@ -296,7 +267,7 @@ const AnimeWatchPageContent: FC<IProps> = ({ seasonId }) => {
           custom={0.45}
         >
           <EpisodeList
-            episodes={data.data.episode}
+            episodes={data.episode}
             epIndex={epIndex || ""}
           />
         </motion.div>

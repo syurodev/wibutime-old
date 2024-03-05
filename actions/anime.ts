@@ -96,38 +96,6 @@ export const createAnime = async (
   }
 }
 
-export const getAnimeNews = async (limit: number = 12): Promise<{
-  code: number,
-  message: string,
-  data: AnimeNew[] | null
-}> => {
-  try {
-    const latestAnimes = await findLatestAnimes(limit)
-
-    if (!latestAnimes) {
-      return {
-        code: 404,
-        message: "Không tìm thấy danh sách anime",
-        data: null
-      }
-    }
-
-    return {
-      code: 200,
-      message: "success",
-      data: latestAnimes
-    }
-
-  } catch (error) {
-    console.log(error)
-    return {
-      code: 500,
-      message: "Lỗi server",
-      data: null
-    }
-  }
-}
-
 export const getSeasons = async (animeId: string) => {
   try {
     const seasons = await findSeasons(animeId)
@@ -222,35 +190,6 @@ export const createAnimeSeason = async (
     return {
       code: 500,
       message: "Lỗi server",
-      data: null
-    }
-  }
-}
-
-export const getAnimeDetail = async (
-  animeId: string
-) => {
-  try {
-    const session = await getServerSession()
-
-    const existingAnime = await animeDetail(animeId, session?.id ?? undefined)
-
-    if (!existingAnime) return {
-      code: 404,
-      message: "Không tìm thấy anime",
-      data: null
-    }
-
-    return {
-      code: 200,
-      message: "success",
-      data: existingAnime
-    }
-  } catch (error) {
-    console.log(error)
-    return {
-      code: 500,
-      message: "Lỗi server vui lòng thử lại",
       data: null
     }
   }

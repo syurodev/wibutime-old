@@ -2,17 +2,19 @@
 import { FC } from 'react'
 import { motion } from 'framer-motion'
 
+import { buttonVariants } from "@/components/ui/button"
 import { Button } from '@/components/ui/button'
 import { slide } from '@/lib/motion/slide'
 import CardItem from '@/components/shared/Card/CardItem'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import Link from 'next/link'
 
 type IProps = {
   title: string,
   type: ContentType,
-  animes?: AnimeNew[],
-  mangas?: MangaNew[],
-  lightnovels?: LightnovelNew[],
+  animes?: AnimeNew,
+  mangas?: MangaNew,
+  lightnovels?: LightnovelNew,
 }
 
 const NewlyUpdated: FC<IProps> = ({
@@ -26,17 +28,25 @@ const NewlyUpdated: FC<IProps> = ({
 
   return (
     type === "anime" ? (
-      animes && animes.length > 0 &&
+      animes && animes.animes && animes.animes.length > 0 &&
       <div>
         <div className='flex justify-between items-center'>
-          <h1 className='uppercase font-semibold text-lg'>{title}</h1>
+          <h2 className='uppercase font-semibold text-base md:text-lg'>{title}</h2>
 
-          <Button variant={"ghost"}>See more</Button>
+          <Link
+            href={"/animes/news"}
+            className={
+              buttonVariants(
+                { variant: "ghost", size: "sm", rounded: "full" }
+              )
+            }>
+            Xem thêm
+          </Link>
         </div>
 
         <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {
-            animes.map((item, index) => {
+            animes.animes.map((item, index) => {
               return (
                 <motion.div
                   key={`${item.type}-newly-${index}`}
@@ -64,17 +74,25 @@ const NewlyUpdated: FC<IProps> = ({
         </div>
       </div>
     ) : type === "manga" ? (
-      mangas && mangas.length > 0 &&
+      mangas && mangas.mangas && mangas.mangas.length > 0 &&
       <section>
         <div className='flex justify-between items-center'>
-          <h1 className='uppercase font-semibold text-lg'>{title}</h1>
+          <h2 className='uppercase font-semibold text-base md:text-lg'>{title}</h2>
 
-          <Button variant={"ghost"}>See more</Button>
+          <Link
+            href={"/mangas/news"}
+            className={
+              buttonVariants(
+                { variant: "ghost", size: "sm", rounded: "full" }
+              )
+            }>
+            Xem thêm
+          </Link>
         </div>
 
         <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {
-            mangas.map((item, index) => {
+            mangas.mangas.map((item, index) => {
               return (
                 <motion.div
                   key={`${item.type}-newly-${index}`}
@@ -102,17 +120,25 @@ const NewlyUpdated: FC<IProps> = ({
         </div>
       </section>
     ) : (
-      lightnovels && lightnovels.length > 0 &&
+      lightnovels && lightnovels.lightnovels && lightnovels.lightnovels.length > 0 &&
       <section>
         <div className='flex justify-between items-center'>
-          <h1 className='uppercase font-semibold text-lg'>{title}</h1>
+          <h2 className='uppercase font-semibold text-base md:text-lg'>{title}</h2>
 
-          <Button variant={"ghost"}>See more</Button>
+          <Link
+            href={"/lightnovels/news"}
+            className={
+              buttonVariants(
+                { variant: "ghost", size: "sm", rounded: "full" }
+              )
+            }>
+            Xem thêm
+          </Link>
         </div>
 
         <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {
-            lightnovels.map((item, index) => {
+            lightnovels.lightnovels.map((item, index) => {
               return (
                 <motion.div
                   key={`${item.type}-newly-${index}`}

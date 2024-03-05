@@ -1,5 +1,6 @@
-import NewlyUpdated from "@/components/Home/MainSection/NewlyUpdated/NewlyUpdated";
 import { notFound } from "next/navigation";
+
+import NewlyUpdated from "@/app/(root)/(home)/_components/NewlyUpdated";
 
 export default async function Home() {
   const res = await fetch(
@@ -7,7 +8,6 @@ export default async function Home() {
     {
       method: "GET",
       next: { revalidate: 60 },
-      cache: "default"
     }
   )
 
@@ -16,9 +16,9 @@ export default async function Home() {
   const data: {
     status: "success" | "error",
     data: {
-      animes: AnimeNew[];
-      mangas: MangaNew[];
-      lightnovels: LightnovelNew[];
+      animes: AnimeNew;
+      mangas: MangaNew;
+      lightnovels: LightnovelNew;
     } | null
   } = await res.json()
 

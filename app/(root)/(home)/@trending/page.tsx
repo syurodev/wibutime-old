@@ -1,15 +1,14 @@
 import React from 'react'
-
-import TrendingComponent from '@/components/Home/Hero/Trending/TrendingComponent'
 import { notFound } from 'next/navigation'
 
-const Trending = async () => {
+import Trending from './_components/Trending'
+
+const TrendingPage = async () => {
   const res = await fetch(
     `${process.env.APP_URL}/api/home/trending`,
     {
       method: "GET",
       next: { revalidate: 60 },
-      cache: "default",
     }
   )
 
@@ -30,9 +29,9 @@ const Trending = async () => {
     <section>
       <h1 className='uppercase font-semibold text-lg mb-1'>Trending</h1>
 
-      <TrendingComponent data={data.data} />
+      <Trending data={data.data} />
     </section>
   )
 }
 
-export default Trending
+export default TrendingPage
