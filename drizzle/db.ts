@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === "production") {
   const client = postgres(connectionString, {
     prepare: false,
     connect_timeout: 15000,
-    idle_timeout: 3000,
+    idle_timeout: 2000,
     max: 20,
   });
 
@@ -36,12 +36,11 @@ if (process.env.NODE_ENV === "production") {
 
     global.db = drizzle(client, {
       schema,
-      logger: {
-        logQuery: (query) => {
-          // to remove quotes on query string, to make it more readable
-          console.log({ query: query.replace(/\"/g, "") });
-        },
-      },
+      // logger: {
+      //   logQuery: (query) => {
+      //     console.log({ query: query.replace(/\"/g, "") });
+      //   },
+      // },
     });
   }
 

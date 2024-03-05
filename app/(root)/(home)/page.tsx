@@ -6,7 +6,7 @@ export default async function Home() {
     `${process.env.APP_URL}/api/home/news?limit=12`,
     {
       method: "GET",
-      next: { revalidate: 5000 },
+      next: { revalidate: 60 },
       cache: "default"
     }
   )
