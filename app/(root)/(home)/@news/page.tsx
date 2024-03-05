@@ -8,6 +8,7 @@ const News = async () => {
     `${process.env.APP_URL}/api/home/news?limit=3`,
     {
       method: "GET",
+      next: { revalidate: 5000 },
       cache: "default"
     }
   )
