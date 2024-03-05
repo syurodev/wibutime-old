@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === "production") {
     prepare: false,
     connect_timeout: 15000,
     idle_timeout: 2000,
-    max: 30,
+    max: 35,
   });
 
   db = drizzle(client, {
