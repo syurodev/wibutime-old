@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { Card, CardContent } from '@/components/ui/card'
 import ContextMenuComponent from '../ContextMenu/ContextMenuComponent'
+import { Button } from '@/components/ui/button'
 
 type IProps = {
   type: ContentType,
@@ -17,6 +18,7 @@ type IProps = {
   end?: number,
   authorId?: string,
   poster?: boolean
+  showContentType?: boolean
 }
 
 const CardItem: FC<IProps> = ({
@@ -27,7 +29,8 @@ const CardItem: FC<IProps> = ({
   current,
   end,
   authorId,
-  poster
+  poster,
+  showContentType
 }) => {
 
   return (
@@ -43,7 +46,23 @@ const CardItem: FC<IProps> = ({
       >
         <Card>
           <CardContent className="relative flex aspect-[2/3] items-center justify-center p-6 overflow-hidden rounded-lg shadow">
-            <div className='absolute z-10 w-full bottom-0 p-2 bg-background/60 backdrop-blur-lg'>
+            {
+              showContentType && (
+                <Button
+                  size={"sm"}
+                  rounded={"full"}
+                  className={`absolute z-40 top-1 right-1 shadow-md`}
+                >
+                  <span
+                    className='font-extrabold'
+                  >
+                    {type === "anime" ? "A" : type === "lightnovel" ? "L" : "M"}
+                  </span>
+                </Button>
+              )
+            }
+
+            <div className={`absolute z-10 w-full bottom-0 p-2 bg-background`}>
               <p className='line-clamp-1 font-medium text-sm'>{name}</p>
 
               <p className='flex gap-1 items-center text-xs uppercase mt-1'>

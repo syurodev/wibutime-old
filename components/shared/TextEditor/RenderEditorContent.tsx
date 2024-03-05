@@ -34,45 +34,45 @@ const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontS
     return generateHTML(content, [
       Document.configure({
         HTMLAttributes: {
-          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} min-h-[16px] select-none`,
+          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} select-none mb-6 leading-7`,
         }
       }),
       Paragraph.configure({
         HTMLAttributes: {
-          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} min-h-[16px] select-none`,
+          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} select-none mb-6 leading-7`,
         }
       }),
       Text.configure({
         HTMLAttributes: {
-          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} min-h-[16px] select-none`,
+          class: `${fontSize ? fontSize : "text-base"} ${font ? font : ""} select-none mb-6 leading-7`,
         }
       }),
       Typography,
       HardBreak,
       Heading.configure({
         HTMLAttributes: {
-          class: "text-xl font-bold select-none",
+          class: "text-xl font-bold select-none mb-6 leading-7",
           level: [2]
         }
       }),
       Bold.configure({
         HTMLAttributes: {
-          class: "font-bold select-none",
+          class: "font-bold select-none mb-6 leading-7",
         }
       }),
       Italic.configure({
         HTMLAttributes: {
-          class: "italic select-none",
+          class: "italic select-none mb-6 leading-7",
         }
       }),
       Blockquote.configure({
         HTMLAttributes: {
-          class: "border-l-2 pl-4 ml-5 select-none"
+          class: "border-l-2 pl-4 ml-5 select-none mb-6 leading-7"
         }
       }),
       ListItem.configure({
         HTMLAttributes: {
-          class: "ml-5 select-none"
+          class: "ml-5 select-none mb-6 leading-7"
         }
       }),
       OrderedList,
@@ -94,7 +94,7 @@ const RenderEditorContent: React.FC<IDescription> = ({ content, className, fontS
       TiptapImage.configure({
         inline: false,
         HTMLAttributes: {
-          class: "mx-auto rounded-lg object-cover max-w-[70%] select-none"
+          class: "mx-auto rounded-lg object-cover max-w-[70%] select-none mb-6 leading-7"
         }
       })
     ])

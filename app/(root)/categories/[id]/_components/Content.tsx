@@ -83,6 +83,7 @@ const Content: FC<IProps> = ({ data }) => {
                     image={content.image}
                     name={content.name}
                     type={content.type}
+                    showContentType={true}
                   />
                 </SlideWithoutScale>
               ))

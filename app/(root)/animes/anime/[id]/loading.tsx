@@ -38,17 +38,6 @@ const ContentLoading = () => {
               <Skeleton className="h-3 w-12 rounded-lg" />
             </div>
           </SlideWithoutScale>
-          <div
-            className='flex items-center gap-2'
-          >
-            <Skeleton className="size-8 rounded-full" />
-            <div
-              className='flex flex-col items-start justify-start gap-1'
-            >
-              <Skeleton className="h-4 w-9 rounded-lg" />
-              <Skeleton className="h-3 w-12 rounded-lg" />
-            </div>
-          </div>
         </div>
 
         <SlideWithoutScale
@@ -104,26 +93,30 @@ const ContentLoading = () => {
       >
         <SlideWithoutScale
           delay={0.3}
+          className="rounded-lg w-full h-32 lg:h-56"
         >
           <Skeleton className="rounded-lg w-full h-32 lg:h-56" />
         </SlideWithoutScale>
 
         <SlideWithoutScale
           delay={0.4}
+          className="rounded-lg w-full h-44 lg:h-72"
         >
-          <Skeleton className="rounded-lg w-full h-32 lg:h-56" />
+          <Skeleton className="rounded-lg w-full h-44 lg:h-72" />
         </SlideWithoutScale>
 
         <SlideWithoutScale
           delay={0.5}
+          className="rounded-lg w-full h-32 lg:h-56"
         >
           <Skeleton className="rounded-lg w-full h-32 lg:h-56" />
         </SlideWithoutScale>
 
         <SlideWithoutScale
           delay={0.6}
+          className="rounded-lg w-full min-h-96 h-full"
         >
-          <Skeleton className="rounded-lg w-full h-96" />
+          <Skeleton className="rounded-lg w-full min-h-96 h-full" />
         </SlideWithoutScale>
       </div>
     </div>
