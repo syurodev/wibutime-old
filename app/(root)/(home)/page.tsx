@@ -7,6 +7,9 @@ export default async function Home() {
     `${process.env.APP_URL}/api/home/news?limit=12`,
     {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
       next: { revalidate: 60 },
     }
   )

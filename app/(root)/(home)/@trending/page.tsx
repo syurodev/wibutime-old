@@ -9,6 +9,9 @@ const TrendingPage = async () => {
     {
       method: "GET",
       next: { revalidate: 60 },
+      headers: {
+        "Content-Type": "application/json"
+      },
     }
   )
 
