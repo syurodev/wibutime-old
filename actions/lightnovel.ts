@@ -490,7 +490,12 @@ export const createComment = async (
   }
 }
 
-export const getLightnovelComments = async (contentId: string, type: CommentType): Promise<{
+export const getLightnovelComments = async (
+  contentId: string,
+  type: CommentType,
+  limit?: number,
+  step?: number,
+): Promise<{
   code: number,
   message: string,
   data: CommentData[]
@@ -499,7 +504,7 @@ export const getLightnovelComments = async (contentId: string, type: CommentType
     const session = await getServerSession()
 
     if (type === "lightnovel chapter") {
-      const res = await findLightnovelComments(10, 1, contentId, session?.id ?? undefined)
+      const res = await findLightnovelComments(limit ?? 10, step ?? 1, contentId, session?.id ?? undefined)
 
       if (!res) return {
         code: 404,

@@ -1,7 +1,7 @@
 import { db } from "@/drizzle/db";
 import { comment, commentToLightnovelChapter } from "@/drizzle/schema";
 import { formatNumber } from "@/lib/formatNumber";
-import { and, eq, inArray, isNull } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull } from "drizzle-orm";
 
 export const findLightnovelComments = async (
   limit: number,
@@ -54,7 +54,9 @@ export const findLightnovelComments = async (
           },
         },
       },
-      limit: limit
+      orderBy: desc(commentToLightnovelChapter.createdAt),
+      offset: (page * limit),
+      limit: limit,
     })
 
     const result: CommentData[] = comments.map(comment => ({

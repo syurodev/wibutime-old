@@ -5,7 +5,7 @@ import React from 'react'
 
 const LightnovelReadingLoading = () => {
   return (
-    <Container>
+    <Container className='flex flex-col gap-3'>
       <SlideWithoutScale
         className='w-full h-7'
       >

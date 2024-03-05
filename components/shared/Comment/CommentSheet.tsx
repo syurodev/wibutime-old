@@ -1,6 +1,7 @@
 "use client"
 
-import React, { FC, useEffect, useState, useTransition } from 'react'
+import React, { FC, memo, useEffect, useState, useTransition } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 import {
   Sheet,
@@ -16,6 +17,7 @@ import SlideWithoutScale from '../Motion/SlideWithoutScale'
 import { AnimatePresence } from 'framer-motion'
 import CommentItem from './CommentItem'
 import { getLightnovelComments } from '@/actions/lightnovel'
+import { ReloadIcon } from '@radix-ui/react-icons'
 
 type IProps = {
   isOpen: boolean
@@ -23,6 +25,7 @@ type IProps = {
   authorId: string
   contentId: string
   commentFor: CommentType
+  totalComment: number
 }
 
 const CommentSheet: FC<IProps> = ({
@@ -31,30 +34,45 @@ const CommentSheet: FC<IProps> = ({
   authorId,
   contentId,
   commentFor,
+  totalComment
 }) => {
   const [comments, setComments] = useState<CommentData[]>([])
+  const [step, setStep] = useState<number>(0)
   const [isPending, startTransition] = useTransition()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchComment = () => {
-    startTransition(async () => {
-      const comments = await getLightnovelComments(contentId, "lightnovel chapter")
+  const { ref, inView } = useInView();
 
-      setComments(comments.data ?? [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const fetchComment = (page: number) => {
+    startTransition(async () => {
+      const comments = await getLightnovelComments(contentId, "lightnovel chapter", 10, page)
+
+      if (step > 0) {
+        setComments((prev) => [...prev, ...comments.data])
+      } else {
+        setComments(comments.data ?? [])
+      }
     })
   }
 
   useEffect(() => {
     if (isOpen) {
-      fetchComment()
+      fetchComment(step)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen])
+  }, [isOpen, step])
 
   const [reply, setReply] = useState<{
     replyId: string,
     replyContent: string,
     userName: string,
   } | null>(null)
+
+  useEffect(() => {
+    if (inView && !isPending && step < totalComment / 10) {
+      setStep((prev) => prev + 1)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, isPending, totalComment])
 
   return (
     <Sheet
@@ -71,8 +89,8 @@ const CommentSheet: FC<IProps> = ({
               className='flex flex-col gap-3'
             >
               {
-                isPending ? (
-                  Array.from({ length: 5 }).map((_, index) => (
+                isPending && step === 0 ? (
+                  Array.from({ length: 10 }).map((_, index) => (
                     <SlideWithoutScale
                       key={`comment skeleton ${index}`}
                       delay={index * 0.1}
@@ -92,23 +110,35 @@ const CommentSheet: FC<IProps> = ({
                   !comments || comments.length === 0 ? (
                     <p className='text-sm font-semibold text-secondary-foreground text-center'>Không có bình luận</p>
                   ) : (
-                    comments.map((comment, index) => (
-                      <SlideWithoutScale
-                        key={`comment ${comment.id}`}
-                        delay={index * 0.1}
-                      >
-                        <CommentItem
-                          authorId={authorId}
-                          comment={comment}
-                          setReply={setReply}
-                        />
-                      </SlideWithoutScale>
-                    ))
+                    <>
+                      {
+                        comments.map((comment, index) => (
+                          <SlideWithoutScale
+                            key={`comment ${comment.id}`}
+                            delay={index < 11 ? (index * 0.1) : (index * 0.025)}
+                          >
+                            <CommentItem
+                              authorId={authorId}
+                              comment={comment}
+                              setReply={setReply}
+                            />
+                          </SlideWithoutScale>
+                        ))
+                      }
+                      <div ref={ref}></div>
+
+                      {
+                        isPending && step > 0 && (
+                          <ReloadIcon className="mx-auto mt-3 h-4 w-4 animate-spin" />
+                        )
+                      }
+                    </>
                   )
               }
             </div>
           </AnimatePresence>
         </ScrollArea>
+
         <AddComment
           contentId={contentId}
           type={commentFor}
@@ -116,11 +146,11 @@ const CommentSheet: FC<IProps> = ({
           reply={reply}
           setReply={setReply}
           fetchComment={fetchComment}
+          setStep={setStep}
         />
       </SheetContent>
     </Sheet>
-
   )
 }
 
-export default CommentSheet
+export default memo(CommentSheet)

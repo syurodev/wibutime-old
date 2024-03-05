@@ -1,19 +1,27 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
-import { lightnovelChapter, lightnovelVolume } from "@/drizzle/schema";
+import { comment, commentToLightnovel, commentToLightnovelChapter, lightnovelChapter, lightnovelVolume } from "@/drizzle/schema";
 import { formatNumber } from "@/lib/formatNumber";
 import { findChapterCharge } from "@/lib/findChapterCharge";
 
 export const findChapter = async (chapterId: string, userId?: string): Promise<LightnovelChapterDetail | null> => {
   try {
     const existingChapter = await db.query.lightnovelChapter.findFirst({
-      where: and(eq(lightnovelChapter.id, chapterId), eq(lightnovelChapter.deleted, false)),
+      where: and(
+        eq(lightnovelChapter.id, chapterId), eq(lightnovelChapter.deleted, false)
+      ),
       with: {
         comments: {
           columns: {
             commentId: true
           },
+          where: inArray(
+            commentToLightnovelChapter.commentId,
+            db.select({ id: comment.id })
+              .from(comment)
+              .where(isNull(comment.parentId))
+          )
         },
         volume: {
           columns: {

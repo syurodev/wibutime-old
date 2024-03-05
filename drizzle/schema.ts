@@ -724,6 +724,7 @@ export const commentToLightnovel = pgTable("comment_lightnovel", {
   lightnovelId: uuid("lightnovel_id")
     .notNull()
     .references(() => lightnovel.id),
+  createdAt: timestamp("created_at").defaultNow(),
 }, (t) => ({
   pk: primaryKey(t.commentId, t.lightnovelId),
 }))
@@ -747,6 +748,7 @@ export const commentToLightnovelChapter = pgTable("comment_lightnovel_chapter", 
   chapterId: uuid("chapter_id")
     .notNull()
     .references(() => lightnovelChapter.id),
+  createdAt: timestamp("created_at").defaultNow(),
 }, (t) => ({
   pk: primaryKey(t.commentId, t.chapterId),
 }))
@@ -770,6 +772,7 @@ export const commentToAnime = pgTable("comment_anime", {
   animeId: uuid("anime_id")
     .notNull()
     .references(() => anime.id),
+  createdAt: timestamp("created_at").defaultNow(),
 }, (t) => ({
   pk: primaryKey(t.commentId, t.animeId),
 }))
@@ -793,6 +796,7 @@ export const commentToAnimeEpisode = pgTable("comment_anime_episode", {
   episodeId: uuid("episode_id")
     .notNull()
     .references(() => animeEpisode.id),
+  createdAt: timestamp("created_at").defaultNow(),
 }, (t) => ({
   pk: primaryKey(t.commentId, t.episodeId),
 }))
@@ -816,6 +820,7 @@ export const commentToManga = pgTable("comment_manga", {
   mangaId: uuid("manga_id")
     .notNull()
     .references(() => manga.id),
+  createdAt: timestamp("created_at").defaultNow(),
 }, (t) => ({
   pk: primaryKey(t.commentId, t.mangaId),
 }))
@@ -839,6 +844,7 @@ export const commentToMangaChapter = pgTable("comment_manga_chapter", {
   chapterId: uuid("chapter_id")
     .notNull()
     .references(() => mangaChapter.id),
+  createdAt: timestamp("created_at").defaultNow(),
 }, (t) => ({
   pk: primaryKey(t.commentId, t.chapterId),
 }))

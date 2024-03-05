@@ -102,6 +102,7 @@ const ReadChapter: FC<IProps> = ({ data }) => {
         volumes={data.volumes}
         novelName={data.novelName}
         authorId={data.authorId}
+        totalComment={data.comments}
       />
     </>
   )

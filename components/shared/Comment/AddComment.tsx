@@ -29,7 +29,8 @@ type IProps = {
     userName: string;
   } | null
   addOptimisticComment: React.Dispatch<React.SetStateAction<CommentData[]>>,
-  fetchComment: () => void
+  fetchComment: (page: number) => void,
+  setStep: React.Dispatch<React.SetStateAction<number>>
 }
 
 const AddComment: FC<IProps> = ({
@@ -39,7 +40,8 @@ const AddComment: FC<IProps> = ({
   addOptimisticComment,
   reply,
   setReply,
-  fetchComment
+  fetchComment,
+  setStep
 }) => {
   const [commentContent, setCommentContent] = useState<string>("")
   const session = useCurrentUser()
@@ -71,7 +73,8 @@ const AddComment: FC<IProps> = ({
       } else {
         setCommentContent("")
         setReply(null)
-        fetchComment()
+        setStep(0)
+        fetchComment(0)
       }
     })
   }
