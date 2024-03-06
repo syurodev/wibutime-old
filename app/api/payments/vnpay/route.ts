@@ -1,6 +1,5 @@
 import { format } from "date-fns"
 import querystring from "qs"
-import crypto from 'crypto';
 import { NextRequest, NextResponse } from "next/server";
 import { sortVNPayObject } from "@/lib/sortVNPayObject";
 
@@ -42,7 +41,7 @@ export async function POST(
   try {
     const body: RequestBody = await req.json()
     const { amount, callbackUrl, bankCode, userId } = body
-
+    const crypto = await import('node:crypto');
     process.env.TZ = 'Asia/Ho_Chi_Minh';
 
     const currentDate = new Date();

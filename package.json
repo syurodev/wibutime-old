@@ -63,7 +63,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
-    "crypto": "^1.0.1",
     "date-fns": "^3.3.1",
     "drizzle-orm": "^0.29.3",
     "embla-carousel-react": "^8.0.0-rc18",
@@ -97,7 +96,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/lodash": "^4.14.202",
-    "@types/node": "^20",
+    "@types/node": "20.11.24",
     "@types/nodemailer": "^6.4.14",
     "@types/qs": "^6.9.11",
     "@types/react": "^18",

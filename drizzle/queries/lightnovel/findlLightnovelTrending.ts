@@ -3,7 +3,7 @@ import { lightnovel } from "@/drizzle/schema";
 import { formatNumber } from "@/lib/formatNumber";
 import { desc, sql } from "drizzle-orm";
 
-export const findlLightnovelTrending = async (limit: number, startDay: Date, endDay: Date): Promise<TrendingData[] | null> => {
+export const findlLightnovelTrending = async (limit: number): Promise<TrendingData[] | null> => {
   try {
     const lightnovelTrending: {
       id: string,

@@ -7,6 +7,7 @@ import { loginSchema } from "@/schemas/auth"
 
 export default {
   // debug: true,
+  trustHost: true,
   providers: [Google({
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,

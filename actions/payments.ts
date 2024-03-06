@@ -1,7 +1,7 @@
 "use server"
 
 import QueryString from "qs"
-import crypto from 'crypto';
+// import crypto from 'node:crypto';
 
 import { VnpParams } from "@/app/api/payments/vnpay/route"
 import { insertPayment } from "@/drizzle/queries/payments/insertPayment"
@@ -74,6 +74,7 @@ export const createVNPayUrl = async (
 
 export const verificationVNPayPayment = async (data: VnpParams) => {
   try {
+    const crypto = await import('node:crypto');
     const session = await getServerSession()
 
     if (!session) return {

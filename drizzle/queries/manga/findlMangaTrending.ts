@@ -2,7 +2,7 @@ import { db } from "@/drizzle/db";
 import { formatNumber } from "@/lib/formatNumber";
 import { sql } from "drizzle-orm";
 
-export const findlMangaTrending = async (limit: number, startDay: Date, endDay: Date): Promise<TrendingData[] | null> => {
+export const findlMangaTrending = async (limit: number): Promise<TrendingData[] | null> => {
   try {
     const topManga: {
       id: string,
