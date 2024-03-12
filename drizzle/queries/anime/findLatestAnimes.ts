@@ -1,10 +1,14 @@
-import { desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
-import { anime, animeEpisode, animeSeason } from "@/drizzle/schema";
+import { anime, animeEpisode, animeSeason, categoryToAnime } from "@/drizzle/schema";
 import { formatNumber } from "@/lib/formatNumber";
 
-export const findLatestAnimes = async (limit: number, page: number = 0): Promise<AnimeNew | null> => {
+export const findLatestAnimes = async (
+  limit: number,
+  page: number = 0,
+  categoriesFilter: string[]
+): Promise<AnimeNew | null> => {
   try {
     const animeNumber: { num_anime: number }[] = await db.execute(sql`
       SELECT COUNT(*) AS num_anime
@@ -13,7 +17,18 @@ export const findLatestAnimes = async (limit: number, page: number = 0): Promise
     `)
 
     const animes = await db.query.anime.findMany({
-      where: eq(anime.deleted, false),
+      where: and(
+        eq(anime.deleted, false),
+        // inArray(
+        //   anime.id,
+        //   db.query.categoryToAnime.findMany({
+        //     where: inArray(categoryToAnime.categoryId, categoriesFilter ?? []),
+        //     columns:{
+        //       animeId:true
+        //     }
+        //   })
+        // ),
+      ),
       columns: {
         id: true,
         name: true,

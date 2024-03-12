@@ -10,8 +10,12 @@ export async function GET(
 
   const page: number = Number(req.nextUrl.searchParams.get("page") ?? 0)
 
+  const categories: string | null = req.nextUrl.searchParams.get("categories")
+
+  console.log(JSON.parse(categories ?? "[]"))
+
   try {
-    const latestAnimesPromise = await findLatestAnimes(limit, page);
+    const latestAnimesPromise = await findLatestAnimes(limit, page, categories ? JSON.parse(categories) : undefined);
 
     if (!latestAnimesPromise) return new Response(JSON.stringify({
       status: "error",

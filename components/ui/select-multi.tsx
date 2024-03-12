@@ -18,10 +18,12 @@ type IProps = {
     id: string,
     name: string
   }[]) => void
+  placeholder?: string
 }
 
 const MultiSelect: React.FC<IProps> = ({
   data,
+  placeholder,
   content,
   onChange
 }) => {
@@ -88,6 +90,7 @@ const MultiSelect: React.FC<IProps> = ({
           {/* Avoid having the "Search" Icon */}
           <CommandPrimitive.Input
             ref={inputRef}
+            placeholder={placeholder ?? ""}
             value={inputValue}
             onValueChange={setInputValue}
             onBlur={() => setOpen(false)}

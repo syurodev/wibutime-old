@@ -48,7 +48,7 @@ const News: FC<IProps> = ({ data }) => {
       >
         <AnimatePresence mode='wait'>
           {
-            data.map((item, index) => {
+            data && data.map((item, index) => {
               return (
                 index === currentIndex && (
                   <div

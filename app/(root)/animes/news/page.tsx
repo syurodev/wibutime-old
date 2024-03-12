@@ -1,8 +1,8 @@
 import React from 'react'
+import { notFound } from 'next/navigation'
 
 import Container from '@/components/shared/Container'
-import { notFound } from 'next/navigation'
-import BoxContents from '@/components/Content/BoxContents/BoxContents'
+import FullSearchContents from '@/components/Content/FullSearchContents/FullSearchContents'
 
 const AnimesPage = async () => {
   const res = await fetch(
@@ -12,6 +12,7 @@ const AnimesPage = async () => {
       next: { revalidate: 120 },
     }
   )
+
   if (!res.ok) return notFound()
 
   const data: {
@@ -23,7 +24,7 @@ const AnimesPage = async () => {
 
   return (
     <Container>
-      <BoxContents
+      <FullSearchContents
         type='anime'
         animes={data.data.animes}
       />
